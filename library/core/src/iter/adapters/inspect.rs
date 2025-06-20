@@ -91,7 +91,8 @@ where
         Fold: FnMut(Acc, Self::Item) -> R,
         R: Try<Output = Acc>,
     {
-        self.iter.try_fold(init, inspect_try_fold(&mut self.f, fold))
+        self.iter
+            .try_fold(init, inspect_try_fold(&mut self.f, fold))
     }
 
     #[inline]
@@ -121,7 +122,8 @@ where
         Fold: FnMut(Acc, Self::Item) -> R,
         R: Try<Output = Acc>,
     {
-        self.iter.try_rfold(init, inspect_try_fold(&mut self.f, fold))
+        self.iter
+            .try_rfold(init, inspect_try_fold(&mut self.f, fold))
     }
 
     #[inline]

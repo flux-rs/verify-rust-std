@@ -101,10 +101,17 @@ impl<'a, T> Iter<'a, T> {
         let ptr: NonNull<T> = NonNull::from_ref(slice).cast();
         // SAFETY: Similar to `IterMut::new`.
         unsafe {
-            let end_or_len =
-                if T::IS_ZST { without_provenance(len) } else { ptr.as_ptr().add(len) };
+            let end_or_len = if T::IS_ZST {
+                without_provenance(len)
+            } else {
+                ptr.as_ptr().add(len)
+            };
 
-            Self { ptr, end_or_len, _marker: PhantomData }
+            Self {
+                ptr,
+                end_or_len,
+                _marker: PhantomData,
+            }
         }
     }
 
@@ -156,7 +163,11 @@ iterator! {struct Iter -> *const T, &'a T, const, {/* no mut */}, as_ref, {
 impl<T> Clone for Iter<'_, T> {
     #[inline]
     fn clone(&self) -> Self {
-        Iter { ptr: self.ptr, end_or_len: self.end_or_len, _marker: self._marker }
+        Iter {
+            ptr: self.ptr,
+            end_or_len: self.end_or_len,
+            _marker: self._marker,
+        }
     }
 }
 
@@ -290,10 +301,17 @@ impl<'a, T> IterMut<'a, T> {
         // See the `next_unchecked!` and `is_empty!` macros as well as the
         // `post_inc_start` method for more information.
         unsafe {
-            let end_or_len =
-                if T::IS_ZST { without_provenance_mut(len) } else { ptr.as_ptr().add(len) };
+            let end_or_len = if T::IS_ZST {
+                without_provenance_mut(len)
+            } else {
+                ptr.as_ptr().add(len)
+            };
 
-            Self { ptr, end_or_len, _marker: PhantomData }
+            Self {
+                ptr,
+                end_or_len,
+                _marker: PhantomData,
+            }
         }
     }
 
@@ -464,7 +482,11 @@ where
 impl<'a, T: 'a, P: FnMut(&T) -> bool> Split<'a, T, P> {
     #[inline]
     pub(super) fn new(slice: &'a [T], pred: P) -> Self {
-        Self { v: slice, pred, finished: false }
+        Self {
+            v: slice,
+            pred,
+            finished: false,
+        }
     }
     /// Returns a slice which contains items not yet handled by split.
     /// # Example
@@ -488,7 +510,10 @@ where
     P: FnMut(&T) -> bool,
 {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        f.debug_struct("Split").field("v", &self.v).field("finished", &self.finished).finish()
+        f.debug_struct("Split")
+            .field("v", &self.v)
+            .field("finished", &self.finished)
+            .finish()
     }
 }
 
@@ -499,7 +524,11 @@ where
     P: Clone + FnMut(&T) -> bool,
 {
     fn clone(&self) -> Self {
-        Split { v: self.v, pred: self.pred.clone(), finished: self.finished }
+        Split {
+            v: self.v,
+            pred: self.pred.clone(),
+            finished: self.finished,
+        }
     }
 }
 
@@ -604,6 +633,7 @@ impl<T, P> FusedIterator for Split<'_, T, P> where P: FnMut(&T) -> bool {}
 ///
 /// [`split_inclusive`]: slice::split_inclusive
 /// [slices]: slice
+#[cfg_attr(flux, flux::trusted)] // has escaping bound vars, so it cannot be wrapped in a dummy binder.
 #[stable(feature = "split_inclusive", since = "1.51.0")]
 #[must_use = "iterators are lazy and do nothing unless consumed"]
 pub struct SplitInclusive<'a, T: 'a, P>
@@ -619,7 +649,11 @@ impl<'a, T: 'a, P: FnMut(&T) -> bool> SplitInclusive<'a, T, P> {
     #[inline]
     pub(super) fn new(slice: &'a [T], pred: P) -> Self {
         let finished = slice.is_empty();
-        Self { v: slice, pred, finished }
+        Self {
+            v: slice,
+            pred,
+            finished,
+        }
     }
 }
 
@@ -643,7 +677,11 @@ where
     P: Clone + FnMut(&T) -> bool,
 {
     fn clone(&self) -> Self {
-        SplitInclusive { v: self.v, pred: self.pred.clone(), finished: self.finished }
+        SplitInclusive {
+            v: self.v,
+            pred: self.pred.clone(),
+            finished: self.finished,
+        }
     }
 }
 
@@ -660,8 +698,12 @@ where
             return None;
         }
 
-        let idx =
-            self.v.iter().position(|x| (self.pred)(x)).map(|idx| idx + 1).unwrap_or(self.v.len());
+        let idx = self
+            .v
+            .iter()
+            .position(|x| (self.pred)(x))
+            .map(|idx| idx + 1)
+            .unwrap_or(self.v.len());
         if idx == self.v.len() {
             self.finished = true;
         }
@@ -697,8 +739,16 @@ where
         // The last index of self.v is already checked and found to match
         // by the last iteration, so we start searching a new match
         // one index to the left.
-        let remainder = if self.v.is_empty() { &[] } else { &self.v[..(self.v.len() - 1)] };
-        let idx = remainder.iter().rposition(|x| (self.pred)(x)).map(|idx| idx + 1).unwrap_or(0);
+        let remainder = if self.v.is_empty() {
+            &[]
+        } else {
+            &self.v[..(self.v.len() - 1)]
+        };
+        let idx = remainder
+            .iter()
+            .rposition(|x| (self.pred)(x))
+            .map(|idx| idx + 1)
+            .unwrap_or(0);
         if idx == 0 {
             self.finished = true;
         }
@@ -739,7 +789,11 @@ where
 impl<'a, T: 'a, P: FnMut(&T) -> bool> SplitMut<'a, T, P> {
     #[inline]
     pub(super) fn new(slice: &'a mut [T], pred: P) -> Self {
-        Self { v: slice, pred, finished: false }
+        Self {
+            v: slice,
+            pred,
+            finished: false,
+        }
     }
 }
 
@@ -749,7 +803,10 @@ where
     P: FnMut(&T) -> bool,
 {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        f.debug_struct("SplitMut").field("v", &self.v).field("finished", &self.finished).finish()
+        f.debug_struct("SplitMut")
+            .field("v", &self.v)
+            .field("finished", &self.finished)
+            .finish()
     }
 }
 
@@ -869,7 +926,11 @@ impl<'a, T: 'a, P: FnMut(&T) -> bool> SplitInclusiveMut<'a, T, P> {
     #[inline]
     pub(super) fn new(slice: &'a mut [T], pred: P) -> Self {
         let finished = slice.is_empty();
-        Self { v: slice, pred, finished }
+        Self {
+            v: slice,
+            pred,
+            finished,
+        }
     }
 }
 
@@ -993,7 +1054,9 @@ where
 impl<'a, T: 'a, P: FnMut(&T) -> bool> RSplit<'a, T, P> {
     #[inline]
     pub(super) fn new(slice: &'a [T], pred: P) -> Self {
-        Self { inner: Split::new(slice, pred) }
+        Self {
+            inner: Split::new(slice, pred),
+        }
     }
 }
 
@@ -1017,7 +1080,9 @@ where
     P: Clone + FnMut(&T) -> bool,
 {
     fn clone(&self) -> Self {
-        RSplit { inner: self.inner.clone() }
+        RSplit {
+            inner: self.inner.clone(),
+        }
     }
 }
 
@@ -1090,7 +1155,9 @@ where
 impl<'a, T: 'a, P: FnMut(&T) -> bool> RSplitMut<'a, T, P> {
     #[inline]
     pub(super) fn new(slice: &'a mut [T], pred: P) -> Self {
-        Self { inner: SplitMut::new(slice, pred) }
+        Self {
+            inner: SplitMut::new(slice, pred),
+        }
     }
 }
 
@@ -1216,7 +1283,9 @@ where
 impl<'a, T: 'a, P: FnMut(&T) -> bool> SplitN<'a, T, P> {
     #[inline]
     pub(super) fn new(s: Split<'a, T, P>, n: usize) -> Self {
-        Self { inner: GenericSplitN { iter: s, count: n } }
+        Self {
+            inner: GenericSplitN { iter: s, count: n },
+        }
     }
 }
 
@@ -1226,7 +1295,9 @@ where
     P: FnMut(&T) -> bool,
 {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        f.debug_struct("SplitN").field("inner", &self.inner).finish()
+        f.debug_struct("SplitN")
+            .field("inner", &self.inner)
+            .finish()
     }
 }
 
@@ -1260,7 +1331,9 @@ where
 impl<'a, T: 'a, P: FnMut(&T) -> bool> RSplitN<'a, T, P> {
     #[inline]
     pub(super) fn new(s: RSplit<'a, T, P>, n: usize) -> Self {
-        Self { inner: GenericSplitN { iter: s, count: n } }
+        Self {
+            inner: GenericSplitN { iter: s, count: n },
+        }
     }
 }
 
@@ -1270,7 +1343,9 @@ where
     P: FnMut(&T) -> bool,
 {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        f.debug_struct("RSplitN").field("inner", &self.inner).finish()
+        f.debug_struct("RSplitN")
+            .field("inner", &self.inner)
+            .finish()
     }
 }
 
@@ -1300,7 +1375,9 @@ where
 impl<'a, T: 'a, P: FnMut(&T) -> bool> SplitNMut<'a, T, P> {
     #[inline]
     pub(super) fn new(s: SplitMut<'a, T, P>, n: usize) -> Self {
-        Self { inner: GenericSplitN { iter: s, count: n } }
+        Self {
+            inner: GenericSplitN { iter: s, count: n },
+        }
     }
 }
 
@@ -1310,7 +1387,9 @@ where
     P: FnMut(&T) -> bool,
 {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        f.debug_struct("SplitNMut").field("inner", &self.inner).finish()
+        f.debug_struct("SplitNMut")
+            .field("inner", &self.inner)
+            .finish()
     }
 }
 
@@ -1341,7 +1420,9 @@ where
 impl<'a, T: 'a, P: FnMut(&T) -> bool> RSplitNMut<'a, T, P> {
     #[inline]
     pub(super) fn new(s: RSplitMut<'a, T, P>, n: usize) -> Self {
-        Self { inner: GenericSplitN { iter: s, count: n } }
+        Self {
+            inner: GenericSplitN { iter: s, count: n },
+        }
     }
 }
 
@@ -1351,7 +1432,9 @@ where
     P: FnMut(&T) -> bool,
 {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        f.debug_struct("RSplitNMut").field("inner", &self.inner).finish()
+        f.debug_struct("RSplitNMut")
+            .field("inner", &self.inner)
+            .finish()
     }
 }
 
@@ -1396,7 +1479,10 @@ impl<'a, T: 'a> Windows<'a, T> {
 #[stable(feature = "rust1", since = "1.0.0")]
 impl<T> Clone for Windows<'_, T> {
     fn clone(&self) -> Self {
-        Windows { v: self.v, size: self.size }
+        Windows {
+            v: self.v,
+            size: self.size,
+        }
     }
 }
 
@@ -1542,7 +1628,10 @@ pub struct Chunks<'a, T: 'a> {
 impl<'a, T: 'a> Chunks<'a, T> {
     #[inline]
     pub(super) const fn new(slice: &'a [T], size: usize) -> Self {
-        Self { v: slice, chunk_size: size }
+        Self {
+            v: slice,
+            chunk_size: size,
+        }
     }
 }
 
@@ -1550,7 +1639,10 @@ impl<'a, T: 'a> Chunks<'a, T> {
 #[stable(feature = "rust1", since = "1.0.0")]
 impl<T> Clone for Chunks<'_, T> {
     fn clone(&self) -> Self {
-        Chunks { v: self.v, chunk_size: self.chunk_size }
+        Chunks {
+            v: self.v,
+            chunk_size: self.chunk_size,
+        }
     }
 }
 
@@ -1636,7 +1728,11 @@ impl<'a, T> DoubleEndedIterator for Chunks<'a, T> {
             None
         } else {
             let remainder = self.v.len() % self.chunk_size;
-            let chunksz = if remainder != 0 { remainder } else { self.chunk_size };
+            let chunksz = if remainder != 0 {
+                remainder
+            } else {
+                self.chunk_size
+            };
             // SAFETY: split_at_unchecked requires the argument be less than or
             // equal to the length. This is guaranteed, but subtle: `chunksz`
             // will always either be `self.v.len() % self.chunk_size`, which
@@ -1730,7 +1826,11 @@ pub struct ChunksMut<'a, T: 'a> {
 impl<'a, T: 'a> ChunksMut<'a, T> {
     #[inline]
     pub(super) const fn new(slice: &'a mut [T], size: usize) -> Self {
-        Self { v: slice, chunk_size: size, _marker: PhantomData }
+        Self {
+            v: slice,
+            chunk_size: size,
+            _marker: PhantomData,
+        }
     }
 }
 
@@ -1824,7 +1924,11 @@ impl<'a, T> DoubleEndedIterator for ChunksMut<'a, T> {
             None
         } else {
             let remainder = self.v.len() % self.chunk_size;
-            let sz = if remainder != 0 { remainder } else { self.chunk_size };
+            let sz = if remainder != 0 {
+                remainder
+            } else {
+                self.chunk_size
+            };
             let len = self.v.len();
             // SAFETY: Similar to `Chunks::next_back`
             let (head, tail) = unsafe { self.v.split_at_mut_unchecked(len - sz) };
@@ -1920,7 +2024,11 @@ impl<'a, T> ChunksExact<'a, T> {
         let fst_len = slice.len() - rem;
         // SAFETY: 0 <= fst_len <= slice.len() by construction above
         let (fst, snd) = unsafe { slice.split_at_unchecked(fst_len) };
-        Self { v: fst, rem: snd, chunk_size }
+        Self {
+            v: fst,
+            rem: snd,
+            chunk_size,
+        }
     }
 
     /// Returns the remainder of the original slice that is not going to be
@@ -1951,7 +2059,11 @@ impl<'a, T> ChunksExact<'a, T> {
 #[stable(feature = "chunks_exact", since = "1.31.0")]
 impl<T> Clone for ChunksExact<'_, T> {
     fn clone(&self) -> Self {
-        ChunksExact { v: self.v, rem: self.rem, chunk_size: self.chunk_size }
+        ChunksExact {
+            v: self.v,
+            rem: self.rem,
+            chunk_size: self.chunk_size,
+        }
     }
 }
 
@@ -2100,7 +2212,12 @@ impl<'a, T> ChunksExactMut<'a, T> {
         let fst_len = slice.len() - rem;
         // SAFETY: 0 <= fst_len <= slice.len() by construction above
         let (fst, snd) = unsafe { slice.split_at_mut_unchecked(fst_len) };
-        Self { v: fst, rem: snd, chunk_size, _marker: PhantomData }
+        Self {
+            v: fst,
+            rem: snd,
+            chunk_size,
+            _marker: PhantomData,
+        }
     }
 
     /// Returns the remainder of the original slice that is not going to be
@@ -2264,7 +2381,11 @@ impl<'a, T: 'a, const N: usize> ArrayWindows<'a, T, N> {
     #[inline]
     pub(super) const fn new(slice: &'a [T]) -> Self {
         let num_windows = slice.len().saturating_sub(N - 1);
-        Self { slice_head: slice.as_ptr(), num: num_windows, marker: PhantomData }
+        Self {
+            slice_head: slice.as_ptr(),
+            num: num_windows,
+            marker: PhantomData,
+        }
     }
 }
 
@@ -2390,7 +2511,10 @@ impl<'a, T, const N: usize> ArrayChunks<'a, T, N> {
     #[inline]
     pub(super) const fn new(slice: &'a [T]) -> Self {
         let (array_slice, rem) = slice.as_chunks();
-        Self { iter: array_slice.iter(), rem }
+        Self {
+            iter: array_slice.iter(),
+            rem,
+        }
     }
 
     /// Returns the remainder of the original slice that is not going to be
@@ -2407,7 +2531,10 @@ impl<'a, T, const N: usize> ArrayChunks<'a, T, N> {
 #[unstable(feature = "array_chunks", issue = "74985")]
 impl<T, const N: usize> Clone for ArrayChunks<'_, T, N> {
     fn clone(&self) -> Self {
-        ArrayChunks { iter: self.iter.clone(), rem: self.rem }
+        ArrayChunks {
+            iter: self.iter.clone(),
+            rem: self.rem,
+        }
     }
 }
 
@@ -2517,7 +2644,10 @@ impl<'a, T, const N: usize> ArrayChunksMut<'a, T, N> {
     #[inline]
     pub(super) const fn new(slice: &'a mut [T]) -> Self {
         let (array_slice, rem) = slice.as_chunks_mut();
-        Self { iter: array_slice.iter_mut(), rem }
+        Self {
+            iter: array_slice.iter_mut(),
+            rem,
+        }
     }
 
     /// Returns the remainder of the original slice that is not going to be
@@ -2634,7 +2764,10 @@ pub struct RChunks<'a, T: 'a> {
 impl<'a, T: 'a> RChunks<'a, T> {
     #[inline]
     pub(super) const fn new(slice: &'a [T], size: usize) -> Self {
-        Self { v: slice, chunk_size: size }
+        Self {
+            v: slice,
+            chunk_size: size,
+        }
     }
 }
 
@@ -2642,7 +2775,10 @@ impl<'a, T: 'a> RChunks<'a, T> {
 #[stable(feature = "rchunks", since = "1.31.0")]
 impl<T> Clone for RChunks<'_, T> {
     fn clone(&self) -> Self {
-        RChunks { v: self.v, chunk_size: self.chunk_size }
+        RChunks {
+            v: self.v,
+            chunk_size: self.chunk_size,
+        }
     }
 }
 
@@ -2734,7 +2870,11 @@ impl<'a, T> DoubleEndedIterator for RChunks<'a, T> {
             None
         } else {
             let remainder = self.v.len() % self.chunk_size;
-            let chunksz = if remainder != 0 { remainder } else { self.chunk_size };
+            let chunksz = if remainder != 0 {
+                remainder
+            } else {
+                self.chunk_size
+            };
             // SAFETY: similar to Chunks::next_back
             let (fst, snd) = unsafe { self.v.split_at_unchecked(chunksz) };
             self.v = snd;
@@ -2814,7 +2954,11 @@ pub struct RChunksMut<'a, T: 'a> {
 impl<'a, T: 'a> RChunksMut<'a, T> {
     #[inline]
     pub(super) const fn new(slice: &'a mut [T], size: usize) -> Self {
-        Self { v: slice, chunk_size: size, _marker: PhantomData }
+        Self {
+            v: slice,
+            chunk_size: size,
+            _marker: PhantomData,
+        }
     }
 }
 
@@ -2915,7 +3059,11 @@ impl<'a, T> DoubleEndedIterator for RChunksMut<'a, T> {
             None
         } else {
             let remainder = self.v.len() % self.chunk_size;
-            let sz = if remainder != 0 { remainder } else { self.chunk_size };
+            let sz = if remainder != 0 {
+                remainder
+            } else {
+                self.chunk_size
+            };
             // SAFETY: Similar to `Chunks::next_back`
             let (head, tail) = unsafe { self.v.split_at_mut_unchecked(sz) };
             self.v = tail;
@@ -3008,7 +3156,11 @@ impl<'a, T> RChunksExact<'a, T> {
         let rem = slice.len() % chunk_size;
         // SAFETY: 0 <= rem <= slice.len() by construction above
         let (fst, snd) = unsafe { slice.split_at_unchecked(rem) };
-        Self { v: snd, rem: fst, chunk_size }
+        Self {
+            v: snd,
+            rem: fst,
+            chunk_size,
+        }
     }
 
     /// Returns the remainder of the original slice that is not going to be
@@ -3040,7 +3192,11 @@ impl<'a, T> RChunksExact<'a, T> {
 #[stable(feature = "rchunks", since = "1.31.0")]
 impl<'a, T> Clone for RChunksExact<'a, T> {
     fn clone(&self) -> RChunksExact<'a, T> {
-        RChunksExact { v: self.v, rem: self.rem, chunk_size: self.chunk_size }
+        RChunksExact {
+            v: self.v,
+            rem: self.rem,
+            chunk_size: self.chunk_size,
+        }
     }
 }
 
@@ -3191,7 +3347,11 @@ impl<'a, T> RChunksExactMut<'a, T> {
         let rem = slice.len() % chunk_size;
         // SAFETY: 0 <= rem <= slice.len() by construction above
         let (fst, snd) = unsafe { slice.split_at_mut_unchecked(rem) };
-        Self { v: snd, rem: fst, chunk_size }
+        Self {
+            v: snd,
+            rem: fst,
+            chunk_size,
+        }
     }
 
     /// Returns the remainder of the original slice that is not going to be
@@ -3384,7 +3544,11 @@ where
             let mut len = 1;
             let mut iter = self.slice.windows(2);
             while let Some([l, r]) = iter.next() {
-                if (self.predicate)(l, r) { len += 1 } else { break }
+                if (self.predicate)(l, r) {
+                    len += 1
+                } else {
+                    break;
+                }
             }
             let (head, tail) = self.slice.split_at(len);
             self.slice = tail;
@@ -3394,7 +3558,11 @@ where
 
     #[inline]
     fn size_hint(&self) -> (usize, Option<usize>) {
-        if self.slice.is_empty() { (0, Some(0)) } else { (1, Some(self.slice.len())) }
+        if self.slice.is_empty() {
+            (0, Some(0))
+        } else {
+            (1, Some(self.slice.len()))
+        }
     }
 
     #[inline]
@@ -3416,7 +3584,11 @@ where
             let mut len = 1;
             let mut iter = self.slice.windows(2);
             while let Some([l, r]) = iter.next_back() {
-                if (self.predicate)(l, r) { len += 1 } else { break }
+                if (self.predicate)(l, r) {
+                    len += 1
+                } else {
+                    break;
+                }
             }
             let (head, tail) = self.slice.split_at(self.slice.len() - len);
             self.slice = head;
@@ -3431,7 +3603,9 @@ impl<'a, T: 'a, P> FusedIterator for ChunkBy<'a, T, P> where P: FnMut(&T, &T) ->
 #[stable(feature = "slice_group_by", since = "1.77.0")]
 impl<'a, T: 'a + fmt::Debug, P> fmt::Debug for ChunkBy<'a, T, P> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        f.debug_struct("ChunkBy").field("slice", &self.slice).finish()
+        f.debug_struct("ChunkBy")
+            .field("slice", &self.slice)
+            .finish()
     }
 }
 
@@ -3471,7 +3645,11 @@ where
             let mut len = 1;
             let mut iter = self.slice.windows(2);
             while let Some([l, r]) = iter.next() {
-                if (self.predicate)(l, r) { len += 1 } else { break }
+                if (self.predicate)(l, r) {
+                    len += 1
+                } else {
+                    break;
+                }
             }
             let slice = mem::take(&mut self.slice);
             let (head, tail) = slice.split_at_mut(len);
@@ -3482,7 +3660,11 @@ where
 
     #[inline]
     fn size_hint(&self) -> (usize, Option<usize>) {
-        if self.slice.is_empty() { (0, Some(0)) } else { (1, Some(self.slice.len())) }
+        if self.slice.is_empty() {
+            (0, Some(0))
+        } else {
+            (1, Some(self.slice.len()))
+        }
     }
 
     #[inline]
@@ -3504,7 +3686,11 @@ where
             let mut len = 1;
             let mut iter = self.slice.windows(2);
             while let Some([l, r]) = iter.next_back() {
-                if (self.predicate)(l, r) { len += 1 } else { break }
+                if (self.predicate)(l, r) {
+                    len += 1
+                } else {
+                    break;
+                }
             }
             let slice = mem::take(&mut self.slice);
             let (head, tail) = slice.split_at_mut(slice.len() - len);
@@ -3520,7 +3706,9 @@ impl<'a, T: 'a, P> FusedIterator for ChunkByMut<'a, T, P> where P: FnMut(&T, &T)
 #[stable(feature = "slice_group_by", since = "1.77.0")]
 impl<'a, T: 'a + fmt::Debug, P> fmt::Debug for ChunkByMut<'a, T, P> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        f.debug_struct("ChunkByMut").field("slice", &self.slice).finish()
+        f.debug_struct("ChunkByMut")
+            .field("slice", &self.slice)
+            .finish()
     }
 }
 

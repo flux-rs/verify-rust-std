@@ -1904,6 +1904,7 @@ pub const unsafe fn encode_utf8_raw_unchecked(code: u32, dst: *mut u8) {
 ///
 /// Panics if the buffer is not large enough.
 /// A buffer of length 2 is large enough to encode any `char`.
+#[cfg_attr(flux, flux::trusted)] // unsupported feature : match on [a, ..]
 #[unstable(feature = "char_internals", reason = "exposed only for libstd", issue = "none")]
 #[doc(hidden)]
 #[inline]

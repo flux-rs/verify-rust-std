@@ -49,7 +49,11 @@ where
             // SAFETY: Loop conditions ensure the index is in bounds.
             unsafe { array.get_unchecked_mut(idx) }.write(element);
 
-            if initialized < N { ControlFlow::Continue(()) } else { ControlFlow::Break(()) }
+            if initialized < N {
+                ControlFlow::Continue(())
+            } else {
+                ControlFlow::Break(())
+            }
         });
 
         match result {
@@ -76,14 +80,26 @@ fn filter_fold<T, Acc>(
     mut predicate: impl FnMut(&T) -> bool,
     mut fold: impl FnMut(Acc, T) -> Acc,
 ) -> impl FnMut(Acc, T) -> Acc {
-    move |acc, item| if predicate(&item) { fold(acc, item) } else { acc }
+    move |acc, item| {
+        if predicate(&item) {
+            fold(acc, item)
+        } else {
+            acc
+        }
+    }
 }
 
 fn filter_try_fold<'a, T, Acc, R: Try<Output = Acc>>(
     predicate: &'a mut impl FnMut(&T) -> bool,
     mut fold: impl FnMut(Acc, T) -> R + 'a,
 ) -> impl FnMut(Acc, T) -> R + 'a {
-    move |acc, item| if predicate(&item) { fold(acc, item) } else { try { acc } }
+    move |acc, item| {
+        if predicate(&item) {
+            fold(acc, item)
+        } else {
+            try { acc }
+        }
+    }
 }
 
 #[stable(feature = "rust1", since = "1.0.0")]
@@ -148,7 +164,8 @@ where
         Fold: FnMut(Acc, Self::Item) -> R,
         R: Try<Output = Acc>,
     {
-        self.iter.try_fold(init, filter_try_fold(&mut self.predicate, fold))
+        self.iter
+            .try_fold(init, filter_try_fold(&mut self.predicate, fold))
     }
 
     #[inline]
@@ -169,7 +186,6 @@ where
     fn next_back(&mut self) -> Option<I::Item> {
         self.iter.rfind(&mut self.predicate)
     }
-
     #[inline]
     fn try_rfold<Acc, Fold, R>(&mut self, init: Acc, fold: Fold) -> R
     where
@@ -177,7 +193,8 @@ where
         Fold: FnMut(Acc, Self::Item) -> R,
         R: Try<Output = Acc>,
     {
-        self.iter.try_rfold(init, filter_try_fold(&mut self.predicate, fold))
+        self.iter
+            .try_rfold(init, filter_try_fold(&mut self.predicate, fold))
     }
 
     #[inline]

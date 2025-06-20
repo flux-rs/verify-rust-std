@@ -22,17 +22,24 @@ pub struct TakeWhile<I, P> {
 
 impl<I, P> TakeWhile<I, P> {
     pub(in crate::iter) fn new(iter: I, predicate: P) -> TakeWhile<I, P> {
-        TakeWhile { iter, flag: false, predicate }
+        TakeWhile {
+            iter,
+            flag: false,
+            predicate,
+        }
     }
 }
 
 #[stable(feature = "core_impl_debug", since = "1.9.0")]
 impl<I: fmt::Debug, P> fmt::Debug for TakeWhile<I, P> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        f.debug_struct("TakeWhile").field("iter", &self.iter).field("flag", &self.flag).finish()
+        f.debug_struct("TakeWhile")
+            .field("iter", &self.iter)
+            .field("flag", &self.flag)
+            .finish()
     }
 }
-
+#[cfg_attr(flux, flux::ignore)] // has escaping bound vars, so it cannot be wrapped in a dummy binder.
 #[stable(feature = "rust1", since = "1.0.0")]
 impl<I: Iterator, P> Iterator for TakeWhile<I, P>
 where

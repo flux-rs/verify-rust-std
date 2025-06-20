@@ -7,7 +7,7 @@
 
 use crate::mem::MaybeUninit;
 use crate::num::diy_float::Fp;
-use crate::num::flt2dec::{Decoded, MAX_SIG_DIGITS, round_up};
+use crate::num::flt2dec::{round_up, Decoded, MAX_SIG_DIGITS};
 
 // see the comments in `format_shortest_opt` for the rationale.
 #[doc(hidden)]
@@ -144,17 +144,37 @@ pub fn max_pow10_no_more_than(x: u32) -> (u8, u32) {
 
     if x < X4 {
         if x < X2 {
-            if x < X1 { (0, 1) } else { (1, X1) }
+            if x < X1 {
+                (0, 1)
+            } else {
+                (1, X1)
+            }
         } else {
-            if x < X3 { (2, X2) } else { (3, X3) }
+            if x < X3 {
+                (2, X2)
+            } else {
+                (3, X3)
+            }
         }
     } else {
         if x < X6 {
-            if x < X5 { (4, X4) } else { (5, X5) }
+            if x < X5 {
+                (4, X4)
+            } else {
+                (5, X5)
+            }
         } else if x < X8 {
-            if x < X7 { (6, X6) } else { (7, X7) }
+            if x < X7 {
+                (6, X6)
+            } else {
+                (7, X7)
+            }
         } else {
-            if x < X9 { (8, X8) } else { (9, X9) }
+            if x < X9 {
+                (8, X8)
+            } else {
+                (9, X9)
+            }
         }
     }
 }
@@ -175,9 +195,21 @@ pub fn format_shortest_opt<'a>(
     assert!(d.mant + d.plus < (1 << 61)); // we need at least three bits of additional precision
 
     // start with the normalized values with the shared exponent
-    let plus = Fp { f: d.mant + d.plus, e: d.exp }.normalize();
-    let minus = Fp { f: d.mant - d.minus, e: d.exp }.normalize_to(plus.e);
-    let v = Fp { f: d.mant, e: d.exp }.normalize_to(plus.e);
+    let plus = Fp {
+        f: d.mant + d.plus,
+        e: d.exp,
+    }
+    .normalize();
+    let minus = Fp {
+        f: d.mant - d.minus,
+        e: d.exp,
+    }
+    .normalize_to(plus.e);
+    let v = Fp {
+        f: d.mant,
+        e: d.exp,
+    }
+    .normalize_to(plus.e);
 
     // find any `cached = 10^minusk` such that `ALPHA <= minusk + plus.e + 64 <= GAMMA`.
     // since `plus` is normalized, this means `2^(62 + ALPHA) <= plus * cached < 2^(64 + GAMMA)`;
@@ -444,7 +476,11 @@ pub fn format_shortest_opt<'a>(
         // this is too liberal, though, so we reject any `w(n)` not between `plus0` and `minus0`,
         // i.e., `plus1 - plus1w(n) <= minus0` or `plus1 - plus1w(n) >= plus0`. we utilize the facts
         // that `threshold = plus1 - minus1` and `plus1 - plus0 = minus0 - minus1 = 2 ulp`.
-        if 2 * ulp <= plus1w && plus1w <= threshold - 4 * ulp { Some((buf, exp)) } else { None }
+        if 2 * ulp <= plus1w && plus1w <= threshold - 4 * ulp {
+            Some((buf, exp))
+        } else {
+            None
+        }
     }
 }
 
@@ -478,7 +514,11 @@ pub fn format_exact_opt<'a>(
     assert!(!buf.is_empty());
 
     // normalize and scale `v`.
-    let v = Fp { f: d.mant, e: d.exp }.normalize();
+    let v = Fp {
+        f: d.mant,
+        e: d.exp,
+    }
+    .normalize();
     let (minusk, cached) = cached_power(ALPHA - v.e - 64, GAMMA - v.e - 64);
     let v = v.mul(cached);
 
@@ -489,8 +529,18 @@ pub fn format_exact_opt<'a>(
 
     let requested_digits = buf.len();
 
-    const POW10_UP_TO_9: [u32; 10] =
-        [1, 10, 100, 1000, 10_000, 100_000, 1_000_000, 10_000_000, 100_000_000, 1_000_000_000];
+    const POW10_UP_TO_9: [u32; 10] = [
+        1,
+        10,
+        100,
+        1000,
+        10_000,
+        100_000,
+        1_000_000,
+        10_000_000,
+        100_000_000,
+        1_000_000_000,
+    ];
 
     // We deviate from the original algorithm here and do some early checks to determine if we can satisfy requested_digits.
     // If we determine that we can't, we exit early and avoid most of the heavy lifting that the algorithm otherwise does.
@@ -538,7 +588,15 @@ pub fn format_exact_opt<'a>(
         //
         // SAFETY: `len=0`, so the obligation of having initialized this memory is trivial.
         return unsafe {
-            possibly_round(buf, 0, exp, limit, v.f / 10, (max_ten_kappa as u64) << e, err << e)
+            possibly_round(
+                buf,
+                0,
+                exp,
+                limit,
+                v.f / 10,
+                (max_ten_kappa as u64) << e,
+                err << e,
+            )
         };
     } else if ((exp as i32 - limit as i32) as usize) < buf.len() {
         (exp - limit) as usize
@@ -569,9 +627,17 @@ pub fn format_exact_opt<'a>(
         // is the buffer full? run the rounding pass with the remainder.
         if i == len {
             let vrem = ((r as u64) << e) + vfrac; // == (v % 10^kappa) * 2^e
-            // SAFETY: we have initialized `len` many bytes.
+                                                  // SAFETY: we have initialized `len` many bytes.
             return unsafe {
-                possibly_round(buf, len, exp, limit, vrem, (ten_kappa as u64) << e, err << e)
+                possibly_round(
+                    buf,
+                    len,
+                    exp,
+                    limit,
+                    vrem,
+                    (ten_kappa as u64) << e,
+                    err << e,
+                )
             };
         }
 

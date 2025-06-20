@@ -35,7 +35,7 @@ pub(super) fn count_chars(s: &str) -> usize {
         do_count_chars(s)
     }
 }
-
+#[cfg_attr(flux, flux::trusted)] // unwrap in move_to
 fn do_count_chars(s: &str) -> usize {
     // For correctness, `CHUNK_SIZE` must be:
     //
@@ -133,5 +133,7 @@ fn sum_bytes_in_usize(values: usize) -> usize {
 // head and tail of the input string (the first and last item in the tuple
 // returned by `slice::align_to`).
 fn char_count_general_case(s: &[u8]) -> usize {
-    s.iter().filter(|&&byte| !super::validations::utf8_is_cont_byte(byte)).count()
+    s.iter()
+        .filter(|&&byte| !super::validations::utf8_is_cont_byte(byte))
+        .count()
 }

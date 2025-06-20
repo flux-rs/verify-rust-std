@@ -17,6 +17,9 @@ bench = false
 
 [dependencies]
 safety = {path = "../contracts/safety" }
+# flux-rs = { git = "https://github.com/flux-rs/flux" }
+flux-attrs = { git = "https://github.com/flux-rs/flux" }
+
 
 [features]
 # Make panics and failed asserts immediately abort without formatting any message
@@ -44,4 +47,10 @@ check-cfg = [
     'cfg(target_has_reliable_f16_math)',
     'cfg(target_has_reliable_f128)',
     'cfg(target_has_reliable_f128_math)',
+    'cfg(kani)',
+    'cfg(flux)'
 ]
+
+[package.metadata.flux]
+enabled = true
+# default_trusted = true

@@ -20,7 +20,9 @@ pub struct FlatMap<I, U: IntoIterator, F> {
 
 impl<I: Iterator, U: IntoIterator, F: FnMut(I::Item) -> U> FlatMap<I, U, F> {
     pub(in crate::iter) fn new(iter: I, f: F) -> FlatMap<I, U, F> {
-        FlatMap { inner: FlattenCompat::new(iter.map(f)) }
+        FlatMap {
+            inner: FlattenCompat::new(iter.map(f)),
+        }
     }
 
     pub(crate) fn into_parts(self) -> (Option<U::IntoIter>, Option<I>, Option<U::IntoIter>) {
@@ -38,7 +40,9 @@ where
     U: Clone + IntoIterator<IntoIter: Clone>,
 {
     fn clone(&self) -> Self {
-        FlatMap { inner: self.inner.clone() }
+        FlatMap {
+            inner: self.inner.clone(),
+        }
     }
 }
 
@@ -48,7 +52,9 @@ where
     U: IntoIterator<IntoIter: fmt::Debug>,
 {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        f.debug_struct("FlatMap").field("inner", &self.inner).finish()
+        f.debug_struct("FlatMap")
+            .field("inner", &self.inner)
+            .finish()
     }
 }
 
@@ -187,7 +193,9 @@ pub struct Flatten<I: Iterator<Item: IntoIterator>> {
 
 impl<I: Iterator<Item: IntoIterator>> Flatten<I> {
     pub(in super::super) fn new(iter: I) -> Flatten<I> {
-        Flatten { inner: FlattenCompat::new(iter) }
+        Flatten {
+            inner: FlattenCompat::new(iter),
+        }
     }
 }
 
@@ -198,7 +206,9 @@ where
     U: fmt::Debug + Iterator,
 {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        f.debug_struct("Flatten").field("inner", &self.inner).finish()
+        f.debug_struct("Flatten")
+            .field("inner", &self.inner)
+            .finish()
     }
 }
 
@@ -209,7 +219,9 @@ where
     U: Clone + Iterator,
 {
     fn clone(&self) -> Self {
-        Flatten { inner: self.inner.clone() }
+        Flatten {
+            inner: self.inner.clone(),
+        }
     }
 }
 
@@ -364,7 +376,11 @@ where
 {
     /// Adapts an iterator by flattening it, for use in `flatten()` and `flat_map()`.
     fn new(iter: I) -> FlattenCompat<I, U> {
-        FlattenCompat { iter: iter.fuse(), frontiter: None, backiter: None }
+        FlattenCompat {
+            iter: iter.fuse(),
+            frontiter: None,
+            backiter: None,
+        }
     }
 }
 
@@ -425,7 +441,9 @@ where
         }
         self.frontiter = None;
 
-        acc = self.iter.try_fold(acc, flatten(&mut self.frontiter, &mut fold))?;
+        acc = self
+            .iter
+            .try_fold(acc, flatten(&mut self.frontiter, &mut fold))?;
         self.frontiter = None;
 
         if let Some(iter) = &mut self.backiter {
@@ -494,7 +512,9 @@ where
         }
         self.backiter = None;
 
-        acc = self.iter.try_rfold(acc, flatten(&mut self.backiter, &mut fold))?;
+        acc = self
+            .iter
+            .try_rfold(acc, flatten(&mut self.backiter, &mut fold))?;
         self.backiter = None;
 
         if let Some(iter) = &mut self.frontiter {
@@ -537,8 +557,10 @@ where
             let (lower, upper) = self.iter.size_hint();
 
             let lower = lower.saturating_mul(fixed_size).saturating_add(lo);
-            let upper =
-                try { fhi?.checked_add(bhi?)?.checked_add(fixed_size.checked_mul(upper?)?)? };
+            let upper = try {
+                fhi?.checked_add(bhi?)?
+                    .checked_add(fixed_size.checked_mul(upper?)?)?
+            };
 
             return (lower, upper);
         }

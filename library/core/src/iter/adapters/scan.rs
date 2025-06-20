@@ -29,7 +29,10 @@ impl<I, St, F> Scan<I, St, F> {
 #[stable(feature = "core_impl_debug", since = "1.9.0")]
 impl<I: fmt::Debug, St: fmt::Debug, F> fmt::Debug for Scan<I, St, F> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        f.debug_struct("Scan").field("iter", &self.iter).field("state", &self.state).finish()
+        f.debug_struct("Scan")
+            .field("iter", &self.iter)
+            .field("state", &self.state)
+            .finish()
     }
 }
 

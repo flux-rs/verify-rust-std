@@ -22,14 +22,21 @@ pub struct SkipWhile<I, P> {
 
 impl<I, P> SkipWhile<I, P> {
     pub(in crate::iter) fn new(iter: I, predicate: P) -> SkipWhile<I, P> {
-        SkipWhile { iter, flag: false, predicate }
+        SkipWhile {
+            iter,
+            flag: false,
+            predicate,
+        }
     }
 }
 
 #[stable(feature = "core_impl_debug", since = "1.9.0")]
 impl<I: fmt::Debug, P> fmt::Debug for SkipWhile<I, P> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        f.debug_struct("SkipWhile").field("iter", &self.iter).field("flag", &self.flag).finish()
+        f.debug_struct("SkipWhile")
+            .field("iter", &self.iter)
+            .field("flag", &self.flag)
+            .finish()
     }
 }
 

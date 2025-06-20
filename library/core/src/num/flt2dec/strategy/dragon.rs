@@ -8,10 +8,11 @@ use crate::cmp::Ordering;
 use crate::mem::MaybeUninit;
 use crate::num::bignum::{Big32x40 as Big, Digit32 as Digit};
 use crate::num::flt2dec::estimator::estimate_scaling_factor;
-use crate::num::flt2dec::{Decoded, MAX_SIG_DIGITS, round_up};
+use crate::num::flt2dec::{round_up, Decoded, MAX_SIG_DIGITS};
 
-static POW10: [Digit; 10] =
-    [1, 10, 100, 1000, 10000, 100000, 1000000, 10000000, 100000000, 1000000000];
+static POW10: [Digit; 10] = [
+    1, 10, 100, 1000, 10000, 100000, 1000000, 10000000, 100000000, 1000000000,
+];
 // precalculated arrays of `Digit`s for 5^(2^n).
 static POW5TO16: [Digit; 2] = [0x86f26fc1, 0x23];
 static POW5TO32: [Digit; 3] = [0x85acef81, 0x2d6d415b, 0x4ee];
@@ -123,7 +124,11 @@ pub fn format_shortest<'a>(
     assert!(buf.len() >= MAX_SIG_DIGITS);
 
     // `a.cmp(&b) < rounding` is `if d.inclusive {a <= b} else {a < b}`
-    let rounding = if d.inclusive { Ordering::Greater } else { Ordering::Equal };
+    let rounding = if d.inclusive {
+        Ordering::Greater
+    } else {
+        Ordering::Equal
+    };
 
     // estimate `k_0` from original inputs satisfying `10^(k_0-1) < high <= 10^(k_0+1)`.
     // the tight bound `k` satisfying `10^(k-1) < high <= 10^k` is calculated later.
@@ -259,6 +264,7 @@ pub fn format_shortest<'a>(
 }
 
 /// The exact and fixed mode implementation for Dragon.
+#[cfg_attr(flux, flux::trusted)]
 pub fn format_exact<'a>(
     d: &Decoded,
     buf: &'a mut [MaybeUninit<u8>],

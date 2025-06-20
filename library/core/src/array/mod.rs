@@ -830,6 +830,7 @@ impl<T, const N: usize> [T; N] {
 ///
 /// By depending on `TrustedLen`, however, we can do that check up-front (where
 /// it easily optimizes away) so it doesn't impact the loop that fills the array.
+#[cfg_attr(flux, flux::trusted)] // unsupported feature
 #[inline]
 fn from_trusted_iterator<T, const N: usize>(iter: impl UncheckedIterator<Item = T>) -> [T; N] {
     try_from_trusted_iterator(iter.map(NeverShortCircuit)).0

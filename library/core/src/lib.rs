@@ -336,6 +336,8 @@ pub mod char;
 pub mod ffi;
 #[unstable(feature = "core_io_borrowed_buf", issue = "117693")]
 pub mod io;
+#[cfg_attr(flux, flux::trusted)]
+#[cfg_attr(flux, flux::trusted_impl)]
 pub mod iter;
 pub mod net;
 pub mod option;
@@ -362,6 +364,9 @@ pub mod time;
 pub mod unicode;
 
 /* Async */
+#[cfg_attr(flux, flux::trusted)]
+#[cfg_attr(flux, flux::trusted_impl)]
+// has escaping bound vars, so it cannot be wrapped in a dummy binder.
 pub mod future;
 pub mod task;
 
