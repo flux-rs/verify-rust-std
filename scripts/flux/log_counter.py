@@ -25,8 +25,11 @@ def process_error_lines(filename):
         line_counts = Counter(error_lines)
         
         # Sort by line content (alphabetically)
-        sorted_lines = dict(sorted(line_counts.items()))
-        
+        # sorted_lines = dict(sorted(line_counts.items()))
+       
+        # Sort by count in descending order, then by line content for ties
+        sorted_lines = dict(sorted(line_counts.items(), key=lambda x: (-x[1], x[0])))
+
         return sorted_lines
     
     except FileNotFoundError:
