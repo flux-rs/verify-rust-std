@@ -1,40 +1,158 @@
+Errors grouped by MODULE and TYPE:
 ==================================================
-Found 35 distinct error lines:
 
-Count: 162 | error[E0999]: arithmetic operation may overflow
-Count: 159 | error[E0999]: assertion might fail: possible out-of-bounds access
-Count:  48 | error[E0999]: internal flux error: crates/flux-infer/src/projections.rs:659:25
-Count:  47 | error[E0999]: refinement type error
-Count:  38 | error[E0999]: assertion might fail: possible division by zero
-Count:  15 | error[E0999]: internal flux error: crates/flux-refineck/src/checker.rs:1599:17
-Count:  12 | error[E0999]: unsupported statement
-Count:  11 | error[E0999]: internal flux error: /Users/rjhala/research/flux/crates/flux-infer/src/infer.rs:915:22
-Count:  10 | error[E0999]: error jumping to join point
-Count:   7 | error: internal compiler error: crates/flux-refineck/src/type_env.rs:527:21: unexpected type with free vars
-Count:   6 | error[E0999]: assignment might be unsafe
-Count:   5 | error[E0999]: assertion might fail: possible remainder with a divisor of zero
-Count:   4 | error[E0999]: internal flux error: crates/flux-infer/src/infer.rs:915:22
-Count:   3 | error: internal compiler error: /Users/rjhala/research/flux/crates/flux-infer/src/infer.rs:912:17: assertion `left == right` failed
-Count:   3 | error: internal compiler error: crates/flux-middle/src/rty/subst.rs:163:21: type parameter out of range
-Count:   2 | error: internal compiler error: crates/flux-refineck/src/checker.rs:1381:18: check_len: expected array or slice type found  `∃b0. [∃b1. T[b1]][b0]`
-Count:   1 | error: could not compile `core` (lib) due to 519 previous errors
-Count:   1 | error: internal compiler error: /Users/rjhala/research/flux/crates/flux-middle/src/rty/binder.rs:181:18: unexpected escaping region BoundRegion { var: 0, kind: BrNamed(DefId(0:63756 ~ core[51f4]::ffi::c_str::{impl#6}::display::'_), '_) }
-Count:   1 | error: internal compiler error: crates/flux-desugar/src/lib.rs:249:17: unsupported node: Synthetic for DefId(0:78594 ~ core[51f4]::future::async_drop::AsyncDrop::drop::{anon_assoc#0})
-Count:   1 | error: internal compiler error: crates/flux-middle/src/rty/subst.rs:171:21: region parameter out of range
-Count:   1 | error: internal compiler error: crates/flux-refineck/src/ghost_statements/fold_unfold.rs:216:17: assertion `left == right` failed
-Count:   1 | error: internal compiler error: crates/flux-refineck/src/ghost_statements/fold_unfold.rs:573:26: implicit downcast of non-struct: `Alias (Projection, str::pattern::Pattern::Searcher, <str::pattern::MultiCharEqPattern<F>, '?36>)`
-Count:   1 | error: internal compiler error: crates/flux-refineck/src/primops.rs:75:32: no primop rule for BitXor using [(bool, a5), (bool, a3)]
-Count:   1 | error: internal compiler error: crates/flux-refineck/src/primops.rs:75:32: no primop rule for Eq using [(*mut ∃b0. { T[b0] | $k0(b0)[] }, ()), (*mut ∃b0. { T[b0] | $k1(b0)[] }, ())]
-Count:   1 | error: internal compiler error: crates/flux-refineck/src/primops.rs:75:32: no primop rule for Eq using [(*mut ∃b0. { T[b0] | * }, ()), (*mut ∃b0. T[b0], ())]
-Count:   1 | error: internal compiler error: crates/flux-refineck/src/primops.rs:75:32: no primop rule for Lt using [(*const ∃b0. { T[b0] | $k18(b0)[a0, a1] }, ()), (*const ∃b0. { T[b0] | $k50(b0)[a0, a1] }, ())]
-Count:   1 | error: internal compiler error: crates/flux-refineck/src/primops.rs:75:32: no primop rule for Lt using [(*mut ∃b0. { T[b0] | $k54(b0)[a0, a1, a2] }, ()), (*mut ∃b0. { T[b0] | $k51(b0)[a0, a1, a2] }, ())]
-Count:   1 | error: internal compiler error: crates/flux-refineck/src/primops.rs:75:32: no primop rule for Lt using [(*mut ∃b0. { T[b0] | $k9(b0)[a0, a1, a2, a3, a4] }, ()), (*mut ∃b0. { T[b0] | $k5(b0)[a0, a1, a2, a3, a4] }, ())]
-Count:   1 | error: internal compiler error: crates/flux-refineck/src/primops.rs:75:32: no primop rule for Ne using [(*const ∃b0. { T[b0] | * }, ()), (*const ∃b0. T[b0], ())]
-Count:   1 | error: internal compiler error: crates/flux-refineck/src/primops.rs:75:32: no primop rule for Ne using [(*mut ∃b0. { T[b0] | $k6(b0)[a0, a1, a2] }, ()), (*mut ∃b0. { T[b0] | $k5(b0)[a0, a1, a2] }, ())]
-Count:   1 | error: internal compiler error: crates/flux-refineck/src/type_env/place_ty.rs:112:9: cannot unfold in `NoUnfold` mode
-Count:   1 | error: internal compiler error: crates/flux-refineck/src/type_env/place_ty.rs:681:18: invalid field projection on `MaybeUninit<λb0. T[b0]>`
-Count:   1 | error: internal compiler error: crates/flux-refineck/src/type_env/place_ty.rs:681:18: invalid field projection on `Transmute<λb0. { Src[b0] | * }, λb1. { Self[b1] | * }>`
-Count:   1 | error[E0999]: unsupported terminator
-Count:   1 | error[E0999]: unsupported terminator args
+core/src/.. (51 errors):
+  error: internal compiler error: crates/flux-middle/src/rty/subst.rs:163:21: type parameter out of range: 2
+  error[E0999]: assertion might fail: possible out-of-bounds access: 2
+  error[E0999]: assignment might be unsafe: 3
+  error[E0999]: internal flux error: crates/flux-infer/src/projections.rs:659:25: 42
+  error[E0999]: refinement type error: 1
+  error[E0999]: unsupported terminator: 1
+
+core/src/any.rs (2 errors):
+  error[E0999]: internal flux error: crates/flux-refineck/src/checker.rs:1599:17: 2
+
+core/src/array (14 errors):
+  error[E0999]: arithmetic operation may overflow: 2
+  error[E0999]: internal flux error: crates/flux-refineck/src/checker.rs:1599:17: 4
+  error[E0999]: refinement type error: 8
+
+core/src/ascii (2 errors):
+  error[E0999]: assertion might fail: possible out-of-bounds access: 2
+
+core/src/bstr (1 errors):
+  error[E0999]: refinement type error: 1
+
+core/src/cell (2 errors):
+  error[E0999]: internal flux error: crates/flux-infer/src/infer.rs:915:22: 2
+
+core/src/cell.rs (1 errors):
+  error[E0999]: internal flux error: crates/flux-refineck/src/checker.rs:1599:17: 1
+
+core/src/clone (1 errors):
+  error[E0999]: assertion might fail: possible out-of-bounds access: 1
+
+core/src/clone.rs (1 errors):
+  error[E0999]: internal flux error: /Users/rjhala/research/flux/crates/flux-infer/src/infer.rs:915:22: 1
+
+core/src/cmp.rs (3 errors):
+  error[E0999]: internal flux error: /Users/rjhala/research/flux/crates/flux-infer/src/infer.rs:915:22: 3
+
+core/src/convert (2 errors):
+  error[E0999]: internal flux error: /Users/rjhala/research/flux/crates/flux-infer/src/infer.rs:915:22: 2
+
+core/src/error.rs (5 errors):
+  error[E0999]: internal flux error: crates/flux-refineck/src/checker.rs:1599:17: 5
+
+core/src/escape.rs (28 errors):
+  error[E0999]: arithmetic operation may overflow: 2
+  error[E0999]: assertion might fail: possible out-of-bounds access: 26
+
+core/src/ffi (6 errors):
+  error: internal compiler error: /Users/rjhala/research/flux/crates/flux-middle/src/rty/binder.rs:193:18: unexpected escaping region BoundRegion { var: 0, kind: BrNamed(DefId(0:63756 ~ core[51f4]::ffi::c_str::{impl#6}::display::'_), '_) }: 1
+  error[E0999]: arithmetic operation may overflow: 4
+  error[E0999]: assertion might fail: possible out-of-bounds access: 1
+
+core/src/fmt (55 errors):
+  error[E0999]: arithmetic operation may overflow: 21
+  error[E0999]: assertion might fail: possible division by zero: 16
+  error[E0999]: assertion might fail: possible out-of-bounds access: 3
+  error[E0999]: assertion might fail: possible remainder with a divisor of zero: 3
+  error[E0999]: internal flux error: /Users/rjhala/research/flux/crates/flux-infer/src/infer.rs:915:22: 2
+  error[E0999]: refinement type error: 10
+
+core/src/hash (3 errors):
+  error[E0999]: arithmetic operation may overflow: 2
+  error[E0999]: internal flux error: /Users/rjhala/research/flux/crates/flux-infer/src/infer.rs:915:22: 1
+
+core/src/intrinsics (1 errors):
+  error[E0999]: internal flux error: crates/flux-infer/src/infer.rs:915:22: 1
+
+core/src/io (2 errors):
+  error[E0999]: arithmetic operation may overflow: 2
+
+core/src/mem (7 errors):
+  error: internal compiler error: crates/flux-refineck/src/type_env/place_ty.rs:681:18: invalid field projection on `MaybeUninit<λb0. T[b0]>`: 1
+  error: internal compiler error: crates/flux-refineck/src/type_env/place_ty.rs:681:18: invalid field projection on `Transmute<λb0. { Src[b0] | * }, λb1. { Self[b1] | * }>`: 1
+  error[E0999]: assertion might fail: possible out-of-bounds access: 2
+  error[E0999]: error jumping to join point: 1
+  error[E0999]: unsupported statement: 2
+
+core/src/net (6 errors):
+  error: internal compiler error: crates/flux-refineck/src/type_env.rs:527:21: unexpected type with free vars: 1
+  error[E0999]: arithmetic operation may overflow: 2
+  error[E0999]: refinement type error: 3
+
+core/src/num (133 errors):
+  error: internal compiler error: crates/flux-refineck/src/type_env.rs:527:21: unexpected type with free vars: 6
+  error[E0999]: arithmetic operation may overflow: 55
+  error[E0999]: assertion might fail: possible division by zero: 12
+  error[E0999]: assertion might fail: possible out-of-bounds access: 48
+  error[E0999]: error jumping to join point: 3
+  error[E0999]: internal flux error: /Users/rjhala/research/flux/crates/flux-infer/src/infer.rs:915:22: 1
+  error[E0999]: refinement type error: 6
+  error[E0999]: unsupported statement: 2
+
+core/src/ops (4 errors):
+  error[E0999]: arithmetic operation may overflow: 2
+  error[E0999]: internal flux error: /Users/rjhala/research/flux/crates/flux-infer/src/infer.rs:915:22: 1
+  error[E0999]: refinement type error: 1
+
+core/src/option.rs (1 errors):
+  error[E0999]: internal flux error: crates/flux-infer/src/projections.rs:659:25: 1
+
+core/src/pat.rs (1 errors):
+  error[E0999]: arithmetic operation may overflow: 1
+
+core/src/ptr (7 errors):
+  error: internal compiler error: crates/flux-refineck/src/primops.rs:77:32: no primop rule for Eq using [(*mut ∃b0. { T[b0] | $k0(b0)[] }, ()), (*mut ∃b0. { T[b0] | $k1(b0)[] }, ())]: 1
+  error[E0999]: arithmetic operation may overflow: 3
+  error[E0999]: assertion might fail: possible out-of-bounds access: 1
+  error[E0999]: internal flux error: crates/flux-refineck/src/checker.rs:1599:17: 2
+
+core/src/result.rs (1 errors):
+  error[E0999]: internal flux error: crates/flux-infer/src/projections.rs:659:25: 1
+
+core/src/slice (102 errors):
+  error: internal compiler error: crates/flux-middle/src/rty/subst.rs:163:21: type parameter out of range: 1
+  error: internal compiler error: crates/flux-refineck/src/checker.rs:1381:18: check_len: expected array or slice type found  `∃b0. [∃b1. T[b1]][b0]`: 2
+  error: internal compiler error: crates/flux-refineck/src/primops.rs:77:32: no primop rule for BitXor using [(bool, a5), (bool, a3)]: 1
+  error: internal compiler error: crates/flux-refineck/src/primops.rs:77:32: no primop rule for Eq using [(*mut ∃b0. { T[b0] | * }, ()), (*mut ∃b0. T[b0], ())]: 1
+  error: internal compiler error: crates/flux-refineck/src/primops.rs:77:32: no primop rule for Lt using [(*const ∃b0. { T[b0] | $k18(b0)[a0, a1] }, ()), (*const ∃b0. { T[b0] | $k50(b0)[a0, a1] }, ())]: 1
+  error: internal compiler error: crates/flux-refineck/src/primops.rs:77:32: no primop rule for Lt using [(*mut ∃b0. { T[b0] | $k54(b0)[a0, a1, a2] }, ()), (*mut ∃b0. { T[b0] | $k51(b0)[a0, a1, a2] }, ())]: 1
+  error: internal compiler error: crates/flux-refineck/src/primops.rs:77:32: no primop rule for Lt using [(*mut ∃b0. { T[b0] | $k9(b0)[a0, a1, a2, a3, a4] }, ()), (*mut ∃b0. { T[b0] | $k5(b0)[a0, a1, a2, a3, a4] }, ())]: 1
+  error: internal compiler error: crates/flux-refineck/src/primops.rs:77:32: no primop rule for Ne using [(*const ∃b0. { T[b0] | * }, ()), (*const ∃b0. T[b0], ())]: 1
+  error: internal compiler error: crates/flux-refineck/src/primops.rs:77:32: no primop rule for Ne using [(*mut ∃b0. { T[b0] | $k6(b0)[a0, a1, a2] }, ()), (*mut ∃b0. { T[b0] | $k5(b0)[a0, a1, a2] }, ())]: 1
+  error: internal compiler error: crates/flux-refineck/src/type_env/place_ty.rs:112:9: cannot unfold in `NoUnfold` mode: 1
+  error[E0999]: arithmetic operation may overflow: 21
+  error[E0999]: assertion might fail: possible division by zero: 8
+  error[E0999]: assertion might fail: possible out-of-bounds access: 33
+  error[E0999]: assertion might fail: possible remainder with a divisor of zero: 2
+  error[E0999]: error jumping to join point: 5
+  error[E0999]: internal flux error: crates/flux-infer/src/projections.rs:659:25: 4
+  error[E0999]: refinement type error: 10
+  error[E0999]: unsupported statement: 8
+
+core/src/str (69 errors):
+  error: internal compiler error: crates/flux-refineck/src/ghost_statements/fold_unfold.rs:573:26: implicit downcast of non-struct: `Alias (Projection, str::pattern::Pattern::Searcher, <str::pattern::MultiCharEqPattern<F>, '?36>)`: 1
+  error[E0999]: arithmetic operation may overflow: 32
+  error[E0999]: assertion might fail: possible out-of-bounds access: 25
+  error[E0999]: assignment might be unsafe: 1
+  error[E0999]: internal flux error: crates/flux-infer/src/infer.rs:915:22: 1
+  error[E0999]: internal flux error: crates/flux-refineck/src/checker.rs:1599:17: 1
+  error[E0999]: refinement type error: 7
+  error[E0999]: unsupported terminator args: 1
+
+core/src/time.rs (11 errors):
+  error[E0999]: arithmetic operation may overflow: 6
+  error[E0999]: assertion might fail: possible division by zero: 1
+  error[E0999]: assertion might fail: possible out-of-bounds access: 2
+  error[E0999]: assignment might be unsafe: 2
+
+core/src/unicode (21 errors):
+  error[E0999]: arithmetic operation may overflow: 7
+  error[E0999]: assertion might fail: possible division by zero: 1
+  error[E0999]: assertion might fail: possible out-of-bounds access: 13
+
 ==================================================
-Total error lines: 551
+Total number of errors: 551
