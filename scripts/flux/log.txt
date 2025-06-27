@@ -1,0 +1,3890 @@
+    Checking core v0.0.0 (/Users/rjhala/research/verify-rust-std/library/core)
+error[E0999]: arithmetic operation may overflow
+   --> core/src/num/dec2flt/decimal_seq.rs:244:48
+    |
+244 |             d.digits[d.num_digits..].write_u64(v - 0x3030_3030_3030_3030);
+    |                                                ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: arithmetic operation may overflow
+   --> core/src/num/dec2flt/decimal_seq.rs:263:9
+    |
+263 |         d.num_digits -= n_trailing_zeros;
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: arithmetic operation may overflow
+   --> core/src/num/dec2flt/decimal_seq.rs:255:27
+    |
+255 |         for &c in start[..(start.len() - s.len())].iter().rev() {
+    |                           ^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+   --> core/src/num/dec2flt/decimal_seq.rs:294:9
+    |
+294 |         d.digits[i] = 0;
+    |         ^^^^^^^^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+   --> core/src/num/dec2flt/decimal_seq.rs:359:15
+    |
+359 |     let x_a = TABLE[shift];
+    |               ^^^^^^^^^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+   --> core/src/num/dec2flt/decimal_seq.rs:360:15
+    |
+360 |     let x_b = TABLE[shift + 1];
+    |               ^^^^^^^^^^^^^^^^
+
+error[E0999]: arithmetic operation may overflow
+   --> core/src/num/dec2flt/decimal_seq.rs:368:20
+    |
+368 |             return num_new_digits - 1;
+    |                    ^^^^^^^^^^^^^^^^^^
+
+error[E0999]: arithmetic operation may overflow
+   --> core/src/num/dec2flt/decimal_seq.rs:366:50
+    |
+366 |     for (i, &p5) in pow5.iter().enumerate().take(pow5_b - pow5_a) {
+    |                                                  ^^^^^^^^^^^^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+   --> core/src/num/dec2flt/decimal_seq.rs:369:19
+    |
+369 |         } else if d.digits[i] == p5 {
+    |                   ^^^^^^^^^^^
+
+error[E0999]: arithmetic operation may overflow
+   --> core/src/num/dec2flt/decimal_seq.rs:372:20
+    |
+372 |             return num_new_digits - 1;
+    |                    ^^^^^^^^^^^^^^^^^^
+
+error[E0999]: arithmetic operation may overflow
+   --> core/src/num/dec2flt/slow.rs:107:17
+    |
+107 |     mantissa &= (1_u64 << F::SIG_BITS) - 1;
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+   --> core/src/num/dec2flt/lemire.rs:150:22
+    |
+150 |     let (lo5, hi5) = POWER_OF_FIVE_128[index];
+    |                      ^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: arithmetic operation may overflow
+  --> core/src/num/dec2flt/parse.rs:21:5
+   |
+21 |     v -= 0x3030_3030_3030_3030;
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+   --> core/src/num/dec2flt/parse.rs:211:17
+    |
+211 |         let a = s[0] as u64;
+    |                 ^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+   --> core/src/num/dec2flt/parse.rs:212:17
+    |
+212 |         let b = s[1] as u64;
+    |                 ^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+   --> core/src/num/dec2flt/parse.rs:213:17
+    |
+213 |         let c = s[2] as u64;
+    |                 ^^^^
+
+error[E0999]: arithmetic operation may overflow
+  --> core/src/num/flt2dec/estimator.rs:10:22
+   |
+10 |     let nbits = 64 - (mant - 1).leading_zeros() as i64;
+   |                      ^^^^^^^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+  --> core/src/num/flt2dec/strategy/dragon.rs:40:21
+   |
+40 |         x.mul_small(POW10[n & 7] >> (n & 7));
+   |                     ^^^^^^^^^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+  --> core/src/num/flt2dec/strategy/dragon.rs:35:28
+   |
+35 |         return x.mul_small(POW10[n & 7]);
+   |                            ^^^^^^^^^^^^
+
+error[E0999]: arithmetic operation may overflow
+  --> core/src/num/flt2dec/strategy/dragon.rs:64:19
+   |
+64 |     let largest = POW10.len() - 1;
+   |                   ^^^^^^^^^^^^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+  --> core/src/num/flt2dec/strategy/dragon.rs:69:21
+   |
+69 |     x.div_rem_small(POW10[n] << 1);
+   |                     ^^^^^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+  --> core/src/num/flt2dec/strategy/dragon.rs:66:25
+   |
+66 |         x.div_rem_small(POW10[largest]);
+   |                         ^^^^^^^^^^^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+   --> core/src/num/flt2dec/strategy/dragon.rs:199:9
+    |
+199 |         buf[i] = MaybeUninit::new(b'0' + d);
+    |         ^^^^^^
+
+error[E0999]: error jumping to join point
+   --> core/src/num/flt2dec/strategy/dragon.rs:188:10
+    |
+188 |       loop {
+    |  __________^
+...   |
+244 | |         plus.mul_small(10);
+245 | |     }
+    | |_____^
+
+error[E0999]: refinement type error
+   --> core/src/num/flt2dec/strategy/dragon.rs:255:47
+    |
+255 |         if let Some(c) = round_up(unsafe { buf[..i].assume_init_mut() }) {
+    |                                               ^^^^^ a precondition cannot be proved
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+   --> core/src/num/flt2dec/strategy/dragon.rs:256:13
+    |
+256 |             buf[i] = MaybeUninit::new(c);
+    |             ^^^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+   --> core/src/num/flt2dec/strategy/grisu.rs:125:21
+    |
+125 |     let (f, e, k) = CACHED_POW10[idx as usize];
+    |                     ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: refinement type error
+   --> core/src/num/flt2dec/strategy/grisu.rs:359:29
+    |
+359 |                 unsafe { buf[..i].assume_init_mut() },
+    |                             ^^^^^ a precondition cannot be proved
+
+error[E0999]: assertion might fail: possible division by zero
+   --> core/src/num/flt2dec/strategy/grisu.rs:298:17
+    |
+298 |         let q = remainder / ten_kappa;
+    |                 ^^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: arithmetic operation may overflow
+   --> core/src/num/flt2dec/strategy/grisu.rs:363:17
+    |
+363 |                 (plus1 - v.f) * ulp,
+    |                 ^^^^^^^^^^^^^
+
+error[E0999]: arithmetic operation may overflow
+   --> core/src/num/flt2dec/strategy/grisu.rs:204:12
+    |
+204 |         f: d.mant - d.minus,
+    |            ^^^^^^^^^^^^^^^^
+
+error[E0999]: refinement type error
+   --> core/src/num/flt2dec/strategy/grisu.rs:310:29
+    |
+310 |                 unsafe { buf[..i].assume_init_mut() },
+    |                             ^^^^^ a precondition cannot be proved
+
+error[E0999]: arithmetic operation may overflow
+   --> core/src/num/flt2dec/strategy/grisu.rs:314:17
+    |
+314 |                 plus1 - v.f,
+    |                 ^^^^^^^^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+   --> core/src/num/flt2dec/strategy/grisu.rs:301:9
+    |
+301 |         buf[i] = MaybeUninit::new(b'0' + q as u8);
+    |         ^^^^^^
+
+error[E0999]: error jumping to join point
+   --> core/src/num/flt2dec/strategy/grisu.rs:290:10
+    |
+290 |       loop {
+    |  __________^
+...   |
+329 | |         remainder = r;
+330 | |     }
+    | |_____^
+
+error[E0999]: arithmetic operation may overflow
+   --> core/src/num/flt2dec/strategy/grisu.rs:350:29
+    |
+350 |         let r = remainder & ((1 << e) - 1);
+    |                             ^^^^^^^^^^^^^^
+
+error[E0999]: arithmetic operation may overflow
+   --> core/src/num/flt2dec/strategy/grisu.rs:259:18
+    |
+259 |     let minus1 = minus.f - 1;
+    |                  ^^^^^^^^^^^
+
+error[E0999]: arithmetic operation may overflow
+   --> core/src/num/flt2dec/strategy/grisu.rs:266:29
+    |
+266 |     let plus1frac = plus1 & ((1 << e) - 1);
+    |                             ^^^^^^^^^^^^^^
+
+error[E0999]: arithmetic operation may overflow
+   --> core/src/num/flt2dec/strategy/grisu.rs:283:18
+    |
+283 |     let delta1 = plus1 - minus1;
+    |                  ^^^^^^^^^^^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+   --> core/src/num/flt2dec/strategy/grisu.rs:352:9
+    |
+352 |         buf[i] = MaybeUninit::new(b'0' + q as u8);
+    |         ^^^^^^
+
+error[E0999]: arithmetic operation may overflow
+   --> core/src/num/flt2dec/strategy/grisu.rs:285:31
+    |
+285 |     let delta1frac = delta1 & ((1 << e) - 1);
+    |                               ^^^^^^^^^^^^^^
+
+error[E0999]: arithmetic operation may overflow
+   --> core/src/num/flt2dec/strategy/grisu.rs:406:25
+    |
+406 |         let plus1v_up = plus1v - ulp; // plus1 - (v + 1 ulp)
+    |                         ^^^^^^^^^^^^
+
+error[E0999]: arithmetic operation may overflow
+   --> core/src/num/flt2dec/strategy/grisu.rs:468:16
+    |
+468 |             && threshold - plus1w >= ten_kappa
+    |                ^^^^^^^^^^^^^^^^^^
+
+error[E0999]: arithmetic operation may overflow
+   --> core/src/num/flt2dec/strategy/grisu.rs:457:17
+    |
+457 |                 *last -= 1;
+    |                 ^^^^^^^^^^
+
+error[E0999]: arithmetic operation may overflow
+   --> core/src/num/flt2dec/strategy/grisu.rs:453:20
+    |
+453 |                 && threshold - plus1w >= ten_kappa
+    |                    ^^^^^^^^^^^^^^^^^^
+
+error[E0999]: arithmetic operation may overflow
+   --> core/src/num/flt2dec/strategy/grisu.rs:479:43
+    |
+479 |         if 2 * ulp <= plus1w && plus1w <= threshold - 4 * ulp {
+    |                                           ^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: arithmetic operation may overflow
+   --> core/src/num/flt2dec/strategy/grisu.rs:528:23
+    |
+528 |     let vfrac = v.f & ((1 << e) - 1);
+    |                       ^^^^^^^^^^^^^^
+
+error[E0999]: arithmetic operation may overflow
+   --> core/src/num/flt2dec/strategy/grisu.rs:684:29
+    |
+684 |         let r = remainder & ((1 << e) - 1);
+    |                             ^^^^^^^^^^^^^^
+
+error[E0999]: assertion might fail: possible division by zero
+   --> core/src/num/flt2dec/strategy/grisu.rs:621:17
+    |
+621 |         let q = remainder / ten_kappa;
+    |                 ^^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: arithmetic operation may overflow
+   --> core/src/num/flt2dec/strategy/grisu.rs:552:75
+    |
+552 |     if (vfrac == 0) && ((requested_digits >= 11) || (vint < POW10_UP_TO_9[requested_digits - 1])) {
+    |                                                                           ^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+   --> core/src/num/flt2dec/strategy/grisu.rs:686:9
+    |
+686 |         buf[i] = MaybeUninit::new(b'0' + q as u8);
+    |         ^^^^^^
+
+error[E0999]: error jumping to join point
+
+error[E0999]: refinement type error
+   --> core/src/num/flt2dec/strategy/grisu.rs:692:29
+    |
+692 |             return unsafe { possibly_round(buf, len, exp, limit, r, 1 << e, err) };
+    |                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ a precondition cannot be proved
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+   --> core/src/num/flt2dec/strategy/grisu.rs:624:9
+    |
+624 |         buf[i] = MaybeUninit::new(b'0' + q as u8);
+    |         ^^^^^^
+
+error[E0999]: error jumping to join point
+   --> core/src/num/flt2dec/strategy/grisu.rs:613:10
+    |
+613 |       loop {
+    |  __________^
+...   |
+655 | |         remainder = r;
+656 | |     }
+    | |_____^
+
+error[E0999]: arithmetic operation may overflow
+   --> core/src/num/flt2dec/strategy/grisu.rs:671:23
+    |
+671 |     let maxerr = 1 << (e - 1);
+    |                       ^^^^^^^
+
+error[E0999]: refinement type error
+   --> core/src/num/flt2dec/strategy/grisu.rs:632:17
+    |
+632 | /                 possibly_round(
+633 | |                     buf,
+634 | |                     len,
+635 | |                     exp,
+...   |
+639 | |                     err << e,
+640 | |                 )
+    | |_________________^ a precondition cannot be proved
+
+error: internal compiler error: crates/flux-refineck/src/type_env.rs:527:21: unexpected type with free vars
+   --> core/src/num/flt2dec/strategy/grisu.rs:811:17
+    |
+811 | /                 if exp > limit && len < buf.len() {
+812 | |                     buf[len] = MaybeUninit::new(c);
+813 | |                     len += 1;
+814 | |                 }
+    | |_________________^
+
+
+thread 'rustc' panicked at crates/flux-refineck/src/type_env.rs:527:21:
+Box<dyn Any>
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+note: bug caught [def_id: DefId(0:936 ~ core[51f4]::num::flt2dec::strategy::grisu::format_exact_opt::possibly_round), span: core/src/num/flt2dec/strategy/grisu.rs:714:5: 722:30 (#0)]
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+   --> core/src/num/flt2dec/mod.rs:160:13
+    |
+160 |             d[0] = b'1';
+    |             ^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+   --> core/src/num/flt2dec/mod.rs:162:17
+    |
+162 |                 d[j] = b'0';
+    |                 ^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+   --> core/src/num/flt2dec/mod.rs:152:13
+    |
+152 |             d[i] += 1;
+    |             ^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+   --> core/src/num/flt2dec/mod.rs:154:17
+    |
+154 |                 d[j] = b'0';
+    |                 ^^^^
+
+error: internal compiler error: crates/flux-refineck/src/type_env.rs:527:21: unexpected type with free vars
+   --> core/src/num/flt2dec/mod.rs:220:9
+    |
+220 | /         if exp < buf.len() {
+221 | |             // the decimal point is inside rendered digits: [12][.][34][____]
+222 | |             parts[0] = MaybeUninit::new(Part::Copy(&buf[..exp]));
+223 | |             parts[1] = MaybeUninit::new(Part::Copy(b"."));
+...   |
+246 | |         }
+    | |_________^
+
+
+thread 'rustc' panicked at crates/flux-refineck/src/type_env.rs:527:21:
+Box<dyn Any>
+note: bug caught [def_id: DefId(0:943 ~ core[51f4]::num::flt2dec::digits_to_dec_str), span: core/src/num/flt2dec/mod.rs:181:1: 186:20 (#0)]
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+   --> core/src/num/flt2dec/mod.rs:267:13
+    |
+267 |     assert!(buf[0] > b'0');
+    |             ^^^^^^
+
+error[E0999]: arithmetic operation may overflow
+   --> core/src/num/flt2dec/mod.rs:280:52
+    |
+280 |             parts[n] = MaybeUninit::new(Part::Zero(min_ndigits - buf.len()));
+    |                                                    ^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+   --> core/src/num/flt2dec/mod.rs:280:13
+    |
+280 |             parts[n] = MaybeUninit::new(Part::Zero(min_ndigits - buf.len()));
+    |             ^^^^^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+   --> core/src/num/flt2dec/mod.rs:272:5
+    |
+272 |     parts[n] = MaybeUninit::new(Part::Copy(&buf[..1]));
+    |     ^^^^^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+   --> core/src/num/flt2dec/mod.rs:288:9
+    |
+288 |         parts[n] = MaybeUninit::new(Part::Copy(if upper { b"E-" } else { b"e-" }));
+    |         ^^^^^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+   --> core/src/num/flt2dec/mod.rs:289:9
+    |
+289 |         parts[n + 1] = MaybeUninit::new(Part::Num(-exp as u16));
+    |         ^^^^^^^^^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+   --> core/src/num/flt2dec/mod.rs:276:9
+    |
+276 |         parts[n] = MaybeUninit::new(Part::Copy(b"."));
+    |         ^^^^^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+   --> core/src/num/flt2dec/mod.rs:277:9
+    |
+277 |         parts[n + 1] = MaybeUninit::new(Part::Copy(&buf[1..]));
+    |         ^^^^^^^^^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+   --> core/src/num/flt2dec/mod.rs:291:9
+    |
+291 |         parts[n] = MaybeUninit::new(Part::Copy(if upper { b"E" } else { b"e" }));
+    |         ^^^^^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+   --> core/src/num/flt2dec/mod.rs:292:9
+    |
+292 |         parts[n + 1] = MaybeUninit::new(Part::Num(exp as u16));
+    |         ^^^^^^^^^^^^
+
+error: internal compiler error: crates/flux-refineck/src/type_env.rs:527:21: unexpected type with free vars
+   --> core/src/num/flt2dec/mod.rs:369:78
+    |
+369 |             Formatted { sign, parts: unsafe { parts[..1].assume_init_ref() } }
+    |                                                                              ^
+
+
+thread 'rustc' panicked at crates/flux-refineck/src/type_env.rs:527:21:
+Box<dyn Any>
+note: bug caught [def_id: DefId(0:948 ~ core[51f4]::num::flt2dec::to_shortest_str), span: core/src/num/flt2dec/mod.rs:348:1: 358:70 (#0)]
+
+error: internal compiler error: crates/flux-refineck/src/type_env.rs:527:21: unexpected type with free vars
+   --> core/src/num/flt2dec/mod.rs:445:78
+    |
+445 |             Formatted { sign, parts: unsafe { parts[..1].assume_init_ref() } }
+    |                                                                              ^
+
+
+thread 'rustc' panicked at crates/flux-refineck/src/type_env.rs:527:21:
+Box<dyn Any>
+note: bug caught [def_id: DefId(0:952 ~ core[51f4]::num::flt2dec::to_shortest_exp_str), span: core/src/num/flt2dec/mod.rs:422:1: 433:70 (#0)]
+
+error: internal compiler error: crates/flux-refineck/src/type_env.rs:527:21: unexpected type with free vars
+   --> core/src/num/flt2dec/mod.rs:536:78
+    |
+536 |             Formatted { sign, parts: unsafe { parts[..1].assume_init_ref() } }
+    |                                                                              ^
+
+
+thread 'rustc' panicked at crates/flux-refineck/src/type_env.rs:527:21:
+Box<dyn Any>
+note: bug caught [def_id: DefId(0:957 ~ core[51f4]::num::flt2dec::to_exact_exp_str), span: core/src/num/flt2dec/mod.rs:514:1: 525:75 (#0)]
+
+error: internal compiler error: crates/flux-refineck/src/type_env.rs:527:21: unexpected type with free vars
+   --> core/src/num/flt2dec/mod.rs:610:78
+    |
+610 |             Formatted { sign, parts: unsafe { parts[..1].assume_init_ref() } }
+    |                                                                              ^
+
+
+thread 'rustc' panicked at crates/flux-refineck/src/type_env.rs:527:21:
+Box<dyn Any>
+note: bug caught [def_id: DefId(0:961 ~ core[51f4]::num::flt2dec::to_exact_fixed_str), span: core/src/num/flt2dec/mod.rs:590:1: 600:75 (#0)]
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+  --> core/src/num/int_sqrt.rs:41:5
+   |
+41 |     U8_ISQRT_WITH_REMAINDER[n as usize].0
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+   --> core/src/num/int_sqrt.rs:145:22
+    |
+145 |         let (s, r) = U8_ISQRT_WITH_REMAINDER[n as usize];
+    |                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+...
+259 |     let (s, r) = first_stage!(16, n);
+    |                  ------------------- in this macro invocation
+    |
+    = note: this error originates in the macro `first_stage` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0999]: assertion might fail: possible division by zero
+   --> core/src/num/int_sqrt.rs:241:17
+    |
+241 |         let q = numerator / denominator;
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^
+...
+260 |     last_stage!(u16, n, s, r)
+    |     ------------------------- in this macro invocation
+    |
+    = note: this error originates in the macro `last_stage` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0999]: arithmetic operation may overflow
+   --> core/src/num/int_sqrt.rs:245:13
+    |
+245 |             s -= 1;
+    |             ^^^^^^
+...
+260 |     last_stage!(u16, n, s, r)
+    |     ------------------------- in this macro invocation
+    |
+    = note: this error originates in the macro `last_stage` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+   --> core/src/num/int_sqrt.rs:145:22
+    |
+145 |         let (s, r) = U8_ISQRT_WITH_REMAINDER[n as usize];
+    |                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+...
+271 |     let (s, r) = first_stage!(32, n);
+    |                  ------------------- in this macro invocation
+    |
+    = note: this error originates in the macro `first_stage` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0999]: arithmetic operation may overflow
+   --> core/src/num/int_sqrt.rs:245:13
+    |
+245 |             s -= 1;
+    |             ^^^^^^
+...
+273 |     last_stage!(u32, n, s, r)
+    |     ------------------------- in this macro invocation
+    |
+    = note: this error originates in the macro `last_stage` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0999]: assertion might fail: possible division by zero
+   --> core/src/num/int_sqrt.rs:189:17
+    |
+189 |         let q = numerator / denominator;
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^
+...
+272 |     let (s, r) = middle_stage!(32, u16, n, s, r);
+    |                  ------------------------------- in this macro invocation
+    |
+    = note: this error originates in the macro `middle_stage` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0999]: arithmetic operation may overflow
+   --> core/src/num/int_sqrt.rs:196:32
+    |
+196 |             r = r.wrapping_add(2 * s - 1);
+    |                                ^^^^^^^^^
+...
+272 |     let (s, r) = middle_stage!(32, u16, n, s, r);
+    |                  ------------------------------- in this macro invocation
+    |
+    = note: this error originates in the macro `middle_stage` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0999]: arithmetic operation may overflow
+   --> core/src/num/int_sqrt.rs:197:13
+    |
+197 |             s -= 1;
+    |             ^^^^^^
+...
+272 |     let (s, r) = middle_stage!(32, u16, n, s, r);
+    |                  ------------------------------- in this macro invocation
+    |
+    = note: this error originates in the macro `middle_stage` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0999]: assertion might fail: possible division by zero
+   --> core/src/num/int_sqrt.rs:241:17
+    |
+241 |         let q = numerator / denominator;
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^
+...
+273 |     last_stage!(u32, n, s, r)
+    |     ------------------------- in this macro invocation
+    |
+    = note: this error originates in the macro `last_stage` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0999]: arithmetic operation may overflow
+   --> core/src/num/int_sqrt.rs:196:32
+    |
+196 |             r = r.wrapping_add(2 * s - 1);
+    |                                ^^^^^^^^^
+...
+286 |     let (s, r) = middle_stage!(64, u32, n, s, r);
+    |                  ------------------------------- in this macro invocation
+    |
+    = note: this error originates in the macro `middle_stage` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+   --> core/src/num/int_sqrt.rs:145:22
+    |
+145 |         let (s, r) = U8_ISQRT_WITH_REMAINDER[n as usize];
+    |                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+...
+284 |     let (s, r) = first_stage!(64, n);
+    |                  ------------------- in this macro invocation
+    |
+    = note: this error originates in the macro `first_stage` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0999]: arithmetic operation may overflow
+   --> core/src/num/int_sqrt.rs:197:13
+    |
+197 |             s -= 1;
+    |             ^^^^^^
+...
+286 |     let (s, r) = middle_stage!(64, u32, n, s, r);
+    |                  ------------------------------- in this macro invocation
+    |
+    = note: this error originates in the macro `middle_stage` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0999]: assertion might fail: possible division by zero
+   --> core/src/num/int_sqrt.rs:189:17
+    |
+189 |         let q = numerator / denominator;
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^
+...
+285 |     let (s, r) = middle_stage!(64, u16, n, s, r);
+    |                  ------------------------------- in this macro invocation
+    |
+    = note: this error originates in the macro `middle_stage` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0999]: assertion might fail: possible division by zero
+   --> core/src/num/int_sqrt.rs:241:17
+    |
+241 |         let q = numerator / denominator;
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^
+...
+287 |     last_stage!(u64, n, s, r)
+    |     ------------------------- in this macro invocation
+    |
+    = note: this error originates in the macro `last_stage` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0999]: arithmetic operation may overflow
+   --> core/src/num/int_sqrt.rs:196:32
+    |
+196 |             r = r.wrapping_add(2 * s - 1);
+    |                                ^^^^^^^^^
+...
+285 |     let (s, r) = middle_stage!(64, u16, n, s, r);
+    |                  ------------------------------- in this macro invocation
+    |
+    = note: this error originates in the macro `middle_stage` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0999]: arithmetic operation may overflow
+   --> core/src/num/int_sqrt.rs:197:13
+    |
+197 |             s -= 1;
+    |             ^^^^^^
+...
+285 |     let (s, r) = middle_stage!(64, u16, n, s, r);
+    |                  ------------------------------- in this macro invocation
+    |
+    = note: this error originates in the macro `middle_stage` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0999]: arithmetic operation may overflow
+   --> core/src/num/int_sqrt.rs:245:13
+    |
+245 |             s -= 1;
+    |             ^^^^^^
+...
+287 |     last_stage!(u64, n, s, r)
+    |     ------------------------- in this macro invocation
+    |
+    = note: this error originates in the macro `last_stage` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0999]: assertion might fail: possible division by zero
+   --> core/src/num/int_sqrt.rs:189:17
+    |
+189 |         let q = numerator / denominator;
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^
+...
+286 |     let (s, r) = middle_stage!(64, u32, n, s, r);
+    |                  ------------------------------- in this macro invocation
+    |
+    = note: this error originates in the macro `middle_stage` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0999]: assertion might fail: possible division by zero
+   --> core/src/num/int_sqrt.rs:241:17
+    |
+241 |         let q = numerator / denominator;
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^
+...
+302 |     last_stage!(u128, n, s, r)
+    |     -------------------------- in this macro invocation
+    |
+    = note: this error originates in the macro `last_stage` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0999]: arithmetic operation may overflow
+   --> core/src/num/int_sqrt.rs:196:32
+    |
+196 |             r = r.wrapping_add(2 * s - 1);
+    |                                ^^^^^^^^^
+...
+300 |     let (s, r) = middle_stage!(128, u32, n, s, r);
+    |                  -------------------------------- in this macro invocation
+    |
+    = note: this error originates in the macro `middle_stage` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+   --> core/src/num/int_sqrt.rs:145:22
+    |
+145 |         let (s, r) = U8_ISQRT_WITH_REMAINDER[n as usize];
+    |                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+...
+298 |     let (s, r) = first_stage!(128, n);
+    |                  -------------------- in this macro invocation
+    |
+    = note: this error originates in the macro `first_stage` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0999]: arithmetic operation may overflow
+   --> core/src/num/int_sqrt.rs:197:13
+    |
+197 |             s -= 1;
+    |             ^^^^^^
+...
+300 |     let (s, r) = middle_stage!(128, u32, n, s, r);
+    |                  -------------------------------- in this macro invocation
+    |
+    = note: this error originates in the macro `middle_stage` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0999]: assertion might fail: possible division by zero
+   --> core/src/num/int_sqrt.rs:189:17
+    |
+189 |         let q = numerator / denominator;
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^
+...
+299 |     let (s, r) = middle_stage!(128, u16, n, s, r);
+    |                  -------------------------------- in this macro invocation
+    |
+    = note: this error originates in the macro `middle_stage` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0999]: arithmetic operation may overflow
+   --> core/src/num/int_sqrt.rs:245:13
+    |
+245 |             s -= 1;
+    |             ^^^^^^
+...
+302 |     last_stage!(u128, n, s, r)
+    |     -------------------------- in this macro invocation
+    |
+    = note: this error originates in the macro `last_stage` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0999]: assertion might fail: possible division by zero
+   --> core/src/num/int_sqrt.rs:189:17
+    |
+189 |         let q = numerator / denominator;
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^
+...
+301 |     let (s, r) = middle_stage!(128, u64, n, s, r);
+    |                  -------------------------------- in this macro invocation
+    |
+    = note: this error originates in the macro `middle_stage` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0999]: arithmetic operation may overflow
+   --> core/src/num/int_sqrt.rs:196:32
+    |
+196 |             r = r.wrapping_add(2 * s - 1);
+    |                                ^^^^^^^^^
+...
+299 |     let (s, r) = middle_stage!(128, u16, n, s, r);
+    |                  -------------------------------- in this macro invocation
+    |
+    = note: this error originates in the macro `middle_stage` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0999]: arithmetic operation may overflow
+   --> core/src/num/int_sqrt.rs:197:13
+    |
+197 |             s -= 1;
+    |             ^^^^^^
+...
+299 |     let (s, r) = middle_stage!(128, u16, n, s, r);
+    |                  -------------------------------- in this macro invocation
+    |
+    = note: this error originates in the macro `middle_stage` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0999]: arithmetic operation may overflow
+   --> core/src/num/int_sqrt.rs:196:32
+    |
+196 |             r = r.wrapping_add(2 * s - 1);
+    |                                ^^^^^^^^^
+...
+301 |     let (s, r) = middle_stage!(128, u64, n, s, r);
+    |                  -------------------------------- in this macro invocation
+    |
+    = note: this error originates in the macro `middle_stage` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0999]: arithmetic operation may overflow
+   --> core/src/num/int_sqrt.rs:197:13
+    |
+197 |             s -= 1;
+    |             ^^^^^^
+...
+301 |     let (s, r) = middle_stage!(128, u64, n, s, r);
+    |                  -------------------------------- in this macro invocation
+    |
+    = note: this error originates in the macro `middle_stage` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0999]: assertion might fail: possible division by zero
+   --> core/src/num/int_sqrt.rs:189:17
+    |
+189 |         let q = numerator / denominator;
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^
+...
+300 |     let (s, r) = middle_stage!(128, u32, n, s, r);
+    |                  -------------------------------- in this macro invocation
+    |
+    = note: this error originates in the macro `middle_stage` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0999]: arithmetic operation may overflow
+    --> core/src/num/mod.rs:1368:36
+     |
+1368 |     radix <= 16 && digits.len() <= size_of::<T>() * 2 - is_signed_ty as usize
+     |                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+    --> core/src/ptr/mod.rs:2276:27
+     |
+2276 |         let mut inverse = INV_TABLE_MOD_16[(x & (INV_TABLE_MOD - 1)) >> 1] as usize;
+     |                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: internal flux error: crates/flux-refineck/src/checker.rs:1599:17
+  --> core/src/array/drain.rs:25:23
+   |
+25 |     let drain = Drain(array.iter_mut());
+   |                       ^^^^^
+   |
+   = note: unsupported unsize cast from `&'?10 mut ∃b0. [∃b1. { T[b1] | * }; N][b0]` to `&'?4 mut [T]`
+
+error[E0999]: refinement type error
+   --> core/src/array/mod.rs:153:11
+    |
+153 |     match try_from_fn_erased(&mut array, cb) {
+    |           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ a precondition cannot be proved
+
+error[E0999]: refinement type error
+   --> core/src/array/mod.rs:958:13
+    |
+958 |     let r = iter_next_chunk_erased(&mut array, iter);
+    |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ a precondition cannot be proved
+
+error[E0999]: internal flux error: crates/flux-refineck/src/checker.rs:1599:17
+    --> core/src/cell.rs:2461:36
+     |
+2461 |     let _: UnsafeCell<&dyn Send> = a;
+     |                                    ^
+     |
+     = note: unsupported unsize cast from `UnsafeCell<λb0. &'?20 ∃b1. i32[b1][b0]>` to `cell::UnsafeCell<&'?6 dyn marker::Send + '?7>`
+
+error: internal compiler error: crates/flux-refineck/src/type_env.rs:527:21: unexpected type with free vars
+   --> core/src/net/parser.rs:196:25
+    |
+196 |                         groups[i + 1] = u16::from_be_bytes([three, four]);
+    |                         ^^^^^^^^^^^^^
+
+
+thread 'rustc' panicked at crates/flux-refineck/src/type_env.rs:527:21:
+Box<dyn Any>
+note: bug caught [def_id: DefId(0:6509 ~ core[51f4]::net::parser::{impl#0}::read_ipv6_addr::read_groups), span: core/src/net/parser.rs:184:9: 184:80 (#0)]
+
+error[E0999]: refinement type error
+  --> core/src/fmt/float.rs:41:21
+   |
+41 |       let formatted = flt2dec::to_exact_fixed_str(
+   |  _____________________^
+42 | |         flt2dec::strategy::grisu::format_exact,
+43 | |         *num,
+44 | |         sign,
+...  |
+47 | |         &mut parts,
+48 | |     );
+   | |_____^ a precondition cannot be proved
+
+error[E0999]: refinement type error
+  --> core/src/fmt/float.rs:69:21
+   |
+69 |       let formatted = flt2dec::to_shortest_str(
+   |  _____________________^
+70 | |         flt2dec::strategy::grisu::format_shortest,
+71 | |         *num,
+72 | |         sign,
+...  |
+75 | |         &mut parts,
+76 | |     );
+   | |_____^ a precondition cannot be proved
+
+error[E0999]: refinement type error
+   --> core/src/fmt/float.rs:114:21
+    |
+114 |       let formatted = flt2dec::to_exact_exp_str(
+    |  _____________________^
+115 | |         flt2dec::strategy::grisu::format_exact,
+116 | |         *num,
+117 | |         sign,
+...   |
+121 | |         &mut parts,
+122 | |     );
+    | |_____^ a precondition cannot be proved
+
+error[E0999]: refinement type error
+   --> core/src/fmt/float.rs:143:21
+    |
+143 |       let formatted = flt2dec::to_shortest_exp_str(
+    |  _____________________^
+144 | |         flt2dec::strategy::grisu::format_shortest,
+145 | |         *num,
+146 | |         sign,
+...   |
+150 | |         &mut parts,
+151 | |     );
+    | |_____^ a precondition cannot be proved
+
+error[E0999]: refinement type error
+   --> core/src/fmt/num.rs:570:19
+    |
+570 |     let buf_ptr = MaybeUninit::slice_as_mut_ptr(buf);
+    |                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ a precondition cannot be proved
+
+error[E0999]: assertion might fail: possible remainder with a divisor of zero
+   --> core/src/fmt/num.rs:580:28
+    |
+580 |             let to_parse = n % 1e16 as u64;
+    |                            ^^^^^^^^^^^^^^^
+
+error[E0999]: assertion might fail: possible division by zero
+   --> core/src/fmt/num.rs:581:13
+    |
+581 |             n /= 1e16 as u64;
+    |             ^^^^^^^^^^^^^^^^
+
+error[E0999]: assertion might fail: possible division by zero
+   --> core/src/fmt/num.rs:584:23
+    |
+584 |             let d1 = ((to_parse / 1e14 as u64) % 100) << 1;
+    |                       ^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: assertion might fail: possible remainder with a divisor of zero
+   --> core/src/fmt/num.rs:623:28
+    |
+623 |             let to_parse = n % 1e4 as u32;
+    |                            ^^^^^^^^^^^^^^
+
+error[E0999]: assertion might fail: possible division by zero
+   --> core/src/fmt/num.rs:585:23
+    |
+585 |             let d2 = ((to_parse / 1e12 as u64) % 100) << 1;
+    |                       ^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: assertion might fail: possible division by zero
+   --> core/src/fmt/num.rs:624:13
+    |
+624 |             n /= 1e4 as u32;
+    |             ^^^^^^^^^^^^^^^
+
+error[E0999]: assertion might fail: possible division by zero
+   --> core/src/fmt/num.rs:586:23
+    |
+586 |             let d3 = ((to_parse / 1e10 as u64) % 100) << 1;
+    |                       ^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: arithmetic operation may overflow
+   --> core/src/fmt/num.rs:628:13
+    |
+628 |             *curr -= 4;
+    |             ^^^^^^^^^^
+
+error[E0999]: assertion might fail: possible division by zero
+   --> core/src/fmt/num.rs:587:23
+    |
+587 |             let d4 = ((to_parse / 1e8 as u64) % 100) << 1;
+    |                       ^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: assertion might fail: possible division by zero
+   --> core/src/fmt/num.rs:588:23
+    |
+588 |             let d5 = ((to_parse / 1e6 as u64) % 100) << 1;
+    |                       ^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: assertion might fail: possible division by zero
+   --> core/src/fmt/num.rs:589:23
+    |
+589 |             let d6 = ((to_parse / 1e4 as u64) % 100) << 1;
+    |                       ^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: assertion might fail: possible division by zero
+   --> core/src/fmt/num.rs:590:23
+    |
+590 |             let d7 = ((to_parse / 1e2 as u64) % 100) << 1;
+    |                       ^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: assertion might fail: possible division by zero
+   --> core/src/fmt/num.rs:591:23
+    |
+591 |             let d8 = ((to_parse / 1e0 as u64) % 100) << 1;
+    |                       ^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: arithmetic operation may overflow
+   --> core/src/fmt/num.rs:593:13
+    |
+593 |             *curr -= 16;
+    |             ^^^^^^^^^^^
+
+error[E0999]: arithmetic operation may overflow
+   --> core/src/fmt/num.rs:639:13
+    |
+639 |             *curr -= 2;
+    |             ^^^^^^^^^^
+
+error[E0999]: assertion might fail: possible remainder with a divisor of zero
+   --> core/src/fmt/num.rs:605:28
+    |
+605 |             let to_parse = n % 1e8 as u64;
+    |                            ^^^^^^^^^^^^^^
+
+error[E0999]: assertion might fail: possible division by zero
+   --> core/src/fmt/num.rs:606:13
+    |
+606 |             n /= 1e8 as u64;
+    |             ^^^^^^^^^^^^^^^
+
+error[E0999]: assertion might fail: possible division by zero
+   --> core/src/fmt/num.rs:609:23
+    |
+609 |             let d1 = ((to_parse / 1e6 as u64) % 100) << 1;
+    |                       ^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: arithmetic operation may overflow
+   --> core/src/fmt/num.rs:649:13
+    |
+649 |             *curr -= 2;
+    |             ^^^^^^^^^^
+
+error[E0999]: assertion might fail: possible division by zero
+   --> core/src/fmt/num.rs:610:23
+    |
+610 |             let d2 = ((to_parse / 1e4 as u64) % 100) << 1;
+    |                       ^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: assertion might fail: possible division by zero
+   --> core/src/fmt/num.rs:611:23
+    |
+611 |             let d3 = ((to_parse / 1e2 as u64) % 100) << 1;
+    |                       ^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: arithmetic operation may overflow
+   --> core/src/fmt/num.rs:645:13
+    |
+645 |             *curr -= 1;
+    |             ^^^^^^^^^^
+
+error[E0999]: assertion might fail: possible division by zero
+   --> core/src/fmt/num.rs:612:23
+    |
+612 |             let d4 = ((to_parse / 1e0 as u64) % 100) << 1;
+    |                       ^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: arithmetic operation may overflow
+   --> core/src/fmt/num.rs:613:13
+    |
+613 |             *curr -= 8;
+    |             ^^^^^^^^^^
+
+error[E0999]: arithmetic operation may overflow
+   --> core/src/fmt/num.rs:690:22
+    |
+690 |         let target = buf.len() - 19;
+    |                      ^^^^^^^^^^^^^^
+
+error[E0999]: refinement type error
+   --> core/src/fmt/num.rs:695:17
+    |
+695 |                 MaybeUninit::slice_as_mut_ptr(&mut buf).add(target),
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ a precondition cannot be proved
+
+error[E0999]: arithmetic operation may overflow
+   --> core/src/fmt/num.rs:697:17
+    |
+697 |                 curr - target,
+    |                 ^^^^^^^^^^^^^
+
+error[E0999]: arithmetic operation may overflow
+   --> core/src/fmt/num.rs:706:26
+    |
+706 |             let target = buf.len() - 38;
+    |                          ^^^^^^^^^^^^^^
+
+error[E0999]: refinement type error
+   --> core/src/fmt/num.rs:709:27
+    |
+709 |             let buf_ptr = MaybeUninit::slice_as_mut_ptr(&mut buf);
+    |                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ a precondition cannot be proved
+
+error[E0999]: arithmetic operation may overflow
+   --> core/src/fmt/num.rs:713:61
+    |
+713 |                 ptr::write_bytes(buf_ptr.add(target), b'0', curr - target);
+    |                                                             ^^^^^^^^^^^^^
+
+error[E0999]: arithmetic operation may overflow
+   --> core/src/fmt/num.rs:714:17
+    |
+714 |                 curr = target - 1;
+    |                 ^^^^^^^^^^^^^^^^^
+
+error[E0999]: refinement type error
+   --> core/src/fmt/num.rs:724:13
+    |
+724 |             MaybeUninit::slice_as_mut_ptr(&mut buf).add(curr),
+    |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ a precondition cannot be proved
+
+error[E0999]: arithmetic operation may overflow
+   --> core/src/fmt/num.rs:725:13
+    |
+725 |             buf.len() - curr,
+    |             ^^^^^^^^^^^^^^^^
+
+error[E0999]: assertion might fail: possible division by zero
+   --> core/src/fmt/num.rs:744:9
+    |
+744 |         ((n >> 19) as u64 / (DIV >> 19)) as u128
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: arithmetic operation may overflow
+   --> core/src/fmt/num.rs:749:15
+    |
+749 |     let rem = (n - quot * DIV as u128) as u64;
+    |               ^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+  --> core/src/slice/memchr.rs:40:12
+   |
+40 |         if text[i] == x {
+   |            ^^^^^^^
+
+error[E0999]: arithmetic operation may overflow
+   --> core/src/slice/memchr.rs:146:31
+    |
+146 |             let u = *(ptr.add(offset - 2 * chunk_bytes) as *const Chunk);
+    |                               ^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: arithmetic operation may overflow
+   --> core/src/slice/memchr.rs:147:31
+    |
+147 |             let v = *(ptr.add(offset - chunk_bytes) as *const Chunk);
+    |                               ^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: arithmetic operation may overflow
+   --> core/src/slice/memchr.rs:156:9
+    |
+156 |         offset -= 2 * chunk_bytes;
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: arithmetic operation may overflow
+   --> core/src/slice/memchr.rs:128:24
+    |
+128 |         (prefix.len(), len - suffix.len())
+    |                        ^^^^^^^^^^^^^^^^^^
+
+error[E0999]: arithmetic operation may overflow
+  --> core/src/slice/sort/stable/drift.rs:66:17
+   |
+66 |                 scan_idx - prev_run.len(),
+   |                 ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: arithmetic operation may overflow
+   --> core/src/slice/sort/stable/drift.rs:161:5
+    |
+161 |     ((1 << 62) + n as u64 - 1) / n as u64
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: assertion might fail: possible division by zero
+   --> core/src/slice/sort/stable/drift.rs:161:5
+    |
+161 |     ((1 << 62) + n as u64 - 1) / n as u64
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+  --> core/src/slice/sort/stable/quicksort.rs:48:64
+   |
+48 |         let pivot_copy = unsafe { ManuallyDrop::new(ptr::read(&v[pivot_pos])) };
+   |                                                                ^^^^^^^^^^^^
+
+error: internal compiler error: crates/flux-refineck/src/type_env/place_ty.rs:112:9: cannot unfold in `NoUnfold` mode
+   --> core/src/slice/sort/stable/quicksort.rs:132:47
+    |
+132 |                   while state.scan < unroll_end {
+    |  _______________________________________________^
+133 | |                     state.partition_one(is_less(&*state.scan, &*pivot));
+134 | |                     state.partition_one(is_less(&*state.scan, &*pivot));
+135 | |                     state.partition_one(is_less(&*state.scan, &*pivot));
+136 | |                     state.partition_one(is_less(&*state.scan, &*pivot));
+137 | |                 }
+    | |_________________^
+
+
+thread 'rustc' panicked at crates/flux-refineck/src/type_env/place_ty.rs:112:9:
+Box<dyn Any>
+note: bug caught [def_id: DefId(0:8720 ~ core[51f4]::slice::sort::stable::quicksort::stable_partition), span: core/src/slice/sort/stable/quicksort.rs:90:1: 96:11 (#0)]
+
+error[E0999]: assertion might fail: possible division by zero
+   --> core/src/slice/sort/stable/mod.rs:112:26
+    |
+112 |     let max_full_alloc = MAX_FULL_ALLOC_BYTES / size_of::<T>();
+    |                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+  --> core/src/slice/sort/unstable/quicksort.rs:71:22
+   |
+71 |         let pivot = &pivot[0];
+   |                      ^^^^^^^^
+
+error: internal compiler error: crates/flux-middle/src/rty/subst.rs:163:21: type parameter out of range
+   --> core/src/slice/sort/unstable/quicksort.rs:125:18
+    |
+125 |     let num_lt = (const { inst_partition::<T, F>() })(v_without_pivot, pivot, is_less);
+    |                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+
+thread 'rustc' panicked at crates/flux-middle/src/rty/subst.rs:163:21:
+Box<dyn Any>
+note: bug caught [def_id: DefId(0:8806 ~ core[51f4]::slice::sort::unstable::quicksort::partition), span: core/src/slice/sort/unstable/quicksort.rs:94:1: 96:30 (#0)]
+
+error: internal compiler error: crates/flux-refineck/src/primops.rs:77:32: no primop rule for Lt using [(*mut ∃b0. { T[b0] | $k54(b0)[a0, a1, a2] }, ()), (*mut ∃b0. { T[b0] | $k51(b0)[a0, a1, a2] }, ())]
+   --> core/src/slice/sort/unstable/quicksort.rs:195:19
+    |
+195 |             while left < right && is_less(&*left, pivot) {
+    |                   ^^^^^^^^^^^^
+
+
+thread 'rustc' panicked at crates/flux-refineck/src/primops.rs:77:32:
+Box<dyn Any>
+note: bug caught [def_id: DefId(0:8814 ~ core[51f4]::slice::sort::unstable::quicksort::partition_hoare_branchy_cyclic), span: core/src/slice/sort/unstable/quicksort.rs:159:1: 161:30 (#0)]
+
+error: internal compiler error: crates/flux-refineck/src/primops.rs:77:32: no primop rule for Lt using [(*mut ∃b0. { T[b0] | $k9(b0)[a0, a1, a2, a3, a4] }, ()), (*mut ∃b0. { T[b0] | $k5(b0)[a0, a1, a2, a3, a4] }, ())]
+   --> core/src/slice/sort/unstable/quicksort.rs:313:15
+    |
+313 |         while state.right < unroll_end {
+    |               ^^^^^^^^^^^^^^^^^^^^^^^^
+
+
+thread 'rustc' panicked at crates/flux-refineck/src/primops.rs:77:32:
+Box<dyn Any>
+note: bug caught [def_id: DefId(0:8822 ~ core[51f4]::slice::sort::unstable::quicksort::partition_lomuto_branchless_cyclic), span: core/src/slice/sort/unstable/quicksort.rs:250:1: 252:30 (#0)]
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+  --> core/src/slice/sort/select.rs:57:22
+   |
+57 |     let pivot = &mut pivot[0];
+   |                      ^^^^^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+   --> core/src/slice/sort/select.rs:131:22
+    |
+131 |         let pivot = &pivot[0];
+    |                      ^^^^^^^^
+
+error[E0999]: arithmetic operation may overflow
+   --> core/src/slice/sort/select.rs:188:17
+    |
+188 |         if k == v.len() - 1 {
+    |                 ^^^^^^^^^^^
+
+error[E0999]: arithmetic operation may overflow
+   --> core/src/slice/sort/select.rs:237:32
+    |
+237 |         ninther(v, is_less, a, i - frac, b, a + 1, i, b + 1, a + 2, i + frac, b + 2);
+    |                                ^^^^^^^^
+
+error[E0999]: arithmetic operation may overflow
+   --> core/src/slice/sort/select.rs:231:14
+    |
+231 |     let lo = v.len() / 2 - pivot;
+    |              ^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: arithmetic operation may overflow
+   --> core/src/slice/sort/select.rs:233:15
+    |
+233 |     let gap = (v.len() - 9 * frac) / 4;
+    |               ^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: arithmetic operation may overflow
+   --> core/src/slice/sort/select.rs:234:17
+    |
+234 |     let mut a = lo - 4 * frac - gap;
+    |                 ^^^^^^^^^^^^^
+
+error[E0999]: arithmetic operation may overflow
+   --> core/src/slice/sort/select.rs:234:17
+    |
+234 |     let mut a = lo - 4 * frac - gap;
+    |                 ^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: refinement type error
+   --> core/src/slice/sort/select.rs:289:5
+    |
+289 |     v.swap(d, e);
+    |     ^^^^^^^^^^^^ a precondition cannot be proved
+
+error[E0999]: refinement type error
+   --> core/src/slice/sort/select.rs:279:13
+    |
+279 |             v.swap(e, h);
+    |             ^^^^^^^^^^^^ a precondition cannot be proved
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+   --> core/src/slice/sort/select.rs:265:17
+    |
+265 |     if is_less(&v[h], &v[b]) {
+    |                 ^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+   --> core/src/slice/sort/select.rs:265:24
+    |
+265 |     if is_less(&v[h], &v[b]) {
+    |                        ^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+   --> core/src/slice/sort/select.rs:271:17
+    |
+271 |     if is_less(&v[e], &v[d]) {
+    |                 ^^^^
+
+error[E0999]: refinement type error
+   --> core/src/slice/sort/select.rs:277:13
+    |
+277 |             v.swap(e, b);
+    |             ^^^^^^^^^^^^ a precondition cannot be proved
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+   --> core/src/slice/sort/select.rs:268:17
+    |
+268 |     if is_less(&v[f], &v[d]) {
+    |                 ^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+   --> core/src/slice/sort/select.rs:268:24
+    |
+268 |     if is_less(&v[f], &v[d]) {
+    |                        ^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+   --> core/src/slice/sort/select.rs:301:17
+    |
+301 |     if is_less(&v[c], &v[a]) {
+    |                 ^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+   --> core/src/slice/sort/select.rs:301:24
+    |
+301 |     if is_less(&v[c], &v[a]) {
+    |                        ^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+   --> core/src/slice/sort/select.rs:304:24
+    |
+304 |     if is_less(&v[c], &v[b]) {
+    |                        ^^^^
+
+error: internal compiler error: crates/flux-refineck/src/primops.rs:77:32: no primop rule for BitXor using [(bool, a5), (bool, a3)]
+  --> core/src/slice/sort/shared/pivot.rs:83:12
+   |
+83 |         if z ^ x { c } else { b }
+   |            ^^^^^
+
+
+thread 'rustc' panicked at crates/flux-refineck/src/primops.rs:77:32:
+Box<dyn Any>
+note: bug caught [def_id: DefId(0:8897 ~ core[51f4]::slice::sort::shared::pivot::median3), span: core/src/slice/sort/shared/pivot.rs:73:1: 73:90 (#0)]
+
+error: internal compiler error: crates/flux-refineck/src/primops.rs:77:32: no primop rule for Ne using [(*const ∃b0. { T[b0] | * }, ()), (*const ∃b0. T[b0], ())]
+   --> core/src/slice/sort/shared/smallsort.rs:355:12
+    |
+355 |         if region.as_ptr() != v_base {
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+
+thread 'rustc' panicked at crates/flux-refineck/src/primops.rs:77:32:
+Box<dyn Any>
+note: bug caught [def_id: DefId(0:8981 ~ core[51f4]::slice::sort::shared::smallsort::small_sort_network), span: core/src/slice/sort/shared/smallsort.rs:311:1: 314:30 (#0)]
+
+error: internal compiler error: crates/flux-refineck/src/primops.rs:77:32: no primop rule for Eq using [(*mut ∃b0. { T[b0] | * }, ()), (*mut ∃b0. T[b0], ())]
+   --> core/src/slice/sort/shared/smallsort.rs:566:16
+    |
+566 |             if sift == begin {
+    |                ^^^^^^^^^^^^^
+
+
+thread 'rustc' panicked at crates/flux-refineck/src/primops.rs:77:32:
+Box<dyn Any>
+note: bug caught [def_id: DefId(0:8994 ~ core[51f4]::slice::sort::shared::smallsort::insert_tail), span: core/src/slice/sort/shared/smallsort.rs:542:1: 542:97 (#0)]
+
+error: internal compiler error: crates/flux-refineck/src/primops.rs:77:32: no primop rule for Ne using [(*mut ∃b0. { T[b0] | $k6(b0)[a0, a1, a2] }, ()), (*mut ∃b0. { T[b0] | $k5(b0)[a0, a1, a2] }, ())]
+   --> core/src/slice/sort/shared/smallsort.rs:599:15
+    |
+599 |         while tail != v_end {
+    |               ^^^^^^^^^^^^^
+
+
+thread 'rustc' panicked at crates/flux-refineck/src/primops.rs:77:32:
+Box<dyn Any>
+note: bug caught [def_id: DefId(0:8997 ~ core[51f4]::slice::sort::shared::smallsort::insertion_sort_shift_left), span: core/src/slice/sort/shared/smallsort.rs:580:1: 584:2 (#0)]
+
+error: internal compiler error: crates/flux-refineck/src/primops.rs:77:32: no primop rule for Lt using [(*const ∃b0. { T[b0] | $k18(b0)[a0, a1] }, ()), (*const ∃b0. { T[b0] | $k50(b0)[a0, a1] }, ())]
+   --> core/src/slice/sort/shared/smallsort.rs:827:33
+    |
+827 |             let left_nonempty = left < left_end;
+    |                                 ^^^^^^^^^^^^^^^
+
+
+thread 'rustc' panicked at crates/flux-refineck/src/primops.rs:77:32:
+Box<dyn Any>
+note: bug caught [def_id: DefId(0:9012 ~ core[51f4]::slice::sort::shared::smallsort::bidirectional_merge), span: core/src/slice/sort/shared/smallsort.rs:760:1: 764:2 (#0)]
+
+error[E0999]: unsupported statement
+   --> core/src/slice/ascii.rs:342:16
+    |
+342 |     while let [rest @ .., last] = bytes {
+    |                ^^^^
+    |
+    = note: unsupported place `(*_1)[:-1]`
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+   --> core/src/slice/cmp.rs:208:21
+    |
+208 |         elem_chain(&lhs[i], &rhs[i])?;
+    |                     ^^^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+   --> core/src/slice/cmp.rs:208:30
+    |
+208 |         elem_chain(&lhs[i], &rhs[i])?;
+    |                              ^^^^^^
+
+error[E0999]: refinement type error
+   --> core/src/slice/raw.rs:211:5
+    |
+211 |     array::from_mut(s)
+    |     ^^^^^^^^^^^^^^^^^^ a postcondition cannot be proved
+
+error[E0999]: assertion might fail: possible division by zero
+  --> core/src/slice/rotate.rs:24:37
+   |
+24 |         && cmp::min(left, right) <= size_of::<BufType>() / size_of::<T>()
+   |                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: error jumping to join point
+    --> core/src/slice/mod.rs:1053:25
+     |
+1053 |               while i < n {
+     |  _________________________^
+1054 | |                 mem::swap(&mut a[i], &mut b[n - 1 - i]);
+1055 | |                 i += 1;
+1056 | |             }
+     | |_____________^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+    --> core/src/slice/mod.rs:1054:32
+     |
+1054 |                 mem::swap(&mut a[i], &mut b[n - 1 - i]);
+     |                                ^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+    --> core/src/slice/mod.rs:1054:43
+     |
+1054 |                 mem::swap(&mut a[i], &mut b[n - 1 - i]);
+     |                                           ^^^^^^^^^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+   --> core/src/str/validations.rs:163:17
+    |
+163 |                 v[index]
+    |                 ^^^^^^^^
+...
+195 |                     match (first, next!()) {
+    |                                   ------- in this macro invocation
+    |
+    = note: this error originates in the macro `next` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+   --> core/src/str/validations.rs:163:17
+    |
+163 |                 v[index]
+    |                 ^^^^^^^^
+...
+202 |                     if next!() as i8 >= -64 {
+    |                        ------- in this macro invocation
+    |
+    = note: this error originates in the macro `next` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+   --> core/src/str/validations.rs:163:17
+    |
+163 |                 v[index]
+    |                 ^^^^^^^^
+...
+207 |                     match (first, next!()) {
+    |                                   ------- in this macro invocation
+    |
+    = note: this error originates in the macro `next` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+   --> core/src/str/validations.rs:246:38
+    |
+246 |                 while index < len && v[index] < 128 {
+    |                                      ^^^^^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+   --> core/src/str/validations.rs:167:21
+    |
+167 |         let first = v[index];
+    |                     ^^^^^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+   --> core/src/str/validations.rs:163:17
+    |
+163 |                 v[index]
+    |                 ^^^^^^^^
+...
+190 |                     if next!() as i8 >= -64 {
+    |                        ------- in this macro invocation
+    |
+    = note: this error originates in the macro `next` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+   --> core/src/str/validations.rs:163:17
+    |
+163 |                 v[index]
+    |                 ^^^^^^^^
+...
+211 |                     if next!() as i8 >= -64 {
+    |                        ------- in this macro invocation
+    |
+    = note: this error originates in the macro `next` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+   --> core/src/str/validations.rs:163:17
+    |
+163 |                 v[index]
+    |                 ^^^^^^^^
+...
+214 |                     if next!() as i8 >= -64 {
+    |                        ------- in this macro invocation
+    |
+    = note: this error originates in the macro `next` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+   --> core/src/str/validations.rs:284:5
+    |
+284 |     UTF8_CHAR_WIDTH[b as usize] as usize
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: assertion might fail: possible division by zero
+    --> core/src/time.rs:1293:35
+     |
+1293 |                 buf[pos] = b'0' + (fractional_part / divisor) as u8;
+     |                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+    --> core/src/time.rs:1293:17
+     |
+1293 |                 buf[pos] = b'0' + (fractional_part / divisor) as u8;
+     |                 ^^^^^^^^
+
+error[E0999]: assignment might be unsafe
+    --> core/src/time.rs:1293:17
+     |
+1293 |                 buf[pos] = b'0' + (fractional_part / divisor) as u8;
+     |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+    --> core/src/time.rs:1318:24
+     |
+1318 |                     if buf[rev_pos] < b'9' {
+     |                        ^^^^^^^^^^^^
+
+error[E0999]: assignment might be unsafe
+    --> core/src/time.rs:1319:25
+     |
+1319 |                         buf[rev_pos] += 1;
+     |                         ^^^^^^^^^^^^^^^^^
+
+error[E0999]: assertion might fail: possible division by zero
+  --> core/src/unicode/unicode_data.rs:18:25
+   |
+18 |     let chunk_map_idx = bucket_idx / CHUNK_SIZE;
+   |                         ^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+  --> core/src/unicode/unicode_data.rs:22:9
+   |
+22 |         chunk_idx_map[chunk_map_idx]
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+  --> core/src/unicode/unicode_data.rs:26:15
+   |
+26 |     let idx = bitset_chunk_idx[chunk_idx as usize][chunk_piece] as usize;
+   |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+  --> core/src/unicode/unicode_data.rs:26:15
+   |
+26 |     let idx = bitset_chunk_idx[chunk_idx as usize][chunk_piece] as usize;
+   |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: arithmetic operation may overflow
+  --> core/src/unicode/unicode_data.rs:31:56
+   |
+31 |         let (real_idx, mapping) = bitset_canonicalized[idx - bitset_canonical.len()];
+   |                                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+  --> core/src/unicode/unicode_data.rs:31:35
+   |
+31 |         let (real_idx, mapping) = bitset_canonicalized[idx - bitset_canonical.len()];
+   |                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+  --> core/src/unicode/unicode_data.rs:32:24
+   |
+32 |         let mut word = bitset_canonical[real_idx as usize];
+   |                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+  --> core/src/unicode/unicode_data.rs:29:9
+   |
+29 |         bitset_canonical[idx]
+   |         ^^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: arithmetic operation may overflow
+  --> core/src/unicode/unicode_data.rs:38:34
+   |
+38 |         let quantity = mapping & ((1 << 6) - 1);
+   |                                  ^^^^^^^^^^^^^^
+
+error[E0999]: arithmetic operation may overflow
+   --> core/src/unicode/unicode_data.rs:112:17
+    |
+112 |     let total = needle - prev;
+    |                 ^^^^^^^^^^^^^
+
+error[E0999]: arithmetic operation may overflow
+   --> core/src/unicode/unicode_data.rs:114:17
+    |
+114 |     for _ in 0..(length - 1) {
+    |                 ^^^^^^^^^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+   --> core/src/unicode/unicode_data.rs:102:26
+    |
+102 |     let mut offset_idx = short_offset_runs[last_idx].start_index();
+    |                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: arithmetic operation may overflow
+   --> core/src/unicode/unicode_data.rs:104:9
+    |
+104 |         (*next).start_index() - offset_idx
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: arithmetic operation may overflow
+   --> core/src/unicode/unicode_data.rs:106:9
+    |
+106 |         offsets.len() - offset_idx
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+   --> core/src/unicode/unicode_data.rs:122:22
+    |
+122 |         let offset = offsets[offset_idx];
+    |                      ^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+   --> core/src/unicode/unicode_data.rs:110:44
+    |
+110 |         last_idx.checked_sub(1).map(|prev| short_offset_runs[prev].prefix_sum()).unwrap_or(0);
+    |                                            ^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+   --> core/src/unicode/unicode_data.rs:728:18
+    |
+728 |             0 => WHITESPACE_MAP[c as usize & 0xff] & 1 != 0,
+    |                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+   --> core/src/unicode/unicode_data.rs:730:19
+    |
+730 |             32 => WHITESPACE_MAP[c as usize & 0xff] & 2 != 0,
+    |                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+   --> core/src/unicode/unicode_data.rs:748:29
+    |
+748 |                     let u = LOWERCASE_TABLE[i].1;
+    |                             ^^^^^^^^^^^^^^^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+   --> core/src/unicode/unicode_data.rs:765:29
+    |
+765 |                     let u = UPPERCASE_TABLE[i].1;
+    |                             ^^^^^^^^^^^^^^^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+  --> core/src/escape.rs:15:5
+   |
+15 |     output[0] = ascii::Char::ReverseSolidus;
+   |     ^^^^^^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+  --> core/src/escape.rs:16:5
+   |
+16 |     output[1] = a;
+   |     ^^^^^^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+  --> core/src/escape.rs:27:14
+   |
+27 |     let hi = HEX_DIGITS[(byte >> 4) as usize];
+   |              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+  --> core/src/escape.rs:28:14
+   |
+28 |     let lo = HEX_DIGITS[(byte & 0xf) as usize];
+   |              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+  --> core/src/escape.rs:30:5
+   |
+30 |     output[0] = ascii::Char::ReverseSolidus;
+   |     ^^^^^^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+  --> core/src/escape.rs:31:5
+   |
+31 |     output[1] = ascii::Char::SmallX;
+   |     ^^^^^^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+  --> core/src/escape.rs:32:5
+   |
+32 |     output[2] = hi;
+   |     ^^^^^^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+  --> core/src/escape.rs:33:5
+   |
+33 |     output[3] = lo;
+   |     ^^^^^^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+  --> core/src/escape.rs:44:5
+   |
+44 |     output[0] = a;
+   |     ^^^^^^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+   --> core/src/escape.rs:104:22
+    |
+104 |         let lookup = LOOKUP[byte as usize];
+    |                      ^^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: arithmetic operation may overflow
+   --> core/src/escape.rs:135:17
+    |
+135 |     let start = (c | 1).leading_zeros() as usize / 4 - 2;
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+   --> core/src/escape.rs:138:17
+    |
+138 |     output[3] = HEX_DIGITS[((c >> 20) & 15) as usize];
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+   --> core/src/escape.rs:138:5
+    |
+138 |     output[3] = HEX_DIGITS[((c >> 20) & 15) as usize];
+    |     ^^^^^^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+   --> core/src/escape.rs:139:17
+    |
+139 |     output[4] = HEX_DIGITS[((c >> 16) & 15) as usize];
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+   --> core/src/escape.rs:139:5
+    |
+139 |     output[4] = HEX_DIGITS[((c >> 16) & 15) as usize];
+    |     ^^^^^^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+   --> core/src/escape.rs:140:17
+    |
+140 |     output[5] = HEX_DIGITS[((c >> 12) & 15) as usize];
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+   --> core/src/escape.rs:140:5
+    |
+140 |     output[5] = HEX_DIGITS[((c >> 12) & 15) as usize];
+    |     ^^^^^^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+   --> core/src/escape.rs:141:17
+    |
+141 |     output[6] = HEX_DIGITS[((c >> 8) & 15) as usize];
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+   --> core/src/escape.rs:141:5
+    |
+141 |     output[6] = HEX_DIGITS[((c >> 8) & 15) as usize];
+    |     ^^^^^^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+   --> core/src/escape.rs:142:17
+    |
+142 |     output[7] = HEX_DIGITS[((c >> 4) & 15) as usize];
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+   --> core/src/escape.rs:142:5
+    |
+142 |     output[7] = HEX_DIGITS[((c >> 4) & 15) as usize];
+    |     ^^^^^^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+   --> core/src/escape.rs:143:17
+    |
+143 |     output[8] = HEX_DIGITS[((c >> 0) & 15) as usize];
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+   --> core/src/escape.rs:143:5
+    |
+143 |     output[8] = HEX_DIGITS[((c >> 0) & 15) as usize];
+    |     ^^^^^^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+   --> core/src/escape.rs:144:5
+    |
+144 |     output[9] = ascii::Char::RightCurlyBracket;
+    |     ^^^^^^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+   --> core/src/escape.rs:145:5
+    |
+145 |     output[start + 0] = ascii::Char::ReverseSolidus;
+    |     ^^^^^^^^^^^^^^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+   --> core/src/escape.rs:146:5
+    |
+146 |     output[start + 1] = ascii::Char::SmallU;
+    |     ^^^^^^^^^^^^^^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+   --> core/src/escape.rs:147:5
+    |
+147 |     output[start + 2] = ascii::Char::LeftCurlyBracket;
+    |     ^^^^^^^^^^^^^^^^^
+
+error[E0999]: unsupported terminator
+   --> core/src/../../stdarch/crates/core_arch/src/arm_shared/hints.rs:107:5
+    |
+107 |     crate::arch::asm!("nop", options(nomem, nostack, preserves_flags));
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: Terminator { source_info: SourceInfo { span: core/src/../../stdarch/crates/core_arch/src/arm_shared/hints.rs:107:5: 107:71 (#0), scope: scope[0] }, kind: asm!("nop", options(NOMEM | PRESERVES_FLAGS | NOSTACK)) -> [return: bb1, unwind unreachable] }
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+    --> core/src/../../stdarch/crates/core_arch/src/simd.rs:1019:69
+     |
+1019 |         &crate::array::from_fn::<&dyn crate::fmt::Debug, N, _>(|i| &array[i]),
+     |                                                                     ^^^^^^^^
+
+error[E0999]: assignment might be unsafe
+   --> core/src/../../portable-simd/crates/core_simd/src/swizzle.rs:375:17
+    |
+375 |                 idx[i] = src_index;
+    |                 ^^^^^^^^^^^^^^^^^^
+
+error[E0999]: assignment might be unsafe
+   --> core/src/../../portable-simd/crates/core_simd/src/swizzle.rs:426:17
+    |
+426 |                 idx[i] = i * 2 + second as usize;
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error: internal compiler error: crates/flux-middle/src/rty/subst.rs:163:21: type parameter out of range
+   --> core/src/../../portable-simd/crates/core_simd/src/swizzle_dyn.rs:192:35
+    |
+192 |     unsafe { mem::transmute_copy(&f(mem::transmute_copy(&a), mem::transmute_copy(&b))) }
+    |                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+
+thread 'rustc' panicked at crates/flux-middle/src/rty/subst.rs:163:21:
+Box<dyn Any>
+note: bug caught [def_id: DefId(0:12077 ~ core[51f4]::core_simd::swizzle_dyn::transize), span: core/src/../../portable-simd/crates/core_simd/src/swizzle_dyn.rs:183:1: 189:38 (#0)]
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+    --> core/src/../../portable-simd/crates/core_simd/src/vector.rs:1231:9
+     |
+1231 |         index[i] = i;
+     |         ^^^^^^^^
+
+error[E0999]: assignment might be unsafe
+    --> core/src/../../portable-simd/crates/core_simd/src/vector.rs:1231:9
+     |
+1231 |         index[i] = i;
+     |         ^^^^^^^^^^^^
+
+error: internal compiler error: crates/flux-middle/src/rty/subst.rs:163:21: type parameter out of range
+    --> core/src/../../portable-simd/crates/core_simd/src/vector.rs:1247:24
+     |
+1247 |                 return index.cast().simd_lt(Simd::splat(len.min(N) as $ty)).cast();
+     |                        ^^^^^^^^^^^^
+...
+1251 |     case!(u8);
+     |     --------- in this macro invocation
+     |
+     = note: this error: internal compiler error originates in the macro `case` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+
+thread 'rustc' panicked at crates/flux-middle/src/rty/subst.rs:163:21:
+Box<dyn Any>
+note: bug caught [def_id: DefId(0:12310 ~ core[51f4]::core_simd::vector::mask_up_to), span: core/src/../../portable-simd/crates/core_simd/src/vector.rs:1237:1: 1240:20 (#0)]
+
+error[E0999]: arithmetic operation may overflow
+   --> core/src/num/dec2flt/float.rs:202:35
+    |
+202 |         let sign: i8 = if bits >> (Self::BITS - 1) == Self::Int::ZERO { 1 } else { -1 };
+    |                                   ^^^^^^^^^^^^^^^^
+
+error: internal compiler error: crates/flux-refineck/src/type_env/place_ty.rs:681:18: invalid field projection on `Transmute<λb0. { Src[b0] | * }, λb1. { Self[b1] | * }>`
+   --> core/src/mem/transmutability.rs:137:28
+    |
+137 |         let dst = unsafe { transmute.dst };
+    |                            ^^^^^^^^^^^^^
+
+
+thread 'rustc' panicked at crates/flux-refineck/src/type_env/place_ty.rs:681:18:
+Box<dyn Any>
+note: bug caught [def_id: DefId(0:2383 ~ core[51f4]::mem::transmutability::TransmuteFrom::transmute), span: core/src/mem/transmutability.rs:115:5: 118:21 (#0)]
+
+error[E0999]: arithmetic operation may overflow
+  --> core/src/fmt/num.rs:71:17
+   |
+71 |                 curr -= 1;
+   |                 ^^^^^^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+  --> core/src/fmt/num.rs:72:17
+   |
+72 |                 buf[curr].write(Self::digit(n.to_u8())); // Store the digit in the buffer.
+   |                 ^^^^^^^^^
+
+error[E0999]: arithmetic operation may overflow
+  --> core/src/fmt/num.rs:83:17
+   |
+83 |                 curr -= 1;
+   |                 ^^^^^^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+  --> core/src/fmt/num.rs:84:17
+   |
+84 |                 buf[curr].write(Self::digit(n.to_u8())); // Store the digit in the buffer.
+   |                 ^^^^^^^^^
+
+error[E0999]: refinement type error
+   --> core/src/fmt/mod.rs:177:24
+    |
+177 |         self.write_str(c.encode_utf8(&mut [0; MAX_LEN_UTF8]))
+    |                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ a precondition cannot be proved
+
+error: internal flux error: crates/flux-desugar/src/lib.rs:246:21
+  --> core/src/future/async_drop.rs:40:5
+   |
+40 |     async fn drop(self: Pin<&mut Self>);
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: unsupported item
+
+error[E0999]: arithmetic operation may overflow
+   --> core/src/num/f128.rs:556:13
+    |
+556 |             bits - 1
+    |             ^^^^^^^^
+
+error[E0999]: arithmetic operation may overflow
+   --> core/src/num/f16.rs:551:13
+    |
+551 |             bits - 1
+    |             ^^^^^^^^
+
+error[E0999]: unsupported statement
+    --> core/src/num/f16.rs:1855:21
+     |
+1855 |         libm::cbrtf(self as f32) as f16
+     |                     ^^^^^^^^^^^
+     |
+     = note: unsupported cast `FloatToFloat`
+
+error[E0999]: arithmetic operation may overflow
+   --> core/src/num/f32.rs:774:13
+    |
+774 |             bits - 1
+    |             ^^^^^^^^
+
+error[E0999]: unsupported statement
+    --> core/src/num/f32.rs:1013:19
+     |
+1013 |                 ((self as f64 + other as f64) / 2.0) as f32
+     |                   ^^^^^^^^^^^
+     |
+     = note: unsupported cast `FloatToFloat`
+
+error[E0999]: arithmetic operation may overflow
+   --> core/src/num/f64.rs:791:13
+    |
+791 |             bits - 1
+    |             ^^^^^^^^
+
+error[E0999]: refinement type error
+  --> core/src/num/dec2flt/common.rs:24:9
+   |
+24 |         tmp.copy_from_slice(&self[..8]);
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ a precondition cannot be proved
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+  --> core/src/num/dec2flt/decimal.rs:78:54
+   |
+78 |             let mantissa = self.mantissa.checked_mul(INT_POW10[shift as usize])?;
+   |                                                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+  --> core/src/num/dec2flt/decimal_seq.rs:70:13
+   |
+70 |             self.digits[self.num_digits] = digit;
+   |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: arithmetic operation may overflow
+  --> core/src/num/dec2flt/decimal_seq.rs:86:51
+   |
+86 |         while self.num_digits != 0 && self.digits[self.num_digits - 1] == 0 {
+   |                                                   ^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+  --> core/src/num/dec2flt/decimal_seq.rs:86:39
+   |
+86 |         while self.num_digits != 0 && self.digits[self.num_digits - 1] == 0 {
+   |                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: arithmetic operation may overflow
+  --> core/src/num/dec2flt/decimal_seq.rs:87:13
+   |
+87 |             self.num_digits -= 1;
+   |             ^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+   --> core/src/num/dec2flt/decimal_seq.rs:111:24
+    |
+111 |             round_up = self.digits[dp] >= 5;
+    |                        ^^^^^^^^^^^^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+   --> core/src/num/dec2flt/decimal_seq.rs:104:22
+    |
+104 |                 n += self.digits[i] as u64;
+    |                      ^^^^^^^^^^^^^^
+
+error[E0999]: arithmetic operation may overflow
+   --> core/src/num/dec2flt/decimal_seq.rs:148:13
+    |
+148 |             write_index -= 1;
+    |             ^^^^^^^^^^^^^^^^
+
+error[E0999]: arithmetic operation may overflow
+   --> core/src/num/dec2flt/decimal_seq.rs:135:13
+    |
+135 |             write_index -= 1;
+    |             ^^^^^^^^^^^^^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+   --> core/src/num/dec2flt/decimal_seq.rs:136:19
+    |
+136 |             n += (self.digits[read_index] as u64) << shift;
+    |                   ^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: arithmetic operation may overflow
+   --> core/src/num/dec2flt/decimal_seq.rs:196:20
+    |
+196 |         let mask = (1_u64 << shift) - 1;
+    |                    ^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+   --> core/src/num/dec2flt/decimal_seq.rs:199:37
+    |
+199 |             n = (10 * (n & mask)) + self.digits[read_index] as u64;
+    |                                     ^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+   --> core/src/num/dec2flt/decimal_seq.rs:176:32
+    |
+176 |                 n = (10 * n) + self.digits[read_index] as u64;
+    |                                ^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+   --> core/src/num/dec2flt/float.rs:253:9
+    |
+253 |         TABLE[exponent & 7]
+    |         ^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+   --> core/src/num/dec2flt/float.rs:297:9
+    |
+297 |         TABLE[exponent & 15]
+    |         ^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+   --> core/src/num/dec2flt/float.rs:342:9
+    |
+342 |         TABLE[exponent & 31]
+    |         ^^^^^^^^^^^^^^^^^^^^
+
+error: internal compiler error: crates/flux-refineck/src/type_env/place_ty.rs:681:18: invalid field projection on `MaybeUninit<λb0. T[b0]>`
+   --> core/src/mem/maybe_uninit.rs:619:38
+    |
+619 |             ManuallyDrop::into_inner(self.value)
+    |                                      ^^^^^^^^^^
+
+
+thread 'rustc' panicked at crates/flux-refineck/src/type_env/place_ty.rs:681:18:
+Box<dyn Any>
+note: bug caught [def_id: DefId(0:2299 ~ core[51f4]::mem::maybe_uninit::{impl#2}::assume_init), span: core/src/mem/maybe_uninit.rs:614:5: 614:47 (#0)]
+
+error[E0999]: error jumping to join point
+    --> core/src/mem/maybe_uninit.rs:1257:9
+     |
+1257 | /         for i in 0..len {
+1258 | |             guard.slice[i].write(src[i].clone());
+1259 | |             guard.initialized += 1;
+1260 | |         }
+     | |_________^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+    --> core/src/mem/maybe_uninit.rs:1258:13
+     |
+1258 |             guard.slice[i].write(src[i].clone());
+     |             ^^^^^^^^^^^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+    --> core/src/mem/maybe_uninit.rs:1258:34
+     |
+1258 |             guard.slice[i].write(src[i].clone());
+     |                                  ^^^^^^
+
+error: internal compiler error: crates/flux-refineck/src/primops.rs:77:32: no primop rule for Eq using [(*mut ∃b0. { T[b0] | $k0(b0)[] }, ()), (*mut ∃b0. { T[b0] | $k1(b0)[] }, ())]
+    --> core/src/ptr/non_null.rs:1848:9
+     |
+1848 |         self.as_ptr() == other.as_ptr()
+     |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+
+thread 'rustc' panicked at crates/flux-refineck/src/primops.rs:77:32:
+Box<dyn Any>
+note: bug caught [def_id: DefId(0:2679 ~ core[51f4]::ptr::non_null::{impl#14}::eq), span: core/src/ptr/non_null.rs:1847:5: 1847:39 (#0)]
+
+error[E0999]: arithmetic operation may overflow
+    --> core/src/ptr/const_ptr.rs:1555:23
+     |
+1555 |         self.addr() & (align - 1) == 0
+     |                       ^^^^^^^^^^^
+
+error[E0999]: internal flux error: crates/flux-refineck/src/checker.rs:1599:17
+    --> core/src/ptr/const_ptr.rs:1752:9
+     |
+1752 |         self
+     |         ^^^^
+     |
+     = note: unsupported unsize cast from `*const [∃b0. T[b0]; N]` to `*const [T]`
+
+error[E0999]: arithmetic operation may overflow
+    --> core/src/ptr/mut_ptr.rs:1817:23
+     |
+1817 |         self.addr() & (align - 1) == 0
+     |                       ^^^^^^^^^^^
+
+error[E0999]: arithmetic operation may overflow
+    --> core/src/ptr/mut_ptr.rs:1971:56
+     |
+1971 |             crate::ptr::slice_from_raw_parts_mut(tail, len - mid),
+     |                                                        ^^^^^^^^^
+
+error[E0999]: internal flux error: crates/flux-refineck/src/checker.rs:1599:17
+    --> core/src/ptr/mut_ptr.rs:2178:9
+     |
+2178 |         self
+     |         ^^^^
+     |
+     = note: unsupported unsize cast from `*mut [∃b0. T[b0]; N]` to `*mut [T]`
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+   --> core/src/clone/uninit.rs:108:33
+    |
+108 |         MaybeUninit::write(&mut self.data[self.initialized_len], value);
+    |                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: internal flux error: crates/flux-refineck/src/checker.rs:1599:17
+   --> core/src/error.rs:241:30
+    |
+241 |             unsafe { Some(&*(self as *const dyn Error as *const T)) }
+    |                              ^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: unsupported unsize cast from `*const dyn Error + '?18` to `*const dyn error::Error + '?4`
+
+error[E0999]: internal flux error: crates/flux-refineck/src/checker.rs:1599:17
+   --> core/src/error.rs:254:34
+    |
+254 |             unsafe { Some(&mut *(self as *mut dyn Error as *mut T)) }
+    |                                  ^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: unsupported unsize cast from `*mut dyn Error + '?18` to `*mut dyn error::Error + '?4`
+
+error[E0999]: internal flux error: crates/flux-refineck/src/checker.rs:1599:17
+   --> core/src/error.rs:961:22
+    |
+961 |         let erased = self as &mut Tagged<dyn Erased<'a> + 'a>;
+    |                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: unsupported unsize cast from `&'?27 mut Tagged<λb0. TaggedOption<'?28, λb1. I[b1]>[b0]>` to `&'?5 mut error::Tagged<dyn error::Erased<'?6> + '?7>`
+
+error[E0999]: internal flux error: crates/flux-refineck/src/checker.rs:1599:17
+   --> core/src/error.rs:990:30
+    |
+990 |             Some(&unsafe { &*(self as *const Self).cast::<Tagged<TaggedOption<'a, I>>>() }.value)
+    |                              ^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: unsupported unsize cast from `*const Tagged<λb0. dyn Erased<'?37> + '?38[b0]>` to `*const error::Tagged<dyn error::Erased<'?6> + '?7>`
+
+error[E0999]: internal flux error: crates/flux-refineck/src/checker.rs:1599:17
+    --> core/src/error.rs:1006:37
+     |
+1006 |                 &mut unsafe { &mut *(self as *mut Self).cast::<Tagged<TaggedOption<'a, I>>>() }
+     |                                     ^^^^^^^^^^^^^^^^^^^
+     |
+     = note: unsupported unsize cast from `*mut Tagged<λb0. dyn Erased<'?37> + '?38[b0]>` to `*mut error::Tagged<dyn error::Erased<'?6> + '?7>`
+
+error: internal compiler error: crates/flux-middle/src/rty/subst.rs:171:21: region parameter out of range
+
+
+thread 'rustc' panicked at crates/flux-middle/src/rty/subst.rs:171:21:
+Box<dyn Any>
+note: bug caught [def_id: DefId(0:3810 ~ core[51f4]::ops::async_function::impls::{impl#0}::async_call), span: core/src/ops/async_function.rs:69:9: 69:84 (#0)]
+
+
+thread 'rustc' panicked at crates/flux-middle/src/rty/subst.rs:171:21:
+Box<dyn Any>
+note: bug caught [def_id: DefId(0:3816 ~ core[51f4]::ops::async_function::impls::{impl#1}::async_call_mut), span: core/src/ops/async_function.rs:84:9: 84:92 (#0)]
+
+
+thread 'rustc' panicked at crates/flux-middle/src/rty/subst.rs:171:21:
+Box<dyn Any>
+note: bug caught [def_id: DefId(0:3829 ~ core[51f4]::ops::async_function::impls::{impl#3}::async_call_mut), span: core/src/ops/async_function.rs:112:9: 112:92 (#0)]
+
+error[E0999]: refinement type error
+   --> core/src/ops/function.rs:271:9
+    |
+271 |         extern "rust-call" fn call_mut(&mut self, args: A) -> F::Output {
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ a precondition cannot be proved
+
+error[E0999]: arithmetic operation may overflow
+   --> core/src/ops/index_range.rs:147:22
+    |
+147 |         NonZero::new(n - taken.len()).map_or(Ok(()), Err)
+    |                      ^^^^^^^^^^^^^^^
+
+error[E0999]: arithmetic operation may overflow
+   --> core/src/ops/index_range.rs:189:22
+    |
+189 |         NonZero::new(n - taken.len()).map_or(Ok(()), Err)
+    |                      ^^^^^^^^^^^^^^^
+
+error[E0999]: internal flux error: crates/flux-refineck/src/checker.rs:1599:17
+   --> core/src/any.rs:297:21
+    |
+297 |         unsafe { &*(self as *const dyn Any as *const T) }
+    |                     ^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: unsupported unsize cast from `*const dyn Any + '?16` to `*const dyn any::Any + '?5`
+
+error[E0999]: internal flux error: crates/flux-refineck/src/checker.rs:1599:17
+   --> core/src/any.rs:327:25
+    |
+327 |         unsafe { &mut *(self as *mut dyn Any as *mut T) }
+    |                         ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: unsupported unsize cast from `*mut dyn Any + '?20` to `*mut dyn any::Any + '?5`
+
+error[E0999]: refinement type error
+  --> core/src/array/iter/iter_inner.rs:25:18
+   |
+25 |         unsafe { slice.partial_drop(alive) }
+   |                  ^^^^^^^^^^^^^^^^^^^^^^^^^ a precondition cannot be proved
+
+error[E0999]: internal flux error: crates/flux-refineck/src/checker.rs:1599:17
+   --> core/src/array/iter/iter_inner.rs:121:24
+    |
+121 |         clone_into_new(self, &mut new);
+    |                        ^^^^
+    |
+    = note: unsupported unsize cast from `&'?10 PolymorphicIter<λb0. [MaybeUninit<λb1. T[b1]>; N][b0]>` to `&'?4 array::iter::iter_inner::PolymorphicIter<[mem::maybe_uninit::MaybeUninit<T>]>`
+
+error[E0999]: arithmetic operation may overflow
+   --> core/src/array/iter/iter_inner.rs:189:25
+    |
+189 |         let remaining = n - range_to_drop.len();
+    |                         ^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: arithmetic operation may overflow
+   --> core/src/array/iter/iter_inner.rs:247:25
+    |
+247 |         let remaining = n - range_to_drop.len();
+    |                         ^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: internal flux error: crates/flux-refineck/src/checker.rs:1599:17
+  --> core/src/array/iter.rs:27:9
+   |
+27 |         &self.inner
+   |         ^^^^^^^^^^^
+   |
+   = note: unsupported unsize cast from `&'?8 PolymorphicIter<λb0. [MaybeUninit<λb1. T[b1]>; N][b0]>` to `&'?5 array::iter::iter_inner::PolymorphicIter<[mem::maybe_uninit::MaybeUninit<T>]>`
+
+error[E0999]: internal flux error: crates/flux-refineck/src/checker.rs:1599:17
+  --> core/src/array/iter.rs:31:9
+   |
+31 |         &mut self.inner
+   |         ^^^^^^^^^^^^^^^
+   |
+   = note: unsupported unsize cast from `&'?10 mut PolymorphicIter<λb0. [MaybeUninit<λb1. T[b1]>; N][b0]>` to `&'?5 mut array::iter::iter_inner::PolymorphicIter<[mem::maybe_uninit::MaybeUninit<T>]>`
+
+error[E0999]: refinement type error
+   --> core/src/array/mod.rs:233:9
+    |
+233 |         self
+    |         ^^^^ a postcondition cannot be proved
+
+error[E0999]: refinement type error
+   --> core/src/array/mod.rs:372:9
+    |
+372 |         self.iter_mut()
+    |         ^^^^^^^^^^^^^^^ a precondition cannot be proved
+
+error[E0999]: refinement type error
+   --> core/src/array/mod.rs:396:9
+    |
+396 |         IndexMut::index_mut(self as &mut [T], index)
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ a precondition cannot be proved
+
+error[E0999]: refinement type error
+   --> core/src/array/mod.rs:446:9
+    |
+446 |         self.clone_from_slice(other);
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ a precondition cannot be proved
+
+error[E0999]: refinement type error
+   --> core/src/array/mod.rs:593:9
+    |
+593 |         self
+    |         ^^^^ a postcondition cannot be proved
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+   --> core/src/ascii/ascii_char.rs:615:26
+    |
+615 |                 let hi = HEX_DIGITS[usize::from(byte >> 4)];
+    |                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+   --> core/src/ascii/ascii_char.rs:616:26
+    |
+616 |                 let lo = HEX_DIGITS[usize::from(byte & 0xf)];
+    |                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: refinement type error
+   --> core/src/bstr/mod.rs:255:9
+    |
+255 |         ByteStr::from_bytes_mut(&mut [])
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ a precondition cannot be proved
+
+error[E0999]: arithmetic operation may overflow
+   --> core/src/ffi/c_str.rs:213:36
+    |
+213 |         !bytes.is_empty() && bytes[len - 1] == 0 && !bytes[..len - 1].contains(&0)
+    |                                    ^^^^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+   --> core/src/ffi/c_str.rs:213:30
+    |
+213 |         !bytes.is_empty() && bytes[len - 1] == 0 && !bytes[..len - 1].contains(&0)
+    |                              ^^^^^^^^^^^^^^
+
+error[E0999]: arithmetic operation may overflow
+   --> core/src/ffi/c_str.rs:213:62
+    |
+213 |         !bytes.is_empty() && bytes[len - 1] == 0 && !bytes[..len - 1].contains(&0)
+    |                                                              ^^^^^^^
+
+error[E0999]: arithmetic operation may overflow
+   --> core/src/ffi/c_str.rs:571:9
+    |
+571 |         self.inner.len() - 1
+    |         ^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: arithmetic operation may overflow
+   --> core/src/ffi/c_str.rs:615:56
+    |
+615 |         unsafe { slice::from_raw_parts(bytes.as_ptr(), bytes.len() - 1) }
+    |                                                        ^^^^^^^^^^^^^^^
+
+error: internal compiler error: /Users/rjhala/research/flux/crates/flux-middle/src/rty/binder.rs:193:18: unexpected escaping region BoundRegion { var: 0, kind: BrNamed(DefId(0:63756 ~ core[51f4]::ffi::c_str::{impl#6}::display::'_), '_) }
+   --> core/src/ffi/c_str.rs:705:9
+    |
+705 |         crate::bstr::ByteStr::from_bytes(self.to_bytes())
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+
+thread 'rustc' panicked at /Users/rjhala/research/flux/crates/flux-middle/src/rty/binder.rs:193:18:
+Box<dyn Any>
+note: bug caught [def_id: DefId(0:6068 ~ core[51f4]::ffi::c_str::{impl#6}::display), span: core/src/ffi/c_str.rs:704:5: 704:47 (#0)]
+
+error[E0999]: arithmetic operation may overflow
+   --> core/src/io/borrowed_buf.rs:218:9
+    |
+218 |         self.buf.capacity() - self.buf.filled
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: arithmetic operation may overflow
+   --> core/src/io/borrowed_buf.rs:227:9
+    |
+227 |         self.buf.filled - self.start
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: refinement type error
+  --> core/src/net/display_buffer.rs:31:28
+   |
+31 |         if let Some(buf) = self.buf.get_mut(self.len..(self.len + bytes.len())) {
+   |                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ a precondition cannot be proved
+
+error[E0999]: refinement type error
+   --> core/src/net/parser.rs:165:30
+    |
+165 |             for (i, slot) in groups.iter_mut().enumerate() {
+    |                              ^^^^^^^^^^^^^^^^^ a precondition cannot be proved
+
+error[E0999]: refinement type error
+   --> core/src/net/parser.rs:215:42
+    |
+215 |             let (head_size, head_ipv4) = read_groups(p, &mut head);
+    |                                          ^^^^^^^^^^^^^^^^^^^^^^^^^ a precondition cannot be proved
+
+error[E0999]: arithmetic operation may overflow
+   --> core/src/net/parser.rs:234:25
+    |
+234 |             let limit = 8 - (head_size + 1);
+    |                         ^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: arithmetic operation may overflow
+   --> core/src/net/parser.rs:238:18
+    |
+238 |             head[(8 - tail_size)..8].copy_from_slice(&tail[..tail_size]);
+    |                  ^^^^^^^^^^^^^^^
+
+error[E0999]: unsupported statement
+    --> core/src/mem/mod.rs:1388:6
+     |
+1388 |     {builtin # offset_of($Container, $($fields)+)}
+     |      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+    ::: core/src/option.rs:846:48
+     |
+846  |                 (self as *const Self).byte_add(core::mem::offset_of!(Self, Some.0)).cast(),
+     |                                                ----------------------------------- in this macro invocation
+     |
+     = note: unsupported nullary op `OffsetOf([(1, 0)])`
+     = note: this error originates in the macro `core::mem::offset_of` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0999]: unsupported statement
+    --> core/src/mem/mod.rs:1388:6
+     |
+1388 |     {builtin # offset_of($Container, $($fields)+)}
+     |      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+    ::: core/src/option.rs:903:46
+     |
+903  |                 (self as *mut Self).byte_add(core::mem::offset_of!(Self, Some.0)).cast(),
+     |                                              ----------------------------------- in this macro invocation
+     |
+     = note: unsupported nullary op `OffsetOf([(1, 0)])`
+     = note: this error originates in the macro `core::mem::offset_of` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0999]: internal flux error: crates/flux-infer/src/projections.rs:659:25
+    --> core/src/option.rs:2531:9
+     |
+2531 |         iter::try_process(iter.into_iter(), |i| i.collect())
+     |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+     = note: cannot infer substitution for GenericParamDef { name: "T", def_id: DefId(0:6855 ~ core[51f4]::option::{impl#40}::T), index: 0, pure_wrt_drop: false, kind: Type { has_default: false, synthetic: false } } at index 0
+
+error[E0999]: arithmetic operation may overflow
+  --> core/src/pat.rs:71:30
+   |
+71 |         match char::from_u32(self as u32 - 1) {
+   |                              ^^^^^^^^^^^^^^^
+
+error[E0999]: internal flux error: crates/flux-infer/src/projections.rs:659:25
+    --> core/src/result.rs:2050:9
+     |
+2050 |         iter::try_process(iter.into_iter(), |i| i.collect())
+     |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+     = note: cannot infer substitution for GenericParamDef { name: "T", def_id: DefId(0:7631 ~ core[51f4]::result::{impl#27}::T), index: 0, pure_wrt_drop: false, kind: Type { has_default: false, synthetic: false } } at index 0
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+   --> core/src/fmt/mod.rs:638:46
+    |
+638 |         } else if !self.pieces.is_empty() && self.pieces[0].is_empty() && pieces_length < 16 {
+    |                                              ^^^^^^^^^^^^^^
+
+error[E0999]: arithmetic operation may overflow
+    --> core/src/fmt/mod.rs:1643:45
+     |
+1643 |             let post_padding = self.padding(min - width as u16, Alignment::Right)?;
+     |                                             ^^^^^^^^^^^^^^^^^^
+
+error[E0999]: arithmetic operation may overflow
+    --> core/src/fmt/mod.rs:1636:45
+     |
+1636 |             let post_padding = self.padding(min - width as u16, Alignment::Right)?;
+     |                                             ^^^^^^^^^^^^^^^^^^
+
+error[E0999]: arithmetic operation may overflow
+    --> core/src/fmt/mod.rs:1697:25
+     |
+1697 |             (truncated, usize::from(max_char_count) - remaining)
+     |                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: arithmetic operation may overflow
+    --> core/src/fmt/mod.rs:1708:30
+     |
+1708 |                 self.padding(self.options.width - char_count as u16, Alignment::Left)?;
+     |                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: arithmetic operation may overflow
+    --> core/src/fmt/mod.rs:1780:49
+     |
+1780 |                 let post_padding = self.padding(width - len as u16, Alignment::Right)?;
+     |                                                 ^^^^^^^^^^^^^^^^^^
+
+error[E0999]: arithmetic operation may overflow
+    --> core/src/fmt/mod.rs:1814:25
+     |
+1814 |                         nzeroes -= ZEROES.len();
+     |                         ^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: refinement type error
+    --> core/src/fmt/mod.rs:2755:19
+     |
+2755 |             f.pad(self.encode_utf8(&mut [0; MAX_LEN_UTF8]))
+     |                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ a precondition cannot be proved
+
+error[E0999]: arithmetic operation may overflow
+   --> core/src/hash/sip.rs:262:13
+    |
+262 |             needed = 8 - self.ntail;
+    |             ^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: arithmetic operation may overflow
+   --> core/src/hash/sip.rs:281:19
+    |
+281 |         while i < len - left {
+    |                   ^^^^^^^^^^
+
+error: internal compiler error: /Users/rjhala/research/flux/crates/flux-infer/src/infer.rs:912:17: assertion `left == right` failed
+                                  left: fn() -> ∃b0. H[b0]
+                                 right: fn() -> ∃b0. { H[b0] | * }
+   --> core/src/hash/mod.rs:758:9
+    |
+758 |         BuildHasherDefault(marker::PhantomData)
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+
+thread 'rustc' panicked at /Users/rjhala/research/flux/crates/flux-infer/src/infer.rs:912:17:
+Box<dyn Any>
+note: bug caught [def_id: DefId(0:8537 ~ core[51f4]::hash::{impl#1}::new), span: core/src/hash/mod.rs:757:5: 757:31 (#0)]
+
+error: internal compiler error: /Users/rjhala/research/flux/crates/flux-infer/src/infer.rs:912:17: assertion `left == right` failed
+                                  left: fn() -> ∃b0. H[b0]
+                                 right: fn() -> ∃b0. { H[b0] | * }
+   --> core/src/hash/mod.rs:781:9
+    |
+781 |         BuildHasherDefault(marker::PhantomData)
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+
+thread 'rustc' panicked at /Users/rjhala/research/flux/crates/flux-infer/src/infer.rs:912:17:
+Box<dyn Any>
+note: bug caught [def_id: DefId(0:8547 ~ core[51f4]::hash::{impl#4}::clone), span: core/src/hash/mod.rs:780:5: 780:45 (#0)]
+
+error[E0999]: assertion might fail: possible division by zero
+   --> core/src/slice/sort/stable/mod.rs:160:19
+    |
+160 |         let len = N / size_of::<T>();
+    |                   ^^^^^^^^^^^^^^^^^^
+
+error[E0999]: refinement type error
+   --> core/src/slice/sort/stable/mod.rs:163:50
+    |
+163 |         unsafe { core::slice::from_raw_parts_mut(self.storage.as_mut_ptr().cast(), len) }
+    |                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^ a precondition cannot be proved
+
+error[E0999]: unsupported statement
+  --> core/src/slice/ascii.rs:71:30
+   |
+71 |         while let ([first_a, rest_a @ ..], [first_b, rest_b @ ..]) = (a, b) {
+   |                              ^^^^^^
+   |
+   = note: unsupported place `(*(_14.0: &[u8]))[1:]`
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+  --> core/src/slice/ascii.rs:99:29
+   |
+99 |             let byte = &mut self[i];
+   |                             ^^^^^^^
+
+error[E0999]: error jumping to join point
+   --> core/src/slice/ascii.rs:98:30
+    |
+98  |           while i < self.len() {
+    |  ______________________________^
+99  | |             let byte = &mut self[i];
+100 | |             byte.make_ascii_uppercase();
+101 | |             i += 1;
+102 | |         }
+    | |_________^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+   --> core/src/slice/ascii.rs:121:29
+    |
+121 |             let byte = &mut self[i];
+    |                             ^^^^^^^
+
+error[E0999]: error jumping to join point
+   --> core/src/slice/ascii.rs:120:30
+    |
+120 |           while i < self.len() {
+    |  ______________________________^
+121 | |             let byte = &mut self[i];
+122 | |             byte.make_ascii_lowercase();
+123 | |             i += 1;
+124 | |         }
+    | |_________^
+
+error[E0999]: unsupported statement
+   --> core/src/slice/ascii.rs:164:27
+    |
+164 |         while let [first, rest @ ..] = bytes {
+    |                           ^^^^
+    |
+    = note: unsupported place `(*_2)[1:]`
+
+error[E0999]: unsupported statement
+   --> core/src/slice/ascii.rs:193:20
+    |
+193 |         while let [rest @ .., last] = bytes {
+    |                    ^^^^
+    |
+    = note: unsupported place `(*_2)[:-1]`
+
+error[E0999]: internal flux error: crates/flux-infer/src/projections.rs:659:25
+   --> core/src/slice/ascii.rs:259:9
+    |
+259 |         self.inner.try_fold(init, fold)
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: cannot infer substitution for GenericParamDef { name: "'_", def_id: DefId(0:76185 ~ core[51f4]::slice::ascii::{impl#8}::'_), index: 0, pure_wrt_drop: false, kind: Lifetime } at index 0
+
+error[E0999]: internal flux error: crates/flux-infer/src/projections.rs:659:25
+   --> core/src/slice/ascii.rs:266:9
+    |
+266 |         self.inner.fold(init, fold)
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: cannot infer substitution for GenericParamDef { name: "'_", def_id: DefId(0:76185 ~ core[51f4]::slice::ascii::{impl#8}::'_), index: 0, pure_wrt_drop: false, kind: Lifetime } at index 0
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+   --> core/src/slice/cmp.rs:120:16
+    |
+120 |             if self[idx] != other[idx] {
+    |                ^^^^^^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+   --> core/src/slice/cmp.rs:120:29
+    |
+120 |             if self[idx] != other[idx] {
+    |                             ^^^^^^^^^^
+
+error[E0999]: internal flux error: crates/flux-infer/src/projections.rs:659:25
+   --> core/src/slice/index.rs:289:17
+    |
+289 |                 slice_get_unchecked(slice, self)
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: cannot infer substitution for GenericParamDef { name: "T", def_id: DefId(0:1504 ~ core[51f4]::intrinsics::bounds::{impl#3}::T), index: 0, pure_wrt_drop: false, kind: Type { has_default: false, synthetic: false } } at index 0
+
+error[E0999]: internal flux error: crates/flux-infer/src/projections.rs:659:25
+   --> core/src/slice/index.rs:310:17
+    |
+310 |                 slice_get_unchecked(slice, self)
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: cannot infer substitution for GenericParamDef { name: "T", def_id: DefId(0:1501 ~ core[51f4]::intrinsics::bounds::{impl#2}::T), index: 0, pure_wrt_drop: false, kind: Type { has_default: false, synthetic: false } } at index 0
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+   --> core/src/slice/index.rs:318:10
+    |
+318 |         &(*slice)[self]
+    |          ^^^^^^^^^^^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+   --> core/src/slice/index.rs:324:14
+    |
+324 |         &mut (*slice)[self]
+    |              ^^^^^^^^^^^^^^
+
+error: internal compiler error: crates/flux-refineck/src/checker.rs:1381:18: check_len: expected array or slice type found  `∃b0. [∃b1. T[b1]][b0]`
+   --> core/src/slice/mod.rs:185:16
+    |
+185 |         if let [first, ..] = self {
+    |                ^^^^^^^^^^^
+
+
+thread 'rustc' panicked at crates/flux-refineck/src/checker.rs:1381:18:
+Box<dyn Any>
+note: bug caught [def_id: DefId(0:9476 ~ core[51f4]::slice::{impl#0}::first_mut), span: core/src/slice/mod.rs:184:5: 184:56 (#0)]
+
+error[E0999]: unsupported statement
+   --> core/src/slice/mod.rs:209:24
+    |
+209 |         if let [first, tail @ ..] = self {
+    |                        ^^^^
+    |
+    = note: unsupported place `(*_1)[1:]`
+
+error[E0999]: unsupported statement
+   --> core/src/slice/mod.rs:235:24
+    |
+235 |         if let [first, tail @ ..] = self {
+    |                        ^^^^
+    |
+    = note: unsupported place `(*_1)[1:]`
+
+error[E0999]: unsupported statement
+   --> core/src/slice/mod.rs:259:17
+    |
+259 |         if let [init @ .., last] = self {
+    |                 ^^^^
+    |
+    = note: unsupported place `(*_1)[:-1]`
+
+error[E0999]: unsupported statement
+   --> core/src/slice/mod.rs:285:17
+    |
+285 |         if let [init @ .., last] = self {
+    |                 ^^^^
+    |
+    = note: unsupported place `(*_1)[:-1]`
+
+error: internal compiler error: crates/flux-refineck/src/checker.rs:1381:18: check_len: expected array or slice type found  `∃b0. [∃b1. T[b1]][b0]`
+   --> core/src/slice/mod.rs:335:16
+    |
+335 |         if let [.., last] = self {
+    |                ^^^^^^^^^^
+
+
+thread 'rustc' panicked at crates/flux-refineck/src/checker.rs:1381:18:
+Box<dyn Any>
+note: bug caught [def_id: DefId(0:9482 ~ core[51f4]::slice::{impl#0}::last_mut), span: core/src/slice/mod.rs:334:5: 334:55 (#0)]
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+   --> core/src/slice/mod.rs:948:27
+    |
+948 |         let pa = &raw mut self[a];
+    |                           ^^^^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+   --> core/src/slice/mod.rs:949:27
+    |
+949 |         let pb = &raw mut self[b];
+    |                           ^^^^^^^
+
+error[E0999]: arithmetic operation may overflow
+    --> core/src/slice/mod.rs:1469:56
+     |
+1469 |         let (remainder, multiple_of_n) = self.split_at(self.len() - len * N);
+     |                                                        ^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: arithmetic operation may overflow
+    --> core/src/slice/mod.rs:1667:60
+     |
+1667 |         let (remainder, multiple_of_n) = self.split_at_mut(self.len() - len * N);
+     |                                                            ^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: refinement type error
+    --> core/src/slice/mod.rs:3535:20
+     |
+3535 |             return (self, &mut []);
+     |                    ^^^^^^^^^^^^^^^ a postcondition cannot be proved
+
+error[E0999]: arithmetic operation may overflow
+    --> core/src/slice/mod.rs:3641:17
+     |
+3641 |         let k = self.len() - mid;
+     |                 ^^^^^^^^^^^^^^^^
+
+error[E0999]: arithmetic operation may overflow
+    --> core/src/slice/mod.rs:3686:19
+     |
+3686 |         let mid = self.len() - k;
+     |                   ^^^^^^^^^^^^^^
+
+error[E0999]: arithmetic operation may overflow
+    --> core/src/slice/mod.rs:3924:21
+     |
+3924 |         let count = src_end - src_start;
+     |                     ^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: arithmetic operation may overflow
+    --> core/src/slice/mod.rs:3925:25
+     |
+3925 |         assert!(dest <= self.len() - count, "dest is out of bounds");
+     |                         ^^^^^^^^^^^^^^^^^^
+
+error[E0999]: assertion might fail: possible division by zero
+    --> core/src/slice/mod.rs:4026:25
+     |
+4026 |         let ts: usize = size_of::<U>() / gcd;
+     |                         ^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: assertion might fail: possible division by zero
+    --> core/src/slice/mod.rs:4030:22
+     |
+4030 |         let us_len = self.len() / ts * us;
+     |                      ^^^^^^^^^^^^^^^
+
+error[E0999]: arithmetic operation may overflow
+    --> core/src/slice/mod.rs:4095:54
+     |
+4095 |                     from_raw_parts(rest.as_ptr().add(rest.len() - ts_len), ts_len),
+     |                                                      ^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: arithmetic operation may overflow
+    --> core/src/slice/mod.rs:4168:52
+     |
+4168 |                     from_raw_parts_mut(mut_ptr.add(rest_len - ts_len), ts_len),
+     |                                                    ^^^^^^^^^^^^^^^^^
+
+error[E0999]: refinement type error
+    --> core/src/slice/mod.rs:4135:20
+     |
+4135 |             return (self, &mut [], &mut []);
+     |                    ^^^^^^^^^^^^^^^^^^^^^^^^ a postcondition cannot be proved
+
+error[E0999]: error jumping to join point
+    --> core/src/slice/mod.rs:4150:13
+     |
+4150 |             (self, &mut [], &mut [])
+     |             ^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: arithmetic operation may overflow
+    --> core/src/slice/mod.rs:4308:19
+     |
+4308 |         while i < self.len() - CHUNK_SIZE {
+     |                   ^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+    --> core/src/slice/mod.rs:4317:38
+     |
+4317 |         self[i..].windows(2).all(|w| w[0] <= w[1])
+     |                                      ^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+    --> core/src/slice/mod.rs:4317:46
+     |
+4317 |         self[i..].windows(2).all(|w| w[0] <= w[1])
+     |                                              ^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+    --> core/src/slice/mod.rs:4310:61
+     |
+4310 |             if !chunk.windows(2).fold(true, |acc, w| acc & (w[0] <= w[1])) {
+     |                                                             ^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+    --> core/src/slice/mod.rs:4310:69
+     |
+4310 |             if !chunk.windows(2).fold(true, |acc, w| acc & (w[0] <= w[1])) {
+     |                                                                     ^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+    --> core/src/slice/mod.rs:4304:44
+     |
+4304 |             return self.windows(2).all(|w| w[0] <= w[1]);
+     |                                            ^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+    --> core/src/slice/mod.rs:4304:52
+     |
+4304 |             return self.windows(2).all(|w| w[0] <= w[1]);
+     |                                                    ^^^^
+
+error: internal compiler error: crates/flux-refineck/src/ghost_statements/fold_unfold.rs:216:17: assertion `left == right` failed
+                                  left: *_2
+                                 right: *_2[0 of 2]
+    --> core/src/slice/mod.rs:4344:34
+     |
+4344 |         self.array_windows().all(|[a, b]| compare(a, b))
+     |                                  ^^^^^^^^^^^^^^^^^^^^^^
+
+
+thread 'rustc' panicked at crates/flux-refineck/src/ghost_statements/fold_unfold.rs:216:17:
+Box<dyn Any>
+note: bug caught [def_id: DefId(0:9680 ~ core[51f4]::slice::{impl#0}::is_sorted_by), span: core/src/slice/mod.rs:4340:5: 4342:40 (#0)]
+
+error[E0999]: refinement type error
+    --> core/src/slice/mod.rs:4610:34
+     |
+4610 |         let Some((first, rem)) = mem::replace(self, &mut []).split_first_mut() else {
+     |                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^ a precondition cannot be proved
+
+error[E0999]: refinement type error
+    --> core/src/slice/mod.rs:4664:33
+     |
+4664 |         let Some((last, rem)) = mem::replace(self, &mut []).split_last_mut() else {
+     |                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^ a precondition cannot be proved
+
+error[E0999]: assertion might fail: possible remainder with a divisor of zero
+    --> core/src/slice/mod.rs:4855:12
+     |
+4855 |         if byte_offset % size_of::<T>() != 0 {
+     |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: assertion might fail: possible division by zero
+    --> core/src/slice/mod.rs:4859:22
+     |
+4859 |         let offset = byte_offset / size_of::<T>();
+     |                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: assertion might fail: possible remainder with a divisor of zero
+    --> core/src/slice/mod.rs:4913:12
+     |
+4913 |         if byte_start % size_of::<T>() != 0 {
+     |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: assertion might fail: possible division by zero
+    --> core/src/slice/mod.rs:4917:21
+     |
+4917 |         let start = byte_start / size_of::<T>();
+     |                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+    --> core/src/slice/mod.rs:5142:13
+     |
+5142 |             self[i].clone_from(&src[i]);
+     |             ^^^^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+    --> core/src/slice/mod.rs:5142:33
+     |
+5142 |             self[i].clone_from(&src[i]);
+     |                                 ^^^^^^
+
+error[E0999]: error jumping to join point
+    --> core/src/slice/mod.rs:5141:9
+     |
+5141 | /         for i in 0..len {
+5142 | |             self[i].clone_from(&src[i]);
+5143 | |         }
+     | |_________^
+
+error[E0999]: refinement type error
+    --> core/src/slice/mod.rs:5169:9
+     |
+5169 |         &mut []
+     |         ^^^^^^^ a postcondition cannot be proved
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+  --> core/src/str/iter.rs:66:77
+   |
+66 |                     start_bytes[i] = !super::validations::utf8_is_cont_byte(chunk[i]);
+   |                                                                             ^^^^^^^^
+
+error[E0999]: assignment might be unsafe
+  --> core/src/str/iter.rs:66:21
+   |
+66 |                     start_bytes[i] = !super::validations::utf8_is_cont_byte(chunk[i]);
+   |                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+  --> core/src/str/iter.rs:78:25
+   |
+78 |                 let b = self.iter.as_slice()[0];
+   |                         ^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: arithmetic operation may overflow
+  --> core/src/str/iter.rs:69:17
+   |
+69 |                 remainder -= start_bytes.into_iter().map(|i| i as u8).sum::<u8>() as usize;
+   |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+  --> core/src/str/iter.rs:89:21
+   |
+89 |             let b = self.iter.as_slice()[0];
+   |                     ^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: arithmetic operation may overflow
+   --> core/src/str/iter.rs:192:38
+    |
+192 |                 self.front_offset += pre_len - len;
+    |                                      ^^^^^^^^^^^^^
+
+error[E0999]: arithmetic operation may overflow
+   --> core/src/str/iter.rs:649:45
+    |
+649 |             if self.allow_trailing_empty || self.end - self.start > 0 {
+    |                                             ^^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: arithmetic operation may overflow
+   --> core/src/str/iter.rs:950:17
+    |
+950 |                 self.count -= 1;
+    |                 ^^^^^^^^^^^^^^^
+
+error[E0999]: arithmetic operation may overflow
+   --> core/src/str/iter.rs:968:17
+    |
+968 |                 self.count -= 1;
+    |                 ^^^^^^^^^^^^^^^
+
+error[E0999]: internal flux error: crates/flux-refineck/src/checker.rs:1599:17
+    --> core/src/str/iter.rs:1515:37
+     |
+1515 |             let n = ch.encode_utf16(&mut buf).len();
+     |                                     ^^^^^^^^
+     |
+     = note: unsupported unsize cast from `&'?23 mut ∃b0. { [∃b1. { u16[b1] | * }; Leaf(2)][b0] | * }` to `&'?10 mut [u16]`
+
+error[E0999]: unsupported terminator args
+   --> core/src/str/traits.rs:859:13
+    |
+859 |             "true" => Ok(true),
+    |             ^^^^^^
+    |
+    = note: unsupported constant `const "true"`
+
+error[E0999]: arithmetic operation may overflow
+   --> core/src/str/pattern.rs:427:28
+    |
+427 |             self.finger += old_len - iter.iter.len();
+    |                            ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: arithmetic operation may overflow
+   --> core/src/str/pattern.rs:444:71
+    |
+444 |             let last_byte = unsafe { *self.utf8_encoded.get_unchecked(self.utf8_size() - 1) };
+    |                                                                       ^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: arithmetic operation may overflow
+   --> core/src/str/pattern.rs:465:38
+    |
+465 |                     let found_char = self.finger - self.utf8_size();
+    |                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: arithmetic operation may overflow
+   --> core/src/str/pattern.rs:494:33
+    |
+494 |             self.finger_back -= old_len - iter.iter.len();
+    |                                 ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: arithmetic operation may overflow
+   --> core/src/str/pattern.rs:494:13
+    |
+494 |             self.finger_back -= old_len - iter.iter.len();
+    |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: arithmetic operation may overflow
+   --> core/src/str/pattern.rs:512:71
+    |
+512 |             let last_byte = unsafe { *self.utf8_encoded.get_unchecked(self.utf8_size() - 1) };
+    |                                                                       ^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: arithmetic operation may overflow
+   --> core/src/str/pattern.rs:523:29
+    |
+523 |                 let shift = self.utf8_size() - 1;
+    |                             ^^^^^^^^^^^^^^^^^^^^
+
+
+thread 'rustc' panicked at crates/flux-middle/src/rty/subst.rs:171:21:
+Box<dyn Any>
+note: bug caught [def_id: DefId(0:10326 ~ core[51f4]::str::pattern::{impl#4}::into_searcher), span: core/src/str/pattern.rs:570:5: 570:72 (#0)]
+
+error[E0999]: refinement type error
+   --> core/src/str/pattern.rs:594:13
+    |
+594 |             self.encode_utf8(&mut buffer).is_contained_in(haystack)
+    |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ a precondition cannot be proved
+
+error[E0999]: refinement type error
+   --> core/src/str/pattern.rs:600:9
+    |
+600 |         self.encode_utf8(&mut [0u8; 4]).is_prefix_of(haystack)
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ a precondition cannot be proved
+
+error[E0999]: refinement type error
+   --> core/src/str/pattern.rs:605:9
+    |
+605 |         self.encode_utf8(&mut [0u8; 4]).strip_prefix_of(haystack)
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ a precondition cannot be proved
+
+error[E0999]: refinement type error
+   --> core/src/str/pattern.rs:613:9
+    |
+613 |         self.encode_utf8(&mut [0u8; 4]).is_suffix_of(haystack)
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ a precondition cannot be proved
+
+error[E0999]: refinement type error
+   --> core/src/str/pattern.rs:621:9
+    |
+621 |         self.encode_utf8(&mut [0u8; 4]).strip_suffix_of(haystack)
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ a precondition cannot be proved
+
+error[E0999]: refinement type error
+   --> core/src/str/pattern.rs:665:5
+    |
+665 |     fn matches(&mut self, c: char) -> bool {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ a precondition cannot be proved
+
+
+thread 'rustc' panicked at crates/flux-middle/src/rty/subst.rs:171:21:
+Box<dyn Any>
+note: bug caught [def_id: DefId(0:10365 ~ core[51f4]::str::pattern::{impl#9}::into_searcher), span: core/src/str/pattern.rs:683:5: 683:73 (#0)]
+
+error[E0999]: arithmetic operation may overflow
+   --> core/src/str/pattern.rs:702:28
+    |
+702 |             let char_len = pre_len - len;
+    |                            ^^^^^^^^^^^^^
+
+error[E0999]: arithmetic operation may overflow
+   --> core/src/str/pattern.rs:722:28
+    |
+722 |             let char_len = pre_len - len;
+    |                            ^^^^^^^^^^^^^
+
+error: internal compiler error: crates/flux-refineck/src/ghost_statements/fold_unfold.rs:573:26: implicit downcast of non-struct: `Alias (Projection, str::pattern::Pattern::Searcher, <str::pattern::MultiCharEqPattern<F>, '?36>)`
+   --> core/src/str/pattern.rs:916:5
+    |
+916 | /     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+917 | |         f.debug_struct("CharPredicateSearcher")
+918 | |             .field("haystack", &self.0.haystack)
+919 | |             .field("char_indices", &self.0.char_indices)
+920 | |             .finish()
+921 | |     }
+    | |_____^
+
+
+thread 'rustc' panicked at crates/flux-refineck/src/ghost_statements/fold_unfold.rs:573:26:
+Box<dyn Any>
+note: bug caught [def_id: DefId(0:10421 ~ core[51f4]::str::pattern::{impl#25}::fmt), span: core/src/str/pattern.rs:916:5: 916:61 (#0)]
+
+
+thread 'rustc' panicked at crates/flux-middle/src/rty/subst.rs:171:21:
+Box<dyn Any>
+note: bug caught [def_id: DefId(0:10440 ~ core[51f4]::str::pattern::{impl#31}::into_searcher), span: core/src/str/pattern.rs:981:5: 981:66 (#0)]
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+    --> core/src/str/pattern.rs:1001:58
+     |
+1001 |                     return haystack.as_bytes().contains(&self.as_bytes()[0]);
+     |                                                          ^^^^^^^^^^^^^^^^^^
+
+error[E0999]: arithmetic operation may overflow
+    --> core/src/str/pattern.rs:1044:21
+     |
+1044 |             let i = haystack.len() - self.as_bytes().len();
+     |                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: arithmetic operation may overflow
+    --> core/src/str/pattern.rs:1240:29
+     |
+1240 | ...                   a -= 1;
+     |                       ^^^^^^
+
+error[E0999]: arithmetic operation may overflow
+    --> core/src/str/pattern.rs:1222:25
+     |
+1222 |                         searcher.end -= ch.len_utf8();
+     |                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: arithmetic operation may overflow
+    --> core/src/str/pattern.rs:1436:44
+     |
+1436 |                 period: cmp::max(crit_pos, needle.len() - crit_pos) + 1,
+     |                                            ^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: arithmetic operation may overflow
+    --> core/src/str/pattern.rs:1408:33
+     |
+1408 |               let crit_pos_back = needle.len()
+     |  _________________________________^
+1409 | |                 - cmp::max(
+1410 | |                     TwoWaySearcher::reverse_maximal_suffix(needle, period, false),
+1411 | |                     TwoWaySearcher::reverse_maximal_suffix(needle, period, true),
+1412 | |                 );
+     | |_________________^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+    --> core/src/str/pattern.rs:1511:20
+     |
+1511 |                 if needle[i] != haystack[self.position + i] {
+     |                    ^^^^^^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+    --> core/src/str/pattern.rs:1511:33
+     |
+1511 |                 if needle[i] != haystack[self.position + i] {
+     |                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: arithmetic operation may overflow
+    --> core/src/str/pattern.rs:1500:38
+     |
+1500 |                     self.position += i - self.crit_pos + 1;
+     |                                      ^^^^^^^^^^^^^^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+    --> core/src/str/pattern.rs:1499:20
+     |
+1499 |                 if needle[i] != haystack[self.position + i] {
+     |                    ^^^^^^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+    --> core/src/str/pattern.rs:1499:33
+     |
+1499 |                 if needle[i] != haystack[self.position + i] {
+     |                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: arithmetic operation may overflow
+    --> core/src/str/pattern.rs:1514:25
+     |
+1514 |                         self.memory = needle.len() - self.period;
+     |                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: arithmetic operation may overflow
+    --> core/src/str/pattern.rs:1469:27
+     |
+1469 |         let needle_last = needle.len() - 1;
+     |                           ^^^^^^^^^^^^^^^^
+
+error[E0999]: arithmetic operation may overflow
+    --> core/src/str/pattern.rs:1608:29
+     |
+1608 |             let match_pos = self.end - needle.len();
+     |                             ^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: arithmetic operation may overflow
+    --> core/src/str/pattern.rs:1610:13
+     |
+1610 |             self.end -= needle.len();
+     |             ^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: arithmetic operation may overflow
+    --> core/src/str/pattern.rs:1599:21
+     |
+1599 |                     self.end -= self.period;
+     |                     ^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: arithmetic operation may overflow
+    --> core/src/str/pattern.rs:1587:33
+     |
+1587 |                     self.end -= self.crit_pos_back - i;
+     |                                 ^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: arithmetic operation may overflow
+    --> core/src/str/pattern.rs:1587:21
+     |
+1587 |                     self.end -= self.crit_pos_back - i;
+     |                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+    --> core/src/str/pattern.rs:1598:20
+     |
+1598 |                 if needle[i] != haystack[self.end - needle.len() + i] {
+     |                    ^^^^^^^^^
+
+error[E0999]: arithmetic operation may overflow
+    --> core/src/str/pattern.rs:1598:42
+     |
+1598 |                 if needle[i] != haystack[self.end - needle.len() + i] {
+     |                                          ^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+    --> core/src/str/pattern.rs:1598:33
+     |
+1598 |                 if needle[i] != haystack[self.end - needle.len() + i] {
+     |                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+    --> core/src/str/pattern.rs:1586:20
+     |
+1586 |                 if needle[i] != haystack[self.end - needle.len() + i] {
+     |                    ^^^^^^^^^
+
+error[E0999]: arithmetic operation may overflow
+    --> core/src/str/pattern.rs:1586:42
+     |
+1586 |                 if needle[i] != haystack[self.end - needle.len() + i] {
+     |                                          ^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: arithmetic operation may overflow
+    --> core/src/str/pattern.rs:1572:17
+     |
+1572 |                 self.end -= needle.len();
+     |                 ^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+    --> core/src/str/pattern.rs:1586:33
+     |
+1586 |                 if needle[i] != haystack[self.end - needle.len() + i] {
+     |                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+    --> core/src/str/pattern.rs:1641:21
+     |
+1641 |             let b = arr[left + offset];
+     |                     ^^^^^^^^^^^^^^^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+    --> core/src/str/pattern.rs:1687:21
+     |
+1687 |             let a = arr[n - (1 + right + offset)];
+     |                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+    --> core/src/str/pattern.rs:1688:21
+     |
+1688 |             let b = arr[n - (1 + left + offset)];
+     |                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: assertion might fail: possible out-of-bounds access
+   --> core/src/str/mod.rs:382:13
+    |
+382 |             self.as_bytes()[index].is_utf8_char_boundary()
+    |             ^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: arithmetic operation may overflow
+   --> core/src/str/mod.rs:962:73
+    |
+962 |                 from_utf8_unchecked(slice::from_raw_parts(ptr.add(mid), len - mid)),
+    |                                                                         ^^^^^^^^^
+
+error[E0999]: arithmetic operation may overflow
+   --> core/src/str/mod.rs:980:81
+    |
+980 |                 from_utf8_unchecked_mut(slice::from_raw_parts_mut(ptr.add(mid), len - mid)),
+    |                                                                                 ^^^^^^^^^
+
+error[E0999]: refinement type error
+    --> core/src/str/mod.rs:3006:18
+     |
+3006 |         unsafe { from_utf8_unchecked_mut(&mut []) }
+     |                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ a precondition cannot be proved
+
+error[E0999]: arithmetic operation may overflow
+   --> core/src/time.rs:726:17
+    |
+726 |                 self.nanos.as_inner() + NANOS_PER_SEC - rhs.nanos.as_inner()
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: arithmetic operation may overflow
+   --> core/src/time.rs:723:17
+    |
+723 |                 self.nanos.as_inner() - rhs.nanos.as_inner()
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0999]: arithmetic operation may overflow
+    --> core/src/time.rs:1547:28
+     |
+1547 |               let rem_mask = (1 << nanos_offset) - 1;
+     |                              ^^^^^^^^^^^^^^^^^^^^^^^
+...
+1636 | /         try_from_secs!(
+1637 | |             secs = secs,
+1638 | |             mantissa_bits = 23,
+1639 | |             exponent_bits = 8,
+...    |
+1642 | |             double_ty = u64,
+1643 | |         )
+     | |_________- in this macro invocation
+     |
+     = note: this error originates in the macro `try_from_secs` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0999]: arithmetic operation may overflow
+    --> core/src/time.rs:1528:28
+     |
+1528 |               let rem_mask = (1 << nanos_offset) - 1;
+     |                              ^^^^^^^^^^^^^^^^^^^^^^^
+...
+1636 | /         try_from_secs!(
+1637 | |             secs = secs,
+1638 | |             mantissa_bits = 23,
+1639 | |             exponent_bits = 8,
+...    |
+1642 | |             double_ty = u64,
+1643 | |         )
+     | |_________- in this macro invocation
+     |
+     = note: this error originates in the macro `try_from_secs` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0999]: arithmetic operation may overflow
+    --> core/src/time.rs:1547:28
+     |
+1547 |               let rem_mask = (1 << nanos_offset) - 1;
+     |                              ^^^^^^^^^^^^^^^^^^^^^^^
+...
+1712 | /         try_from_secs!(
+1713 | |             secs = secs,
+1714 | |             mantissa_bits = 52,
+1715 | |             exponent_bits = 11,
+...    |
+1718 | |             double_ty = u128,
+1719 | |         )
+     | |_________- in this macro invocation
+     |
+     = note: this error originates in the macro `try_from_secs` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0999]: arithmetic operation may overflow
+    --> core/src/time.rs:1528:28
+     |
+1528 |               let rem_mask = (1 << nanos_offset) - 1;
+     |                              ^^^^^^^^^^^^^^^^^^^^^^^
+...
+1712 | /         try_from_secs!(
+1713 | |             secs = secs,
+1714 | |             mantissa_bits = 52,
+1715 | |             exponent_bits = 11,
+...    |
+1718 | |             double_ty = u128,
+1719 | |         )
+     | |_________- in this macro invocation
+     |
+     = note: this error originates in the macro `try_from_secs` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0999]: arithmetic operation may overflow
+  --> core/src/unicode/unicode_data.rs:68:18
+   |
+68 |         self.0 & ((1 << 21) - 1)
+   |                  ^^^^^^^^^^^^^^^
+
+error[E0999]: arithmetic operation may overflow
+   --> core/src/escape.rs:201:21
+    |
+201 |         usize::from(self.alive.end - self.alive.start)
+    |                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error: internal compiler error: /Users/rjhala/research/flux/crates/flux-infer/src/infer.rs:912:17: assertion `left == right` failed
+                                  left: fn(uint8x8_t, uint8x8_t) -> uint8x8_t
+                                 right: fn(∃b0. { uint8x8_t[b0] | * }, ∃b1. { uint8x8_t[b1] | * }) -> ∃b2. { uint8x8_t[b2] | * }
+  --> core/src/../../portable-simd/crates/core_simd/src/swizzle_dyn.rs:51:22
+   |
+51 |                 8 => transize(vtbl1_u8, self, idxs),
+   |                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+
+thread 'rustc' panicked at /Users/rjhala/research/flux/crates/flux-infer/src/infer.rs:912:17:
+Box<dyn Any>
+note: bug caught [def_id: DefId(0:12071 ~ core[51f4]::core_simd::swizzle_dyn::{impl#0}::swizzle_dyn), span: core/src/../../portable-simd/crates/core_simd/src/swizzle_dyn.rs:17:5: 17:56 (#0)]
+
+error[E0999]: internal flux error: crates/flux-infer/src/projections.rs:659:25
+   --> core/src/../../portable-simd/crates/core_simd/src/vector.rs:593:20
+    |
+593 |         let ptrs = base_ptr.wrapping_add(idxs);
+    |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: cannot infer substitution for GenericParamDef { name: "T", def_id: DefId(0:12505 ~ core[51f4]::core_simd::simd::ptr::const_ptr::{impl#1}::T), index: 0, pure_wrt_drop: false, kind: Type { has_default: false, synthetic: false } } at index 0
+
+error[E0999]: internal flux error: crates/flux-infer/src/projections.rs:659:25
+   --> core/src/../../portable-simd/crates/core_simd/src/vector.rs:832:24
+    |
+832 |             let ptrs = base_ptr.wrapping_add(idxs);
+    |                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: cannot infer substitution for GenericParamDef { name: "T", def_id: DefId(0:12558 ~ core[51f4]::core_simd::simd::ptr::mut_ptr::{impl#1}::T), index: 0, pure_wrt_drop: false, kind: Type { has_default: false, synthetic: false } } at index 0
+
+error[E0999]: refinement type error
+    --> core/src/../../portable-simd/crates/core_simd/src/vector.rs:1044:9
+     |
+1044 |         self.as_mut_array()
+     |         ^^^^^^^^^^^^^^^^^^^ a postcondition cannot be proved
+
+error[E0999]: internal flux error: crates/flux-infer/src/projections.rs:659:25
+   --> core/src/../../portable-simd/crates/core_simd/src/simd/ptr/const_ptr.rs:104:5
+    |
+104 |     fn is_null(self) -> Self::Mask {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: cannot infer substitution for GenericParamDef { name: "T", def_id: DefId(0:12505 ~ core[51f4]::core_simd::simd::ptr::const_ptr::{impl#1}::T), index: 0, pure_wrt_drop: false, kind: Type { has_default: false, synthetic: false } } at index 0
+
+error[E0999]: internal flux error: crates/flux-infer/src/projections.rs:659:25
+   --> core/src/../../portable-simd/crates/core_simd/src/simd/ptr/const_ptr.rs:109:5
+    |
+109 |     fn cast<U>(self) -> Self::CastPtr<U> {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: cannot infer substitution for GenericParamDef { name: "T", def_id: DefId(0:12505 ~ core[51f4]::core_simd::simd::ptr::const_ptr::{impl#1}::T), index: 0, pure_wrt_drop: false, kind: Type { has_default: false, synthetic: false } } at index 0
+
+error[E0999]: internal flux error: crates/flux-infer/src/projections.rs:659:25
+   --> core/src/../../portable-simd/crates/core_simd/src/simd/ptr/const_ptr.rs:121:5
+    |
+121 |     fn cast_mut(self) -> Self::MutPtr {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: cannot infer substitution for GenericParamDef { name: "T", def_id: DefId(0:12505 ~ core[51f4]::core_simd::simd::ptr::const_ptr::{impl#1}::T), index: 0, pure_wrt_drop: false, kind: Type { has_default: false, synthetic: false } } at index 0
+
+error[E0999]: internal flux error: crates/flux-infer/src/projections.rs:659:25
+   --> core/src/../../portable-simd/crates/core_simd/src/simd/ptr/const_ptr.rs:127:5
+    |
+127 |     fn addr(self) -> Self::Usize {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: cannot infer substitution for GenericParamDef { name: "T", def_id: DefId(0:12505 ~ core[51f4]::core_simd::simd::ptr::const_ptr::{impl#1}::T), index: 0, pure_wrt_drop: false, kind: Type { has_default: false, synthetic: false } } at index 0
+
+error[E0999]: internal flux error: crates/flux-infer/src/projections.rs:659:25
+   --> core/src/../../portable-simd/crates/core_simd/src/simd/ptr/const_ptr.rs:135:5
+    |
+135 |     fn without_provenance(addr: Self::Usize) -> Self {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: cannot infer substitution for GenericParamDef { name: "T", def_id: DefId(0:12505 ~ core[51f4]::core_simd::simd::ptr::const_ptr::{impl#1}::T), index: 0, pure_wrt_drop: false, kind: Type { has_default: false, synthetic: false } } at index 0
+
+error[E0999]: internal flux error: crates/flux-infer/src/projections.rs:659:25
+   --> core/src/../../portable-simd/crates/core_simd/src/simd/ptr/const_ptr.rs:143:5
+    |
+143 |     fn with_addr(self, addr: Self::Usize) -> Self {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: cannot infer substitution for GenericParamDef { name: "T", def_id: DefId(0:12505 ~ core[51f4]::core_simd::simd::ptr::const_ptr::{impl#1}::T), index: 0, pure_wrt_drop: false, kind: Type { has_default: false, synthetic: false } } at index 0
+
+error[E0999]: internal flux error: crates/flux-infer/src/projections.rs:659:25
+   --> core/src/../../portable-simd/crates/core_simd/src/simd/ptr/const_ptr.rs:155:5
+    |
+155 |     fn expose_provenance(self) -> Self::Usize {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: cannot infer substitution for GenericParamDef { name: "T", def_id: DefId(0:12505 ~ core[51f4]::core_simd::simd::ptr::const_ptr::{impl#1}::T), index: 0, pure_wrt_drop: false, kind: Type { has_default: false, synthetic: false } } at index 0
+
+error[E0999]: internal flux error: crates/flux-infer/src/projections.rs:659:25
+   --> core/src/../../portable-simd/crates/core_simd/src/simd/ptr/const_ptr.rs:161:5
+    |
+161 |     fn with_exposed_provenance(addr: Self::Usize) -> Self {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: cannot infer substitution for GenericParamDef { name: "T", def_id: DefId(0:12505 ~ core[51f4]::core_simd::simd::ptr::const_ptr::{impl#1}::T), index: 0, pure_wrt_drop: false, kind: Type { has_default: false, synthetic: false } } at index 0
+
+error[E0999]: internal flux error: crates/flux-infer/src/projections.rs:659:25
+   --> core/src/../../portable-simd/crates/core_simd/src/simd/ptr/const_ptr.rs:167:5
+    |
+167 |     fn wrapping_offset(self, count: Self::Isize) -> Self {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: cannot infer substitution for GenericParamDef { name: "T", def_id: DefId(0:12505 ~ core[51f4]::core_simd::simd::ptr::const_ptr::{impl#1}::T), index: 0, pure_wrt_drop: false, kind: Type { has_default: false, synthetic: false } } at index 0
+
+error[E0999]: internal flux error: crates/flux-infer/src/projections.rs:659:25
+   --> core/src/../../portable-simd/crates/core_simd/src/simd/ptr/const_ptr.rs:173:5
+    |
+173 |     fn wrapping_add(self, count: Self::Usize) -> Self {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: cannot infer substitution for GenericParamDef { name: "T", def_id: DefId(0:12505 ~ core[51f4]::core_simd::simd::ptr::const_ptr::{impl#1}::T), index: 0, pure_wrt_drop: false, kind: Type { has_default: false, synthetic: false } } at index 0
+
+error[E0999]: internal flux error: crates/flux-infer/src/projections.rs:659:25
+   --> core/src/../../portable-simd/crates/core_simd/src/simd/ptr/const_ptr.rs:178:5
+    |
+178 |     fn wrapping_sub(self, count: Self::Usize) -> Self {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: cannot infer substitution for GenericParamDef { name: "T", def_id: DefId(0:12505 ~ core[51f4]::core_simd::simd::ptr::const_ptr::{impl#1}::T), index: 0, pure_wrt_drop: false, kind: Type { has_default: false, synthetic: false } } at index 0
+
+error[E0999]: internal flux error: crates/flux-infer/src/projections.rs:659:25
+   --> core/src/../../portable-simd/crates/core_simd/src/simd/ptr/mut_ptr.rs:101:5
+    |
+101 |     fn is_null(self) -> Self::Mask {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: cannot infer substitution for GenericParamDef { name: "T", def_id: DefId(0:12558 ~ core[51f4]::core_simd::simd::ptr::mut_ptr::{impl#1}::T), index: 0, pure_wrt_drop: false, kind: Type { has_default: false, synthetic: false } } at index 0
+
+error[E0999]: internal flux error: crates/flux-infer/src/projections.rs:659:25
+   --> core/src/../../portable-simd/crates/core_simd/src/simd/ptr/mut_ptr.rs:106:5
+    |
+106 |     fn cast<U>(self) -> Self::CastPtr<U> {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: cannot infer substitution for GenericParamDef { name: "T", def_id: DefId(0:12558 ~ core[51f4]::core_simd::simd::ptr::mut_ptr::{impl#1}::T), index: 0, pure_wrt_drop: false, kind: Type { has_default: false, synthetic: false } } at index 0
+
+error[E0999]: internal flux error: crates/flux-infer/src/projections.rs:659:25
+   --> core/src/../../portable-simd/crates/core_simd/src/simd/ptr/mut_ptr.rs:118:5
+    |
+118 |     fn cast_const(self) -> Self::ConstPtr {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: cannot infer substitution for GenericParamDef { name: "T", def_id: DefId(0:12558 ~ core[51f4]::core_simd::simd::ptr::mut_ptr::{impl#1}::T), index: 0, pure_wrt_drop: false, kind: Type { has_default: false, synthetic: false } } at index 0
+
+error[E0999]: internal flux error: crates/flux-infer/src/projections.rs:659:25
+   --> core/src/../../portable-simd/crates/core_simd/src/simd/ptr/mut_ptr.rs:124:5
+    |
+124 |     fn addr(self) -> Self::Usize {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: cannot infer substitution for GenericParamDef { name: "T", def_id: DefId(0:12558 ~ core[51f4]::core_simd::simd::ptr::mut_ptr::{impl#1}::T), index: 0, pure_wrt_drop: false, kind: Type { has_default: false, synthetic: false } } at index 0
+
+error[E0999]: internal flux error: crates/flux-infer/src/projections.rs:659:25
+   --> core/src/../../portable-simd/crates/core_simd/src/simd/ptr/mut_ptr.rs:132:5
+    |
+132 |     fn without_provenance(addr: Self::Usize) -> Self {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: cannot infer substitution for GenericParamDef { name: "T", def_id: DefId(0:12558 ~ core[51f4]::core_simd::simd::ptr::mut_ptr::{impl#1}::T), index: 0, pure_wrt_drop: false, kind: Type { has_default: false, synthetic: false } } at index 0
+
+error[E0999]: internal flux error: crates/flux-infer/src/projections.rs:659:25
+   --> core/src/../../portable-simd/crates/core_simd/src/simd/ptr/mut_ptr.rs:140:5
+    |
+140 |     fn with_addr(self, addr: Self::Usize) -> Self {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: cannot infer substitution for GenericParamDef { name: "T", def_id: DefId(0:12558 ~ core[51f4]::core_simd::simd::ptr::mut_ptr::{impl#1}::T), index: 0, pure_wrt_drop: false, kind: Type { has_default: false, synthetic: false } } at index 0
+
+error[E0999]: internal flux error: crates/flux-infer/src/projections.rs:659:25
+   --> core/src/../../portable-simd/crates/core_simd/src/simd/ptr/mut_ptr.rs:152:5
+    |
+152 |     fn expose_provenance(self) -> Self::Usize {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: cannot infer substitution for GenericParamDef { name: "T", def_id: DefId(0:12558 ~ core[51f4]::core_simd::simd::ptr::mut_ptr::{impl#1}::T), index: 0, pure_wrt_drop: false, kind: Type { has_default: false, synthetic: false } } at index 0
+
+error[E0999]: internal flux error: crates/flux-infer/src/projections.rs:659:25
+   --> core/src/../../portable-simd/crates/core_simd/src/simd/ptr/mut_ptr.rs:158:5
+    |
+158 |     fn with_exposed_provenance(addr: Self::Usize) -> Self {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: cannot infer substitution for GenericParamDef { name: "T", def_id: DefId(0:12558 ~ core[51f4]::core_simd::simd::ptr::mut_ptr::{impl#1}::T), index: 0, pure_wrt_drop: false, kind: Type { has_default: false, synthetic: false } } at index 0
+
+error[E0999]: internal flux error: crates/flux-infer/src/projections.rs:659:25
+   --> core/src/../../portable-simd/crates/core_simd/src/simd/ptr/mut_ptr.rs:164:5
+    |
+164 |     fn wrapping_offset(self, count: Self::Isize) -> Self {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: cannot infer substitution for GenericParamDef { name: "T", def_id: DefId(0:12558 ~ core[51f4]::core_simd::simd::ptr::mut_ptr::{impl#1}::T), index: 0, pure_wrt_drop: false, kind: Type { has_default: false, synthetic: false } } at index 0
+
+error[E0999]: internal flux error: crates/flux-infer/src/projections.rs:659:25
+   --> core/src/../../portable-simd/crates/core_simd/src/simd/ptr/mut_ptr.rs:170:5
+    |
+170 |     fn wrapping_add(self, count: Self::Usize) -> Self {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: cannot infer substitution for GenericParamDef { name: "T", def_id: DefId(0:12558 ~ core[51f4]::core_simd::simd::ptr::mut_ptr::{impl#1}::T), index: 0, pure_wrt_drop: false, kind: Type { has_default: false, synthetic: false } } at index 0
+
+error[E0999]: internal flux error: crates/flux-infer/src/projections.rs:659:25
+   --> core/src/../../portable-simd/crates/core_simd/src/simd/ptr/mut_ptr.rs:175:5
+    |
+175 |     fn wrapping_sub(self, count: Self::Usize) -> Self {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: cannot infer substitution for GenericParamDef { name: "T", def_id: DefId(0:12558 ~ core[51f4]::core_simd::simd::ptr::mut_ptr::{impl#1}::T), index: 0, pure_wrt_drop: false, kind: Type { has_default: false, synthetic: false } } at index 0
+
+error[E0999]: internal flux error: crates/flux-infer/src/projections.rs:659:25
+  --> core/src/../../portable-simd/crates/core_simd/src/simd/cmp/eq.rs:85:5
+   |
+85 |     fn simd_eq(self, other: Self) -> Self::Mask {
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: cannot infer substitution for GenericParamDef { name: "T", def_id: DefId(0:12601 ~ core[51f4]::core_simd::simd::cmp::eq::{impl#0}::T), index: 0, pure_wrt_drop: false, kind: Type { has_default: false, synthetic: false } } at index 0
+
+error[E0999]: internal flux error: crates/flux-infer/src/projections.rs:659:25
+  --> core/src/../../portable-simd/crates/core_simd/src/simd/cmp/eq.rs:90:5
+   |
+90 |     fn simd_ne(self, other: Self) -> Self::Mask {
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: cannot infer substitution for GenericParamDef { name: "T", def_id: DefId(0:12601 ~ core[51f4]::core_simd::simd::cmp::eq::{impl#0}::T), index: 0, pure_wrt_drop: false, kind: Type { has_default: false, synthetic: false } } at index 0
+
+error[E0999]: internal flux error: crates/flux-infer/src/projections.rs:659:25
+   --> core/src/../../portable-simd/crates/core_simd/src/simd/cmp/eq.rs:102:5
+    |
+102 |     fn simd_eq(self, other: Self) -> Self::Mask {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: cannot infer substitution for GenericParamDef { name: "T", def_id: DefId(0:12607 ~ core[51f4]::core_simd::simd::cmp::eq::{impl#1}::T), index: 0, pure_wrt_drop: false, kind: Type { has_default: false, synthetic: false } } at index 0
+
+error[E0999]: internal flux error: crates/flux-infer/src/projections.rs:659:25
+   --> core/src/../../portable-simd/crates/core_simd/src/simd/cmp/eq.rs:107:5
+    |
+107 |     fn simd_ne(self, other: Self) -> Self::Mask {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: cannot infer substitution for GenericParamDef { name: "T", def_id: DefId(0:12607 ~ core[51f4]::core_simd::simd::cmp::eq::{impl#1}::T), index: 0, pure_wrt_drop: false, kind: Type { has_default: false, synthetic: false } } at index 0
+
+error[E0999]: internal flux error: crates/flux-infer/src/projections.rs:659:25
+   --> core/src/../../portable-simd/crates/core_simd/src/simd/cmp/ord.rs:226:5
+    |
+226 |     fn simd_lt(self, other: Self) -> Self::Mask {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: cannot infer substitution for GenericParamDef { name: "T", def_id: DefId(0:12601 ~ core[51f4]::core_simd::simd::cmp::eq::{impl#0}::T), index: 0, pure_wrt_drop: false, kind: Type { has_default: false, synthetic: false } } at index 0
+
+error[E0999]: internal flux error: crates/flux-infer/src/projections.rs:659:25
+   --> core/src/../../portable-simd/crates/core_simd/src/simd/cmp/ord.rs:231:5
+    |
+231 |     fn simd_le(self, other: Self) -> Self::Mask {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: cannot infer substitution for GenericParamDef { name: "T", def_id: DefId(0:12601 ~ core[51f4]::core_simd::simd::cmp::eq::{impl#0}::T), index: 0, pure_wrt_drop: false, kind: Type { has_default: false, synthetic: false } } at index 0
+
+error[E0999]: internal flux error: crates/flux-infer/src/projections.rs:659:25
+   --> core/src/../../portable-simd/crates/core_simd/src/simd/cmp/ord.rs:236:5
+    |
+236 |     fn simd_gt(self, other: Self) -> Self::Mask {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: cannot infer substitution for GenericParamDef { name: "T", def_id: DefId(0:12601 ~ core[51f4]::core_simd::simd::cmp::eq::{impl#0}::T), index: 0, pure_wrt_drop: false, kind: Type { has_default: false, synthetic: false } } at index 0
+
+error[E0999]: internal flux error: crates/flux-infer/src/projections.rs:659:25
+   --> core/src/../../portable-simd/crates/core_simd/src/simd/cmp/ord.rs:241:5
+    |
+241 |     fn simd_ge(self, other: Self) -> Self::Mask {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: cannot infer substitution for GenericParamDef { name: "T", def_id: DefId(0:12601 ~ core[51f4]::core_simd::simd::cmp::eq::{impl#0}::T), index: 0, pure_wrt_drop: false, kind: Type { has_default: false, synthetic: false } } at index 0
+
+error[E0999]: internal flux error: crates/flux-infer/src/projections.rs:659:25
+   --> core/src/../../portable-simd/crates/core_simd/src/simd/cmp/ord.rs:252:9
+    |
+252 |         self.simd_lt(other).select(other, self)
+    |         ^^^^^^^^^^^^^^^^^^^
+    |
+    = note: cannot infer substitution for GenericParamDef { name: "T", def_id: DefId(0:12601 ~ core[51f4]::core_simd::simd::cmp::eq::{impl#0}::T), index: 0, pure_wrt_drop: false, kind: Type { has_default: false, synthetic: false } } at index 0
+
+error[E0999]: internal flux error: crates/flux-infer/src/projections.rs:659:25
+   --> core/src/../../portable-simd/crates/core_simd/src/simd/cmp/ord.rs:257:9
+    |
+257 |         self.simd_gt(other).select(other, self)
+    |         ^^^^^^^^^^^^^^^^^^^
+    |
+    = note: cannot infer substitution for GenericParamDef { name: "T", def_id: DefId(0:12601 ~ core[51f4]::core_simd::simd::cmp::eq::{impl#0}::T), index: 0, pure_wrt_drop: false, kind: Type { has_default: false, synthetic: false } } at index 0
+
+error[E0999]: internal flux error: crates/flux-infer/src/projections.rs:659:25
+   --> core/src/../../portable-simd/crates/core_simd/src/simd/cmp/ord.rs:264:13
+    |
+264 |             min.simd_le(max).all(),
+    |             ^^^^^^^^^^^^^^^^
+    |
+    = note: cannot infer substitution for GenericParamDef { name: "T", def_id: DefId(0:12601 ~ core[51f4]::core_simd::simd::cmp::eq::{impl#0}::T), index: 0, pure_wrt_drop: false, kind: Type { has_default: false, synthetic: false } } at index 0
+
+error[E0999]: internal flux error: crates/flux-infer/src/projections.rs:659:25
+   --> core/src/../../portable-simd/crates/core_simd/src/simd/cmp/ord.rs:276:5
+    |
+276 |     fn simd_lt(self, other: Self) -> Self::Mask {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: cannot infer substitution for GenericParamDef { name: "T", def_id: DefId(0:12607 ~ core[51f4]::core_simd::simd::cmp::eq::{impl#1}::T), index: 0, pure_wrt_drop: false, kind: Type { has_default: false, synthetic: false } } at index 0
+
+error[E0999]: internal flux error: crates/flux-infer/src/projections.rs:659:25
+   --> core/src/../../portable-simd/crates/core_simd/src/simd/cmp/ord.rs:281:5
+    |
+281 |     fn simd_le(self, other: Self) -> Self::Mask {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: cannot infer substitution for GenericParamDef { name: "T", def_id: DefId(0:12607 ~ core[51f4]::core_simd::simd::cmp::eq::{impl#1}::T), index: 0, pure_wrt_drop: false, kind: Type { has_default: false, synthetic: false } } at index 0
+
+error[E0999]: internal flux error: crates/flux-infer/src/projections.rs:659:25
+   --> core/src/../../portable-simd/crates/core_simd/src/simd/cmp/ord.rs:286:5
+    |
+286 |     fn simd_gt(self, other: Self) -> Self::Mask {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: cannot infer substitution for GenericParamDef { name: "T", def_id: DefId(0:12607 ~ core[51f4]::core_simd::simd::cmp::eq::{impl#1}::T), index: 0, pure_wrt_drop: false, kind: Type { has_default: false, synthetic: false } } at index 0
+
+error[E0999]: internal flux error: crates/flux-infer/src/projections.rs:659:25
+   --> core/src/../../portable-simd/crates/core_simd/src/simd/cmp/ord.rs:291:5
+    |
+291 |     fn simd_ge(self, other: Self) -> Self::Mask {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: cannot infer substitution for GenericParamDef { name: "T", def_id: DefId(0:12607 ~ core[51f4]::core_simd::simd::cmp::eq::{impl#1}::T), index: 0, pure_wrt_drop: false, kind: Type { has_default: false, synthetic: false } } at index 0
+
+error[E0999]: internal flux error: crates/flux-infer/src/projections.rs:659:25
+   --> core/src/../../portable-simd/crates/core_simd/src/simd/cmp/ord.rs:302:9
+    |
+302 |         self.simd_lt(other).select(other, self)
+    |         ^^^^^^^^^^^^^^^^^^^
+    |
+    = note: cannot infer substitution for GenericParamDef { name: "T", def_id: DefId(0:12607 ~ core[51f4]::core_simd::simd::cmp::eq::{impl#1}::T), index: 0, pure_wrt_drop: false, kind: Type { has_default: false, synthetic: false } } at index 0
+
+error[E0999]: internal flux error: crates/flux-infer/src/projections.rs:659:25
+   --> core/src/../../portable-simd/crates/core_simd/src/simd/cmp/ord.rs:307:9
+    |
+307 |         self.simd_gt(other).select(other, self)
+    |         ^^^^^^^^^^^^^^^^^^^
+    |
+    = note: cannot infer substitution for GenericParamDef { name: "T", def_id: DefId(0:12607 ~ core[51f4]::core_simd::simd::cmp::eq::{impl#1}::T), index: 0, pure_wrt_drop: false, kind: Type { has_default: false, synthetic: false } } at index 0
+
+error[E0999]: internal flux error: crates/flux-infer/src/projections.rs:659:25
+   --> core/src/../../portable-simd/crates/core_simd/src/simd/cmp/ord.rs:314:13
+    |
+314 |             min.simd_le(max).all(),
+    |             ^^^^^^^^^^^^^^^^
+    |
+    = note: cannot infer substitution for GenericParamDef { name: "T", def_id: DefId(0:12607 ~ core[51f4]::core_simd::simd::cmp::eq::{impl#1}::T), index: 0, pure_wrt_drop: false, kind: Type { has_default: false, synthetic: false } } at index 0
+
+
+───────────────────── Timing Report ────────────────────────
+Total running time:                                   24.26s
+Functions checked:                                      8039
+Min:                                                  3.92µs
+Max:                                                   9.64s
+Mean:                                                 2.94ms
+Std. Dev.:                                          109.00ms
+────────────────────────────────────────────────────────────
+Top 5 Functions 
+• num::dec2flt::decimal_seq::parse_decimal_seq         9.64s
+• …attern::TwoWaySearcher::reverse_maximal_suffix   867.65ms
+• str::pattern::TwoWaySearcher::maximal_suffix      795.79ms
+• str::pattern::TwoWaySearcher::next_back           794.60ms
+• str::pattern::TwoWaySearcher::next                785.79ms
+────────────────────────────────────────────────────────────
+error: could not compile `core` (lib) due to 505 previous errors

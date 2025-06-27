@@ -1,0 +1,39 @@
+Processing error lines from: log.txt
+==================================================
+Found 33 distinct error lines:
+
+Count: 162 | error[E0999]: arithmetic operation may overflow
+Count: 159 | error[E0999]: assertion might fail: possible out-of-bounds access
+Count:  48 | error[E0999]: internal flux error: crates/flux-infer/src/projections.rs:659:25
+Count:  47 | error[E0999]: refinement type error
+Count:  38 | error[E0999]: assertion might fail: possible division by zero
+Count:  15 | error[E0999]: internal flux error: crates/flux-refineck/src/checker.rs:1599:17
+Count:  12 | error[E0999]: unsupported statement
+Count:  10 | error[E0999]: error jumping to join point
+Count:   7 | error: internal compiler error: crates/flux-refineck/src/type_env.rs:527:21: unexpected type with free vars
+Count:   6 | error[E0999]: assignment might be unsafe
+Count:   5 | error[E0999]: assertion might fail: possible remainder with a divisor of zero
+Count:   3 | error: internal compiler error: /Users/rjhala/research/flux/crates/flux-infer/src/infer.rs:912:17: assertion `left == right` failed
+Count:   3 | error: internal compiler error: crates/flux-middle/src/rty/subst.rs:163:21: type parameter out of range
+Count:   2 | error: internal compiler error: crates/flux-refineck/src/checker.rs:1381:18: check_len: expected array or slice type found  `∃b0. [∃b1. T[b1]][b0]`
+Count:   1 | error: could not compile `core` (lib) due to 505 previous errors
+Count:   1 | error: internal compiler error: /Users/rjhala/research/flux/crates/flux-middle/src/rty/binder.rs:193:18: unexpected escaping region BoundRegion { var: 0, kind: BrNamed(DefId(0:63756 ~ core[51f4]::ffi::c_str::{impl#6}::display::'_), '_) }
+Count:   1 | error: internal compiler error: crates/flux-middle/src/rty/subst.rs:171:21: region parameter out of range
+Count:   1 | error: internal compiler error: crates/flux-refineck/src/ghost_statements/fold_unfold.rs:216:17: assertion `left == right` failed
+Count:   1 | error: internal compiler error: crates/flux-refineck/src/ghost_statements/fold_unfold.rs:573:26: implicit downcast of non-struct: `Alias (Projection, str::pattern::Pattern::Searcher, <str::pattern::MultiCharEqPattern<F>, '?36>)`
+Count:   1 | error: internal compiler error: crates/flux-refineck/src/primops.rs:77:32: no primop rule for BitXor using [(bool, a5), (bool, a3)]
+Count:   1 | error: internal compiler error: crates/flux-refineck/src/primops.rs:77:32: no primop rule for Eq using [(*mut ∃b0. { T[b0] | $k0(b0)[] }, ()), (*mut ∃b0. { T[b0] | $k1(b0)[] }, ())]
+Count:   1 | error: internal compiler error: crates/flux-refineck/src/primops.rs:77:32: no primop rule for Eq using [(*mut ∃b0. { T[b0] | * }, ()), (*mut ∃b0. T[b0], ())]
+Count:   1 | error: internal compiler error: crates/flux-refineck/src/primops.rs:77:32: no primop rule for Lt using [(*const ∃b0. { T[b0] | $k18(b0)[a0, a1] }, ()), (*const ∃b0. { T[b0] | $k50(b0)[a0, a1] }, ())]
+Count:   1 | error: internal compiler error: crates/flux-refineck/src/primops.rs:77:32: no primop rule for Lt using [(*mut ∃b0. { T[b0] | $k54(b0)[a0, a1, a2] }, ()), (*mut ∃b0. { T[b0] | $k51(b0)[a0, a1, a2] }, ())]
+Count:   1 | error: internal compiler error: crates/flux-refineck/src/primops.rs:77:32: no primop rule for Lt using [(*mut ∃b0. { T[b0] | $k9(b0)[a0, a1, a2, a3, a4] }, ()), (*mut ∃b0. { T[b0] | $k5(b0)[a0, a1, a2, a3, a4] }, ())]
+Count:   1 | error: internal compiler error: crates/flux-refineck/src/primops.rs:77:32: no primop rule for Ne using [(*const ∃b0. { T[b0] | * }, ()), (*const ∃b0. T[b0], ())]
+Count:   1 | error: internal compiler error: crates/flux-refineck/src/primops.rs:77:32: no primop rule for Ne using [(*mut ∃b0. { T[b0] | $k6(b0)[a0, a1, a2] }, ()), (*mut ∃b0. { T[b0] | $k5(b0)[a0, a1, a2] }, ())]
+Count:   1 | error: internal compiler error: crates/flux-refineck/src/type_env/place_ty.rs:112:9: cannot unfold in `NoUnfold` mode
+Count:   1 | error: internal compiler error: crates/flux-refineck/src/type_env/place_ty.rs:681:18: invalid field projection on `MaybeUninit<λb0. T[b0]>`
+Count:   1 | error: internal compiler error: crates/flux-refineck/src/type_env/place_ty.rs:681:18: invalid field projection on `Transmute<λb0. { Src[b0] | * }, λb1. { Self[b1] | * }>`
+Count:   1 | error: internal flux error: crates/flux-desugar/src/lib.rs:246:21
+Count:   1 | error[E0999]: unsupported terminator
+Count:   1 | error[E0999]: unsupported terminator args
+==================================================
+Total error lines: 536
