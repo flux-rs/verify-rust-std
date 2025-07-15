@@ -752,6 +752,7 @@ pub struct BuildHasherDefault<H>(marker::PhantomData<fn() -> H>);
 
 impl<H> BuildHasherDefault<H> {
     /// Creates a new BuildHasherDefault for Hasher `H`.
+    #[cfg_attr(flux, flux::trusted(reason = "https://github.com/flux-rs/flux/issues/1185"))]
     #[stable(feature = "build_hasher_default_const_new", since = "1.85.0")]
     #[rustc_const_stable(feature = "build_hasher_default_const_new", since = "1.85.0")]
     pub const fn new() -> Self {
@@ -777,6 +778,7 @@ impl<H: Default + Hasher> BuildHasher for BuildHasherDefault<H> {
 
 #[stable(since = "1.7.0", feature = "build_hasher")]
 impl<H> Clone for BuildHasherDefault<H> {
+    #[cfg_attr(flux, flux::trusted(reason = "https://github.com/flux-rs/flux/issues/1185"))]
     fn clone(&self) -> BuildHasherDefault<H> {
         BuildHasherDefault(marker::PhantomData)
     }
