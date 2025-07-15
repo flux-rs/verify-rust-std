@@ -1269,6 +1269,7 @@ impl fmt::Debug for Duration {
         ///
         /// A prefix and postfix may be added. The whole thing is padded
         /// to the formatter's `width`, if specified.
+        #[cfg_attr(flux, flux::trusted(reason = "modular arithmetic invariant"))]
         fn fmt_decimal(
             f: &mut fmt::Formatter<'_>,
             integer_part: u64,

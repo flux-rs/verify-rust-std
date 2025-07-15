@@ -55,4 +55,5 @@ include = [ "src/ascii{*.rs,/**/*.rs}",
             "src/pat{*.rs,/**/*.rs}", 
             "src/bstr{*.rs,/**/*.rs}",
             "src/hash{*.rs,/**/*.rs}",
+            "src/time{*.rs,/**/*.rs}",
           ]
