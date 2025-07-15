@@ -5,8 +5,12 @@
 /// <https://flux-rs.github.io/flux/guide/specifications.html#extensible-properties-for-primitive-ops>
 #[flux::defs {
 
-    fn char_to_int(c:char) -> int { 
-        cast(c) 
+    fn as_int(x:int) -> int { 
+        x 
+    }
+
+    fn char_to_int(x:char) -> int { 
+        cast(x) 
     } 
 
     property ShiftRightByFour[>>](x, y) {
