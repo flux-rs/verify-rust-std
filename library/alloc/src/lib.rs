@@ -218,7 +218,6 @@ pub mod alloc;
 // duplicating the lang-items when building in test cfg; but also need
 // to allow code to have `use boxed::Box;` declarations.
 pub mod borrow;
-#[cfg_attr(flux, flux::trusted(reason = "Box definition base/ty ICE"))]
 pub mod boxed;
 #[unstable(feature = "bstr", issue = "134915")]
 pub mod bstr;
@@ -240,7 +239,11 @@ pub mod vec;
 pub mod wtf8;
 
 #[doc(hidden)]
-#[unstable(feature = "liballoc_internals", issue = "none", reason = "implementation detail")]
+#[unstable(
+    feature = "liballoc_internals",
+    issue = "none",
+    reason = "implementation detail"
+)]
 pub mod __export {
     pub use core::format_args;
     pub use core::hint::must_use;
