@@ -43,9 +43,9 @@
 #![stable(feature = "rust1", since = "1.0.0")]
 
 use core::error::Error;
-use core::iter::FusedIterator;
 #[cfg(not(no_global_oom_handling))]
 use core::iter::from_fn;
+use core::iter::FusedIterator;
 #[cfg(not(no_global_oom_handling))]
 use core::ops::Add;
 #[cfg(not(no_global_oom_handling))]
@@ -62,9 +62,9 @@ use crate::alloc::Allocator;
 use crate::borrow::{Cow, ToOwned};
 use crate::boxed::Box;
 use crate::collections::TryReserveError;
-use crate::str::{self, CharIndices, Chars, Utf8Error, from_utf8_unchecked_mut};
+use crate::str::{self, from_utf8_unchecked_mut, CharIndices, Chars, Utf8Error};
 #[cfg(not(no_global_oom_handling))]
-use crate::str::{FromStr, from_boxed_utf8_unchecked};
+use crate::str::{from_boxed_utf8_unchecked, FromStr};
 use crate::vec::{self, Vec};
 
 /// A UTF-8–encoded, growable string.
@@ -478,7 +478,9 @@ impl String {
     #[stable(feature = "rust1", since = "1.0.0")]
     #[must_use]
     pub fn with_capacity(capacity: usize) -> String {
-        String { vec: Vec::with_capacity(capacity) }
+        String {
+            vec: Vec::with_capacity(capacity),
+        }
     }
 
     /// Creates a new empty `String` with at least the specified capacity.
@@ -491,7 +493,9 @@ impl String {
     #[inline]
     #[unstable(feature = "try_with_capacity", issue = "91913")]
     pub fn try_with_capacity(capacity: usize) -> Result<String, TryReserveError> {
-        Ok(String { vec: Vec::try_with_capacity(capacity)? })
+        Ok(String {
+            vec: Vec::try_with_capacity(capacity)?,
+        })
     }
 
     /// Converts a vector of bytes to a `String`.
@@ -556,7 +560,10 @@ impl String {
     pub fn from_utf8(vec: Vec<u8>) -> Result<String, FromUtf8Error> {
         match str::from_utf8(&vec) {
             Ok(..) => Ok(String { vec }),
-            Err(e) => Err(FromUtf8Error { bytes: vec, error: e }),
+            Err(e) => Err(FromUtf8Error {
+                bytes: vec,
+                error: e,
+            }),
         }
     }
 
@@ -783,7 +790,9 @@ impl String {
         let (chunks, []) = v.as_chunks::<2>() else {
             return Err(FromUtf16Error(()));
         };
-        match (cfg!(target_endian = "little"), unsafe { v.align_to::<u16>() }) {
+        match (cfg!(target_endian = "little"), unsafe {
+            v.align_to::<u16>()
+        }) {
             (true, ([], v, [])) => Self::from_utf16(v),
             _ => char::decode_utf16(chunks.iter().copied().map(u16::from_le_bytes))
                 .collect::<Result<_, _>>()
@@ -819,7 +828,9 @@ impl String {
     #[cfg(not(no_global_oom_handling))]
     #[unstable(feature = "str_from_utf16_endian", issue = "116258")]
     pub fn from_utf16le_lossy(v: &[u8]) -> String {
-        match (cfg!(target_endian = "little"), unsafe { v.align_to::<u16>() }) {
+        match (cfg!(target_endian = "little"), unsafe {
+            v.align_to::<u16>()
+        }) {
             (true, ([], v, [])) => Self::from_utf16_lossy(v),
             (true, ([], v, [_remainder])) => Self::from_utf16_lossy(v) + "\u{FFFD}",
             _ => {
@@ -827,7 +838,11 @@ impl String {
                 let string = char::decode_utf16(chunks.iter().copied().map(u16::from_le_bytes))
                     .map(|r| r.unwrap_or(char::REPLACEMENT_CHARACTER))
                     .collect();
-                if remainder.is_empty() { string } else { string + "\u{FFFD}" }
+                if remainder.is_empty() {
+                    string
+                } else {
+                    string + "\u{FFFD}"
+                }
             }
         }
     }
@@ -902,7 +917,11 @@ impl String {
                 let string = char::decode_utf16(chunks.iter().copied().map(u16::from_be_bytes))
                     .map(|r| r.unwrap_or(char::REPLACEMENT_CHARACTER))
                     .collect();
-                if remainder.is_empty() { string } else { string + "\u{FFFD}" }
+                if remainder.is_empty() {
+                    string
+                } else {
+                    string + "\u{FFFD}"
+                }
             }
         }
     }
@@ -977,7 +996,11 @@ impl String {
     #[inline]
     #[stable(feature = "rust1", since = "1.0.0")]
     pub unsafe fn from_raw_parts(buf: *mut u8, length: usize, capacity: usize) -> String {
-        unsafe { String { vec: Vec::from_raw_parts(buf, length, capacity) } }
+        unsafe {
+            String {
+                vec: Vec::from_raw_parts(buf, length, capacity),
+            }
+        }
     }
 
     /// Converts a vector of bytes to a `String` without checking that the
@@ -1509,7 +1532,11 @@ impl String {
         let next = idx + ch.len_utf8();
         let len = self.len();
         unsafe {
-            ptr::copy(self.vec.as_ptr().add(next), self.vec.as_mut_ptr().add(idx), len - next);
+            ptr::copy(
+                self.vec.as_ptr().add(next),
+                self.vec.as_mut_ptr().add(idx),
+                len - next,
+            );
             self.vec.set_len(len - (next - idx));
         }
         ch
@@ -1559,7 +1586,9 @@ impl String {
                 Some((prev_front, start))
             })
             .collect();
-            rejections.into_iter().chain(core::iter::once((front, self.len())))
+            rejections
+                .into_iter()
+                .chain(core::iter::once((front, self.len())))
         };
 
         let mut len = 0;
@@ -1633,7 +1662,11 @@ impl String {
         }
 
         let len = self.len();
-        let mut guard = SetLenOnDrop { s: self, idx: 0, del_bytes: 0 };
+        let mut guard = SetLenOnDrop {
+            s: self,
+            idx: 0,
+            del_bytes: 0,
+        };
 
         while guard.idx < len {
             let ch =
@@ -1764,7 +1797,11 @@ impl String {
         // ahead. This is safe because sufficient capacity was just reserved, and `idx`
         // is a char boundary.
         unsafe {
-            ptr::copy(self.vec.as_ptr().add(idx), self.vec.as_mut_ptr().add(idx + amt), len - idx);
+            ptr::copy(
+                self.vec.as_ptr().add(idx),
+                self.vec.as_mut_ptr().add(idx + amt),
+                len - idx,
+            );
         }
 
         // SAFETY: Copy the new string slice into the vacated region if `idx != len`,
@@ -1965,7 +2002,12 @@ impl String {
         // SAFETY: `slice::range` and `is_char_boundary` do the appropriate bounds checks.
         let chars_iter = unsafe { self.get_unchecked(start..end) }.chars();
 
-        Drain { start, end, iter: chars_iter, string: self_ptr }
+        Drain {
+            start,
+            end,
+            iter: chars_iter,
+            string: self_ptr,
+        }
     }
 
     /// Converts a `String` into an iterator over the [`char`]s of the string.
@@ -2020,7 +2062,9 @@ impl String {
     #[must_use = "`self` will be dropped if the result is not used"]
     #[unstable(feature = "string_into_chars", issue = "133125")]
     pub fn into_chars(self) -> IntoChars {
-        IntoChars { bytes: self.into_bytes().into_iter() }
+        IntoChars {
+            bytes: self.into_bytes().into_iter(),
+        }
     }
 
     /// Removes the specified range in the string,
@@ -2155,6 +2199,7 @@ impl String {
     #[stable(feature = "box_str", since = "1.4.0")]
     #[must_use = "`self` will be dropped if the result is not used"]
     #[inline]
+    #[cfg_attr(flux, flux::ignore)]
     pub fn into_boxed_str(self) -> Box<str> {
         let slice = self.vec.into_boxed_slice();
         unsafe { from_boxed_utf8_unchecked(slice) }
@@ -2333,7 +2378,9 @@ impl Error for FromUtf16Error {}
 #[stable(feature = "rust1", since = "1.0.0")]
 impl Clone for String {
     fn clone(&self) -> Self {
-        String { vec: self.vec.clone() }
+        String {
+            vec: self.vec.clone(),
+        }
     }
 
     /// Clones the contents of `source` into `self`.
@@ -2439,7 +2486,11 @@ impl FromIterator<core::ascii::Char> for String {
 #[unstable(feature = "ascii_char", issue = "110998")]
 impl<'a> FromIterator<&'a core::ascii::Char> for String {
     fn from_iter<T: IntoIterator<Item = &'a core::ascii::Char>>(iter: T) -> Self {
-        let buf = iter.into_iter().copied().map(core::ascii::Char::to_u8).collect();
+        let buf = iter
+            .into_iter()
+            .copied()
+            .map(core::ascii::Char::to_u8)
+            .collect();
         // SAFETY: `buf` is guaranteed to be valid UTF-8 because the `core::ascii::Char` type
         // only contains ASCII values (0x00-0x7F), which are valid UTF-8.
         unsafe { String::from_utf8_unchecked(buf) }
@@ -2575,6 +2626,13 @@ impl<'a> Extend<&'a core::ascii::Char> for String {
 impl<'b> Pattern for &'b String {
     type Searcher<'a> = <&'b str as Pattern>::Searcher<'a>;
 
+    #[cfg_attr(flux, flux::trusted_impl)]
+    #[cfg_attr(
+        flux,
+        flux::trusted(
+            reason = " internal compiler error: crates/flux-middle/src/rty/subst.rs:169:21: region parameter out of range"
+        )
+    )]
     fn into_searcher(self, haystack: &str) -> <&'b str as Pattern>::Searcher<'_> {
         self[..].into_searcher(haystack)
     }
@@ -3133,6 +3191,7 @@ impl From<String> for Box<str> {
     ///
     /// assert_eq!("hello world", s3)
     /// ```
+    #[cfg_attr(flux, flux::trusted(reason = "ignoring into_boxed_str due to ICE"))]
     fn from(s: String) -> Box<str> {
         s.into_boxed_str()
     }

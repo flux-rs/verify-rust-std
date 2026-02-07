@@ -218,6 +218,7 @@ pub mod alloc;
 // duplicating the lang-items when building in test cfg; but also need
 // to allow code to have `use boxed::Box;` declarations.
 pub mod borrow;
+#[cfg_attr(flux, flux::trusted(reason = "Box definition base/ty ICE"))]
 pub mod boxed;
 #[unstable(feature = "bstr", issue = "134915")]
 pub mod bstr;

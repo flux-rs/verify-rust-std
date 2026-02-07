@@ -225,6 +225,7 @@ pub use thin::ThinBox;
 /// A pointer type that uniquely owns a heap allocation of type `T`.
 ///
 /// See the [module-level documentation](../../std/boxed/index.html) for more.
+#[cfg_attr(flux, flux::opaque)]
 #[lang = "owned_box"]
 #[fundamental]
 #[stable(feature = "rust1", since = "1.0.0")]
