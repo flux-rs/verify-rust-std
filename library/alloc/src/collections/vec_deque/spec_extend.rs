@@ -202,6 +202,7 @@ where
 /// # Safety
 ///
 /// Elements of `slice` will be copied into the deque, make sure to forget the items if `T` is not `Copy`.
+///
 unsafe fn prepend<T, A: Allocator>(deque: &mut VecDeque<T, A>, slice: &[T]) {
     deque.reserve(slice.len());
 

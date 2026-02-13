@@ -38,7 +38,8 @@ check-cfg = [
 [package.metadata.flux]
 enabled = true
 check_overflow = "lazy"
-include = [ "src/raw_vec/mod.rs",
-            "src/collections/vec_deque/mod.rs",
-            "src/string.rs"
-          ]
+include = [ 
+  "src/raw_vec/mod.rs",
+  "src/collections/vec_deque/mod.rs",
+  "src/string.rs"
+  ]

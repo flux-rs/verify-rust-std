@@ -12,6 +12,13 @@
 // Total           : 31911 bytes
 
 #[inline(always)]
+#[cfg_attr(flux, flux::sig(
+    fn(needle: _,
+       chunk_idx_map:&[u8{v: v < N1};_],
+       bitset_chunk_idx: &[[u8{v: v < CANONICAL + CANONICALIZED}; _]; _],
+       bitset_canonical: _,
+       bitset_canonicalized: &[(u8{v:v < CANONICAL}, u8); _],
+      ) -> bool requires CHUNK_SIZE > 0))]
 const fn bitset_search<
     const N: usize,
     const CHUNK_SIZE: usize,
@@ -85,6 +92,7 @@ impl ShortOffsetRunHeader {
 /// - The last element of `short_offset_runs` must be greater than `std::char::MAX`.
 /// - The start indices of all elements in `short_offset_runs` must be less than `OFFSETS`.
 #[inline(always)]
+#[cfg_attr(flux, flux::trusted(reason = "binary-search"))]
 unsafe fn skip_search<const SOR: usize, const OFFSETS: usize>(
     needle: char,
     short_offset_runs: &[ShortOffsetRunHeader; SOR],
@@ -117,8 +125,10 @@ unsafe fn skip_search<const SOR: usize, const OFFSETS: usize>(
         offsets.len() - offset_idx
     };
 
-    let prev =
-        last_idx.checked_sub(1).map(|prev| short_offset_runs[prev].prefix_sum()).unwrap_or(0);
+    let prev = last_idx
+        .checked_sub(1)
+        .map(|prev| short_offset_runs[prev].prefix_sum())
+        .unwrap_or(0);
 
     let total = needle - prev;
     let mut prefix_sum = 0;

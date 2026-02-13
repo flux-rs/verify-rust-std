@@ -116,6 +116,7 @@ impl<T> [T] {
     #[rustc_no_implicit_autorefs]
     #[inline]
     #[must_use]
+    #[cfg_attr(flux, flux::sig(fn(&Self[@n]) -> usize[n]))]
     pub const fn len(&self) -> usize {
         ptr::metadata(self)
     }
@@ -156,7 +157,11 @@ impl<T> [T] {
     #[inline]
     #[must_use]
     pub const fn first(&self) -> Option<&T> {
-        if let [first, ..] = self { Some(first) } else { None }
+        if let [first, ..] = self {
+            Some(first)
+        } else {
+            None
+        }
     }
 
     /// Returns a mutable reference to the first element of the slice, or `None` if it is empty.
@@ -179,7 +184,11 @@ impl<T> [T] {
     #[inline]
     #[must_use]
     pub const fn first_mut(&mut self) -> Option<&mut T> {
-        if let [first, ..] = self { Some(first) } else { None }
+        if let [first, ..] = self {
+            Some(first)
+        } else {
+            None
+        }
     }
 
     /// Returns the first and all the rest of the elements of the slice, or `None` if it is empty.
@@ -199,7 +208,11 @@ impl<T> [T] {
     #[inline]
     #[must_use]
     pub const fn split_first(&self) -> Option<(&T, &[T])> {
-        if let [first, tail @ ..] = self { Some((first, tail)) } else { None }
+        if let [first, tail @ ..] = self {
+            Some((first, tail))
+        } else {
+            None
+        }
     }
 
     /// Returns the first and all the rest of the elements of the slice, or `None` if it is empty.
@@ -221,7 +234,11 @@ impl<T> [T] {
     #[inline]
     #[must_use]
     pub const fn split_first_mut(&mut self) -> Option<(&mut T, &mut [T])> {
-        if let [first, tail @ ..] = self { Some((first, tail)) } else { None }
+        if let [first, tail @ ..] = self {
+            Some((first, tail))
+        } else {
+            None
+        }
     }
 
     /// Returns the last and all the rest of the elements of the slice, or `None` if it is empty.
@@ -241,7 +258,11 @@ impl<T> [T] {
     #[inline]
     #[must_use]
     pub const fn split_last(&self) -> Option<(&T, &[T])> {
-        if let [init @ .., last] = self { Some((last, init)) } else { None }
+        if let [init @ .., last] = self {
+            Some((last, init))
+        } else {
+            None
+        }
     }
 
     /// Returns the last and all the rest of the elements of the slice, or `None` if it is empty.
@@ -263,7 +284,11 @@ impl<T> [T] {
     #[inline]
     #[must_use]
     pub const fn split_last_mut(&mut self) -> Option<(&mut T, &mut [T])> {
-        if let [init @ .., last] = self { Some((last, init)) } else { None }
+        if let [init @ .., last] = self {
+            Some((last, init))
+        } else {
+            None
+        }
     }
 
     /// Returns the last element of the slice, or `None` if it is empty.
@@ -282,7 +307,11 @@ impl<T> [T] {
     #[inline]
     #[must_use]
     pub const fn last(&self) -> Option<&T> {
-        if let [.., last] = self { Some(last) } else { None }
+        if let [.., last] = self {
+            Some(last)
+        } else {
+            None
+        }
     }
 
     /// Returns a mutable reference to the last item in the slice, or `None` if it is empty.
@@ -305,7 +334,11 @@ impl<T> [T] {
     #[inline]
     #[must_use]
     pub const fn last_mut(&mut self) -> Option<&mut T> {
-        if let [.., last] = self { Some(last) } else { None }
+        if let [.., last] = self {
+            Some(last)
+        } else {
+            None
+        }
     }
 
     /// Returns an array reference to the first `N` items in the slice.
@@ -388,7 +421,9 @@ impl<T> [T] {
     #[stable(feature = "slice_first_last_chunk", since = "1.77.0")]
     #[rustc_const_stable(feature = "slice_first_last_chunk", since = "1.77.0")]
     pub const fn split_first_chunk<const N: usize>(&self) -> Option<(&[T; N], &[T])> {
-        let Some((first, tail)) = self.split_at_checked(N) else { return None };
+        let Some((first, tail)) = self.split_at_checked(N) else {
+            return None;
+        };
 
         // SAFETY: We explicitly check for the correct number of elements,
         //   and do not let the references outlive the slice.
@@ -420,7 +455,9 @@ impl<T> [T] {
     pub const fn split_first_chunk_mut<const N: usize>(
         &mut self,
     ) -> Option<(&mut [T; N], &mut [T])> {
-        let Some((first, tail)) = self.split_at_mut_checked(N) else { return None };
+        let Some((first, tail)) = self.split_at_mut_checked(N) else {
+            return None;
+        };
 
         // SAFETY: We explicitly check for the correct number of elements,
         //   do not let the reference outlive the slice,
@@ -448,7 +485,9 @@ impl<T> [T] {
     #[stable(feature = "slice_first_last_chunk", since = "1.77.0")]
     #[rustc_const_stable(feature = "slice_first_last_chunk", since = "1.77.0")]
     pub const fn split_last_chunk<const N: usize>(&self) -> Option<(&[T], &[T; N])> {
-        let Some(index) = self.len().checked_sub(N) else { return None };
+        let Some(index) = self.len().checked_sub(N) else {
+            return None;
+        };
         let (init, last) = self.split_at(index);
 
         // SAFETY: We explicitly check for the correct number of elements,
@@ -481,7 +520,9 @@ impl<T> [T] {
     pub const fn split_last_chunk_mut<const N: usize>(
         &mut self,
     ) -> Option<(&mut [T], &mut [T; N])> {
-        let Some(index) = self.len().checked_sub(N) else { return None };
+        let Some(index) = self.len().checked_sub(N) else {
+            return None;
+        };
         let (init, last) = self.split_at_mut(index);
 
         // SAFETY: We explicitly check for the correct number of elements,
@@ -511,7 +552,9 @@ impl<T> [T] {
     #[rustc_const_stable(feature = "const_slice_last_chunk", since = "1.80.0")]
     pub const fn last_chunk<const N: usize>(&self) -> Option<&[T; N]> {
         // FIXME(const-hack): Without const traits, we need this instead of `get`.
-        let Some(index) = self.len().checked_sub(N) else { return None };
+        let Some(index) = self.len().checked_sub(N) else {
+            return None;
+        };
         let (_, last) = self.split_at(index);
 
         // SAFETY: We explicitly check for the correct number of elements,
@@ -541,7 +584,9 @@ impl<T> [T] {
     #[rustc_const_stable(feature = "const_slice_first_last_chunk", since = "1.83.0")]
     pub const fn last_chunk_mut<const N: usize>(&mut self) -> Option<&mut [T; N]> {
         // FIXME(const-hack): Without const traits, we need this instead of `get`.
-        let Some(index) = self.len().checked_sub(N) else { return None };
+        let Some(index) = self.len().checked_sub(N) else {
+            return None;
+        };
         let (_, last) = self.split_at_mut(index);
 
         // SAFETY: We explicitly check for the correct number of elements,
@@ -2058,7 +2103,12 @@ impl<T> [T] {
         );
 
         // SAFETY: Caller has to check that `0 <= mid <= self.len()`
-        unsafe { (from_raw_parts(ptr, mid), from_raw_parts(ptr.add(mid), unchecked_sub(len, mid))) }
+        unsafe {
+            (
+                from_raw_parts(ptr, mid),
+                from_raw_parts(ptr.add(mid), unchecked_sub(len, mid)),
+            )
+        }
     }
 
     /// Divides one mutable slice into two at an index, without doing bounds checking.
@@ -3936,7 +3986,10 @@ impl<T> [T] {
     where
         T: Copy,
     {
-        let Range { start: src_start, end: src_end } = slice::range(src, ..self.len());
+        let Range {
+            start: src_start,
+            end: src_end,
+        } = slice::range(src, ..self.len());
         let count = src_end - src_start;
         assert!(dest <= self.len() - count, "dest is out of bounds");
         // SAFETY: the conditions for `ptr::copy` have all been checked above,
@@ -4001,7 +4054,10 @@ impl<T> [T] {
     #[rustc_const_unstable(feature = "const_swap_with_slice", issue = "142204")]
     #[track_caller]
     pub const fn swap_with_slice(&mut self, other: &mut [T]) {
-        assert!(self.len() == other.len(), "destination and source slices have different lengths");
+        assert!(
+            self.len() == other.len(),
+            "destination and source slices have different lengths"
+        );
         // SAFETY: `self` is valid for `self.len()` elements by definition, and `src` was
         // checked to have the same length. The slices cannot overlap because
         // mutable references are exclusive.
@@ -4504,7 +4560,8 @@ impl<T> [T] {
     where
         P: FnMut(&T) -> bool,
     {
-        self.binary_search_by(|x| if pred(x) { Less } else { Greater }).unwrap_or_else(|i| i)
+        self.binary_search_by(|x| if pred(x) { Less } else { Greater })
+            .unwrap_or_else(|i| i)
     }
 
     /// Removes the subslice corresponding to the given range
@@ -4658,7 +4715,9 @@ impl<T> [T] {
     #[rustc_const_unstable(feature = "const_split_off_first_last", issue = "138539")]
     pub const fn split_off_first<'a>(self: &mut &'a Self) -> Option<&'a T> {
         // FIXME(const-hack): Use `?` when available in const instead of `let-else`.
-        let Some((first, rem)) = self.split_first() else { return None };
+        let Some((first, rem)) = self.split_first() else {
+            return None;
+        };
         *self = rem;
         Some(first)
     }
@@ -4684,7 +4743,9 @@ impl<T> [T] {
     pub const fn split_off_first_mut<'a>(self: &mut &'a mut Self) -> Option<&'a mut T> {
         // FIXME(const-hack): Use `mem::take` and `?` when available in const.
         // Original: `mem::take(self).split_first_mut()?`
-        let Some((first, rem)) = mem::replace(self, &mut []).split_first_mut() else { return None };
+        let Some((first, rem)) = mem::replace(self, &mut []).split_first_mut() else {
+            return None;
+        };
         *self = rem;
         Some(first)
     }
@@ -4708,7 +4769,9 @@ impl<T> [T] {
     #[rustc_const_unstable(feature = "const_split_off_first_last", issue = "138539")]
     pub const fn split_off_last<'a>(self: &mut &'a Self) -> Option<&'a T> {
         // FIXME(const-hack): Use `?` when available in const instead of `let-else`.
-        let Some((last, rem)) = self.split_last() else { return None };
+        let Some((last, rem)) = self.split_last() else {
+            return None;
+        };
         *self = rem;
         Some(last)
     }
@@ -4734,7 +4797,9 @@ impl<T> [T] {
     pub const fn split_off_last_mut<'a>(self: &mut &'a mut Self) -> Option<&'a mut T> {
         // FIXME(const-hack): Use `mem::take` and `?` when available in const.
         // Original: `mem::take(self).split_last_mut()?`
-        let Some((last, rem)) = mem::replace(self, &mut []).split_last_mut() else { return None };
+        let Some((last, rem)) = mem::replace(self, &mut []).split_last_mut() else {
+            return None;
+        };
         *self = rem;
         Some(last)
     }
@@ -4808,7 +4873,10 @@ impl<T> [T] {
         unsafe {
             for i in 0..N {
                 let idx = indices.get_unchecked(i).clone();
-                arr_ptr.cast::<&mut I::Output>().add(i).write(&mut *slice.get_unchecked_mut(idx));
+                arr_ptr
+                    .cast::<&mut I::Output>()
+                    .add(i)
+                    .write(&mut *slice.get_unchecked_mut(idx));
             }
             arr.assume_init()
         }
@@ -4926,7 +4994,11 @@ impl<T> [T] {
 
         let offset = byte_offset / size_of::<T>();
 
-        if offset < self.len() { Some(offset) } else { None }
+        if offset < self.len() {
+            Some(offset)
+        } else {
+            None
+        }
     }
 
     /// Returns the range of indices that a subslice points to.
@@ -4981,7 +5053,11 @@ impl<T> [T] {
         let start = byte_start / size_of::<T>();
         let end = start.wrapping_add(subslice.len());
 
-        if start <= self.len() && end <= self.len() { Some(start..end) } else { None }
+        if start <= self.len() && end <= self.len() {
+            Some(start..end)
+        } else {
+            None
+        }
     }
 }
 
@@ -5221,7 +5297,10 @@ where
 {
     #[track_caller]
     default fn spec_clone_from(&mut self, src: &[T]) {
-        assert!(self.len() == src.len(), "destination and source slices have different lengths");
+        assert!(
+            self.len() == src.len(),
+            "destination and source slices have different lengths"
+        );
         // NOTE: We need to explicitly slice them to the same length
         // to make it easier for the optimizer to elide bounds checking.
         // But since it can't be relied on we also have an explicit specialization for T: Copy.
@@ -5264,7 +5343,11 @@ impl<T> const Default for &mut [T] {
     }
 }
 
-#[unstable(feature = "slice_pattern", reason = "stopgap trait for slice patterns", issue = "56345")]
+#[unstable(
+    feature = "slice_pattern",
+    reason = "stopgap trait for slice patterns",
+    issue = "56345"
+)]
 /// Patterns in slices - currently, only used by `strip_prefix` and `strip_suffix`.  At a future
 /// point, we hope to generalise `core::str::Pattern` (which at the time of writing is limited to
 /// `str`) to slices, and then this trait will be replaced or abolished.
