@@ -1,9 +1,8 @@
 //! This file contains auxiliary definitions for Flux
 
-
 use crate::hash;
 use crate::time;
-
+use crate::unicode;
 
 /// List of properties tracked for the result of primitive bitwise operations.
 /// See the following link for more information on how extensible properties for primitive operations work:
@@ -91,6 +90,33 @@ use crate::time;
         impl fmt::Debug for Duration {
             #[trusted(reason="modular arithmetic invariant inside nested fmt_decimal")]
             fn fmt(self: &Self, f: &mut fmt::Formatter) -> fmt::Result;
+        }
+    }
+
+    mod unicode {
+        mod unicode_data {
+            fn bitset_search(
+               needle: _,
+               chunk_idx_map:&[u8{v: v < N1};_],
+               bitset_chunk_idx: &[[u8{v: v < CANONICAL + CANONICALIZED}; _]; _],
+               bitset_canonical: _,
+               bitset_canonicalized: &[(u8{v:v < CANONICAL}, u8); _],
+            ) -> bool requires CHUNK_SIZE > 0;
+
+            #[trusted(reason="TODO:F2L:binary-search")]
+            fn skip_search(needle: _, short_offset_runs: _, offsets: _ ) -> bool;
+
+            mod lowercase {
+                static BITSET_CHUNKS_MAP: [u8{v:v < 20}; 123];
+                static BITSET_INDEX_CHUNKS: [[u8{v:v < 79}; 16]; 20];
+                static BITSET_MAPPING: [(u8{v:v < 57}, u8); 22];
+            }
+
+            mod uppercase {
+                static BITSET_CHUNKS_MAP: [u8{v:v < 17}; 125];
+                static BITSET_INDEX_CHUNKS: [[u8{v:v < 69}; 16]; 17];
+                static BITSET_MAPPING: [(u8{v : v < 44}, u8); 25];
+            }
         }
     }
 }]

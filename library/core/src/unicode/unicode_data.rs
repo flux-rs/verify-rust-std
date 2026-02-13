@@ -12,13 +12,6 @@
 // Total           : 31911 bytes
 
 #[inline(always)]
-#[cfg_attr(flux, flux::sig(
-    fn(needle: _,
-       chunk_idx_map:&[u8{v: v < N1};_],
-       bitset_chunk_idx: &[[u8{v: v < CANONICAL + CANONICALIZED}; _]; _],
-       bitset_canonical: _,
-       bitset_canonicalized: &[(u8{v:v < CANONICAL}, u8); _],
-      ) -> bool requires CHUNK_SIZE > 0))]
 const fn bitset_search<
     const N: usize,
     const CHUNK_SIZE: usize,
@@ -92,7 +85,6 @@ impl ShortOffsetRunHeader {
 /// - The last element of `short_offset_runs` must be greater than `std::char::MAX`.
 /// - The start indices of all elements in `short_offset_runs` must be less than `OFFSETS`.
 #[inline(always)]
-#[cfg_attr(flux, flux::trusted(reason = "binary-search"))]
 unsafe fn skip_search<const SOR: usize, const OFFSETS: usize>(
     needle: char,
     short_offset_runs: &[ShortOffsetRunHeader; SOR],
@@ -476,7 +468,6 @@ pub mod grapheme_extend {
 
 #[rustfmt::skip]
 pub mod lowercase {
-    #[cfg_attr(flux, flux::static_spec([u8{v:v < 20}; 123]))]
     static BITSET_CHUNKS_MAP: [u8; 123] = [
         12, 17, 0, 0, 9, 0, 0, 13, 14, 10, 0, 16, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -484,7 +475,6 @@ pub mod lowercase {
         0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 19, 0,
         3, 18, 0, 7,
     ];
-    #[cfg_attr(flux, flux::static_spec([[u8{v:v < 79}; 16]; 20]))]
     static BITSET_INDEX_CHUNKS: [[u8; 16]; 20] = [
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 63, 0, 0],
@@ -566,7 +556,6 @@ pub mod lowercase {
         0b1110011001010001001011010010101001001110001001000011000100101001,
         0b1110101111000000000000000000000000001111111111111111111111111100,
     ];
-    #[cfg_attr(flux, flux::static_spec([(u8{v:v < 57}, u8); 22]))]
     static BITSET_MAPPING: [(u8, u8); 22] = [
         (0, 64), (1, 184), (1, 182), (1, 179), (1, 172), (1, 168), (1, 161), (1, 146), (1, 144),
         (1, 140), (1, 136), (1, 132), (2, 146), (2, 144), (2, 83), (3, 93), (3, 147), (3, 133),
@@ -652,7 +641,6 @@ pub mod n {
 
 #[rustfmt::skip]
 pub mod uppercase {
-    #[cfg_attr(flux, flux::static_spec([u8{v:v < 17}; 125]))]
     static BITSET_CHUNKS_MAP: [u8; 125] = [
         3, 14, 6, 6, 0, 6, 6, 2, 5, 12, 6, 15, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6,
         6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 9, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6,
@@ -660,7 +648,6 @@ pub mod uppercase {
         6, 8, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 16, 6, 6,
         6, 6, 10, 6, 4,
     ];
-    #[cfg_attr(flux, flux::static_spec([[u8{v:v < 69}; 16]; 17]))]
     static BITSET_INDEX_CHUNKS: [[u8; 16]; 17] = [
         [44, 44, 5, 35, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 5, 0],
         [44, 44, 5, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44],
@@ -727,7 +714,6 @@ pub mod uppercase {
         0b1111111100000000111111110000000000111111000000001111111100000000,
     ];
 
-    #[cfg_attr(flux, flux::static_spec([(u8{v : v < 44}, u8); 25]))]
     static BITSET_MAPPING: [(u8, u8); 25] = [
         (0, 182), (0, 74), (0, 166), (0, 162), (0, 159), (0, 150), (0, 148), (0, 142), (0, 134),
         (0, 131), (0, 64), (1, 66), (1, 70), (1, 83), (1, 12), (1, 8), (2, 146), (2, 140), (2, 134),
