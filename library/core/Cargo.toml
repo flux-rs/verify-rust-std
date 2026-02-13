@@ -58,5 +58,5 @@ include = [ "src/ascii*.rs",
             "src/time.rs",
             "src/num/niche_types.rs",
             "src/mem/mod.rs",
-  # "src/unicode/*.rs"
+            "src/unicode/*.rs"
           ]

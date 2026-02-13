@@ -3025,6 +3025,7 @@ impl<T> [T] {
     /// ```
     #[stable(feature = "rust1", since = "1.0.0")]
     #[inline]
+    #[cfg_attr(flux, flux::sig(fn (& [_][@n], _) -> Result<usize{v: v < n}, usize>))]
     pub fn binary_search_by<'a, F>(&'a self, mut f: F) -> Result<usize, usize>
     where
         F: FnMut(&'a T) -> Ordering,
