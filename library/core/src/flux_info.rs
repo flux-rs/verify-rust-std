@@ -106,17 +106,17 @@ use crate::unicode;
             #[trusted(reason="TODO:LEAN:binary-search")]
             fn skip_search(needle: _, short_offset_runs: _, offsets: _ ) -> bool;
 
-            // mod lowercase {
-            //     static BITSET_CHUNKS_MAP: [u8{v:v < 20}; 123];
-            //    static BITSET_INDEX_CHUNKS: [[u8{v:v < 79}; 16]; 20];
-            //    static BITSET_MAPPING: [(u8{v:v < 57}, u8); 22];
-            // }
+            mod lowercase {
+               static BITSET_CHUNKS_MAP: [u8{v:v < 20}; 123];
+               static BITSET_INDEX_CHUNKS: [[u8{v:v < 79}; 16]; 20];
+               static BITSET_MAPPING: [(u8{v:v < 57}, u8); 22];
+            }
 
-            // mod uppercase {
-            //   static BITSET_CHUNKS_MAP: [u8{v:v < 17}; 125];
-            //    static BITSET_INDEX_CHUNKS: [[u8{v:v < 69}; 16]; 17];
-            //    static BITSET_MAPPING: [(u8{v : v < 44}, u8); 25];
-            // }
+            mod uppercase {
+              static BITSET_CHUNKS_MAP: [u8{v:v < 17}; 125];
+               static BITSET_INDEX_CHUNKS: [[u8{v:v < 69}; 16]; 17];
+               static BITSET_MAPPING: [(u8{v : v < 44}, u8); 25];
+            }
         }
     }
 }]
