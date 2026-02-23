@@ -59,7 +59,7 @@ include = [
     "src/time.rs",
     "src/num/niche_types.rs",
     "src/mem/mod.rs",
-    "src/unicode/*.rs"
+    "src/unicode/*.rs",
 ]
 
 include_trusted = [
@@ -87,18 +87,18 @@ include_trusted = [
     "src/str/mod.rs",
     "src/str/pattern.rs",
     "src/str/traits.rs",
-    "src/fmt/builders.rs",
     "src/hint.rs",
-    "src/iter/adapters/*.rs",
-    "src/iter/sources/from_fn.rs",
-    "src/iter/sources/repeat_with.rs",
-    "src/iter/sources/once.rs",
-    "src/mem/manually_drop.rs",
-    "src/panicking.rs",
-    "src/ptr/mod.rs",
     "src/result.rs",
+    "src/ptr/mod.rs",
+    "src/iter/adapters/*.rs",
+    "src/fmt/builders.rs",
+    "src/iter/sources/repeat_with.rs",
     "src/slice/index.rs",
-    "src/slice/raw.rs",
+    "src/panicking.rs",
+    "src/mem/manually_drop.rs",
     "src/str/converts.rs",
+    "src/iter/sources/from_fn.rs",
+    "src/slice/raw.rs",
     "src/str/error.rs",
+    "src/iter/sources/once.rs",
 ]

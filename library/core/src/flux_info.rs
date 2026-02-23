@@ -113,7 +113,7 @@ use crate::unicode;
             }
 
             mod uppercase {
-              static BITSET_CHUNKS_MAP: [u8{v:v < 17}; 125];
+               static BITSET_CHUNKS_MAP: [u8{v:v < 17}; 125];
                static BITSET_INDEX_CHUNKS: [[u8{v:v < 69}; 16]; 17];
                static BITSET_MAPPING: [(u8{v : v < 44}, u8); 25];
             }

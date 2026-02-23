@@ -49,7 +49,11 @@ where
             // SAFETY: Loop conditions ensure the index is in bounds.
             unsafe { array.get_unchecked_mut(idx) }.write(element);
 
-            if initialized < N { ControlFlow::Continue(()) } else { ControlFlow::Break(()) }
+            if initialized < N {
+                ControlFlow::Continue(())
+            } else {
+                ControlFlow::Break(())
+            }
         });
 
         match result {
@@ -76,16 +80,31 @@ fn filter_fold<T, Acc>(
     mut predicate: impl FnMut(&T) -> bool,
     mut fold: impl FnMut(Acc, T) -> Acc,
 ) -> impl FnMut(Acc, T) -> Acc {
-    move |acc, item| if predicate(&item) { fold(acc, item) } else { acc }
+    move |acc, item| {
+        if predicate(&item) {
+            fold(acc, item)
+        } else {
+            acc
+        }
+    }
 }
 
 fn filter_try_fold<'a, T, Acc, R: Try<Output = Acc>>(
     predicate: &'a mut impl FnMut(&T) -> bool,
     mut fold: impl FnMut(Acc, T) -> R + 'a,
 ) -> impl FnMut(Acc, T) -> R + 'a {
-    move |acc, item| if predicate(&item) { fold(acc, item) } else { try { acc } }
+    move |acc, item| {
+        if predicate(&item) {
+            fold(acc, item)
+        } else {
+            try { acc }
+        }
+    }
 }
-
+#[cfg_attr(
+    flux,
+    flux::trusted_impl(reason = "ICE: escaping bound vars in predicate: next, next_chunk,...")
+)]
 #[stable(feature = "rust1", since = "1.0.0")]
 impl<I: Iterator, P> Iterator for Filter<I, P>
 where
@@ -148,7 +167,8 @@ where
         Fold: FnMut(Acc, Self::Item) -> R,
         R: Try<Output = Acc>,
     {
-        self.iter.try_fold(init, filter_try_fold(&mut self.predicate, fold))
+        self.iter
+            .try_fold(init, filter_try_fold(&mut self.predicate, fold))
     }
 
     #[inline]
@@ -159,7 +179,10 @@ where
         self.iter.fold(init, filter_fold(self.predicate, fold))
     }
 }
-
+#[cfg_attr(
+    flux,
+    flux::trusted_impl(reason = "ICE: escaping bound vars in predicate: next_back,...")
+)]
 #[stable(feature = "rust1", since = "1.0.0")]
 impl<I: DoubleEndedIterator, P> DoubleEndedIterator for Filter<I, P>
 where
@@ -177,7 +200,8 @@ where
         Fold: FnMut(Acc, Self::Item) -> R,
         R: Try<Output = Acc>,
     {
-        self.iter.try_rfold(init, filter_try_fold(&mut self.predicate, fold))
+        self.iter
+            .try_rfold(init, filter_try_fold(&mut self.predicate, fold))
     }
 
     #[inline]
