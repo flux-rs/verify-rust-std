@@ -59,7 +59,11 @@ impl<T: PointeeSized> *mut T {
                   without modifying the original"]
     #[inline]
     pub fn try_cast_aligned<U>(self) -> Option<*mut U> {
-        if self.is_aligned_to(align_of::<U>()) { Some(self.cast()) } else { None }
+        if self.is_aligned_to(align_of::<U>()) {
+            Some(self.cast())
+        } else {
+            None
+        }
     }
 
     /// Uses the address value in a new pointer of another type.
@@ -265,7 +269,11 @@ impl<T: PointeeSized> *mut T {
     pub const unsafe fn as_ref<'a>(self) -> Option<&'a T> {
         // SAFETY: the caller must guarantee that `self` is valid for a
         // reference if it isn't null.
-        if self.is_null() { None } else { unsafe { Some(&*self) } }
+        if self.is_null() {
+            None
+        } else {
+            unsafe { Some(&*self) }
+        }
     }
 
     /// Returns a shared reference to the value behind the pointer.
@@ -332,7 +340,11 @@ impl<T: PointeeSized> *mut T {
     {
         // SAFETY: the caller must guarantee that `self` meets all the
         // requirements for a reference.
-        if self.is_null() { None } else { Some(unsafe { &*(self as *const MaybeUninit<T>) }) }
+        if self.is_null() {
+            None
+        } else {
+            Some(unsafe { &*(self as *const MaybeUninit<T>) })
+        }
     }
 
     #[doc = include_str!("./docs/offset.md")]
@@ -376,6 +388,7 @@ impl<T: PointeeSized> *mut T {
     {
         #[inline]
         #[rustc_allow_const_fn_unstable(const_eval_select)]
+        #[cfg_attr(flux, flux::trusted)]
         const fn runtime_offset_nowrap(this: *const (), count: isize, size: usize) -> bool {
             // We can use const_eval_select here because this is only for UB checks.
             const_eval_select!(
@@ -516,7 +529,9 @@ impl<T: PointeeSized> *mut T {
     #[stable(feature = "pointer_byte_offsets", since = "1.75.0")]
     #[rustc_const_stable(feature = "const_pointer_byte_offsets", since = "1.75.0")]
     pub const fn wrapping_byte_offset(self, count: isize) -> Self {
-        self.cast::<u8>().wrapping_offset(count).with_metadata_of(self)
+        self.cast::<u8>()
+            .wrapping_offset(count)
+            .with_metadata_of(self)
     }
 
     /// Masks out bits of the pointer according to a mask.
@@ -557,7 +572,9 @@ impl<T: PointeeSized> *mut T {
     #[must_use = "returns a new pointer rather than modifying its argument"]
     #[inline(always)]
     pub fn mask(self, mask: usize) -> *mut T {
-        intrinsics::ptr_mask(self.cast::<()>(), mask).cast_mut().with_metadata_of(self)
+        intrinsics::ptr_mask(self.cast::<()>(), mask)
+            .cast_mut()
+            .with_metadata_of(self)
     }
 
     /// Returns `None` if the pointer is null, or else returns a unique reference to
@@ -613,7 +630,11 @@ impl<T: PointeeSized> *mut T {
     pub const unsafe fn as_mut<'a>(self) -> Option<&'a mut T> {
         // SAFETY: the caller must guarantee that `self` is be valid for
         // a mutable reference if it isn't null.
-        if self.is_null() { None } else { unsafe { Some(&mut *self) } }
+        if self.is_null() {
+            None
+        } else {
+            unsafe { Some(&mut *self) }
+        }
     }
 
     /// Returns a unique reference to the value behind the pointer.
@@ -679,7 +700,11 @@ impl<T: PointeeSized> *mut T {
     {
         // SAFETY: the caller must guarantee that `self` meets all the
         // requirements for a reference.
-        if self.is_null() { None } else { Some(unsafe { &mut *(self as *mut MaybeUninit<T>) }) }
+        if self.is_null() {
+            None
+        } else {
+            Some(unsafe { &mut *(self as *mut MaybeUninit<T>) })
+        }
     }
 
     /// Returns whether two pointers are guaranteed to be equal.
@@ -1001,6 +1026,7 @@ impl<T: PointeeSized> *mut T {
         #[cfg(debug_assertions)]
         #[inline]
         #[rustc_allow_const_fn_unstable(const_eval_select)]
+        #[cfg_attr(flux, flux::trusted)]
         const fn runtime_add_nowrap(this: *const (), count: usize, size: usize) -> bool {
             const_eval_select!(
                 @capture { this: *const (), count: usize, size: usize } -> bool:
@@ -1141,6 +1167,7 @@ impl<T: PointeeSized> *mut T {
         #[cfg(debug_assertions)]
         #[inline]
         #[rustc_allow_const_fn_unstable(const_eval_select)]
+        #[cfg_attr(flux, flux::trusted)]
         const fn runtime_sub_nowrap(this: *const (), count: usize, size: usize) -> bool {
             const_eval_select!(
                 @capture { this: *const (), count: usize, size: usize } -> bool:
@@ -2112,6 +2139,7 @@ impl<T, const N: usize> *mut [T; N] {
     /// ```
     #[inline]
     #[unstable(feature = "array_ptr_get", issue = "119834")]
+    #[cfg_attr(flux, flux::trusted)]
     pub const fn as_mut_slice(self) -> *mut [T] {
         self
     }
@@ -2403,9 +2431,24 @@ mod verify {
 
     // Generate harnesses for integer types (add, sub, offset)
     generate_arithmetic_harnesses!(i8, check_mut_add_i8, check_mut_sub_i8, check_mut_offset_i8);
-    generate_arithmetic_harnesses!(i16, check_mut_add_i16, check_mut_sub_i16, check_mut_offset_i16);
-    generate_arithmetic_harnesses!(i32, check_mut_add_i32, check_mut_sub_i32, check_mut_offset_i32);
-    generate_arithmetic_harnesses!(i64, check_mut_add_i64, check_mut_sub_i64, check_mut_offset_i64);
+    generate_arithmetic_harnesses!(
+        i16,
+        check_mut_add_i16,
+        check_mut_sub_i16,
+        check_mut_offset_i16
+    );
+    generate_arithmetic_harnesses!(
+        i32,
+        check_mut_add_i32,
+        check_mut_sub_i32,
+        check_mut_offset_i32
+    );
+    generate_arithmetic_harnesses!(
+        i64,
+        check_mut_add_i64,
+        check_mut_sub_i64,
+        check_mut_offset_i64
+    );
     generate_arithmetic_harnesses!(
         i128,
         check_mut_add_i128,
@@ -2421,9 +2464,24 @@ mod verify {
     // Due to a bug of kani the test `check_mut_add_u8` is malfunctioning for now.
     // Tracking issue: https://github.com/model-checking/kani/issues/3743
     // generate_arithmetic_harnesses!(u8, check_mut_add_u8, check_mut_sub_u8, check_mut_offset_u8);
-    generate_arithmetic_harnesses!(u16, check_mut_add_u16, check_mut_sub_u16, check_mut_offset_u16);
-    generate_arithmetic_harnesses!(u32, check_mut_add_u32, check_mut_sub_u32, check_mut_offset_u32);
-    generate_arithmetic_harnesses!(u64, check_mut_add_u64, check_mut_sub_u64, check_mut_offset_u64);
+    generate_arithmetic_harnesses!(
+        u16,
+        check_mut_add_u16,
+        check_mut_sub_u16,
+        check_mut_offset_u16
+    );
+    generate_arithmetic_harnesses!(
+        u32,
+        check_mut_add_u32,
+        check_mut_sub_u32,
+        check_mut_offset_u32
+    );
+    generate_arithmetic_harnesses!(
+        u64,
+        check_mut_add_u64,
+        check_mut_sub_u64,
+        check_mut_offset_u64
+    );
     generate_arithmetic_harnesses!(
         u128,
         check_mut_add_u128,
@@ -2521,9 +2579,21 @@ mod verify {
     }
 
     generate_offset_from_harness!(u8, check_mut_offset_from_u8, check_mut_offset_from_u8_array);
-    generate_offset_from_harness!(u16, check_mut_offset_from_u16, check_mut_offset_from_u16_array);
-    generate_offset_from_harness!(u32, check_mut_offset_from_u32, check_mut_offset_from_u32_array);
-    generate_offset_from_harness!(u64, check_mut_offset_from_u64, check_mut_offset_from_u64_array);
+    generate_offset_from_harness!(
+        u16,
+        check_mut_offset_from_u16,
+        check_mut_offset_from_u16_array
+    );
+    generate_offset_from_harness!(
+        u32,
+        check_mut_offset_from_u32,
+        check_mut_offset_from_u32_array
+    );
+    generate_offset_from_harness!(
+        u64,
+        check_mut_offset_from_u64,
+        check_mut_offset_from_u64_array
+    );
     generate_offset_from_harness!(
         u128,
         check_mut_offset_from_u128,
@@ -2536,9 +2606,21 @@ mod verify {
     );
 
     generate_offset_from_harness!(i8, check_mut_offset_from_i8, check_mut_offset_from_i8_array);
-    generate_offset_from_harness!(i16, check_mut_offset_from_i16, check_mut_offset_from_i16_array);
-    generate_offset_from_harness!(i32, check_mut_offset_from_i32, check_mut_offset_from_i32_array);
-    generate_offset_from_harness!(i64, check_mut_offset_from_i64, check_mut_offset_from_i64_array);
+    generate_offset_from_harness!(
+        i16,
+        check_mut_offset_from_i16,
+        check_mut_offset_from_i16_array
+    );
+    generate_offset_from_harness!(
+        i32,
+        check_mut_offset_from_i32,
+        check_mut_offset_from_i32_array
+    );
+    generate_offset_from_harness!(
+        i64,
+        check_mut_offset_from_i64,
+        check_mut_offset_from_i64_array
+    );
     generate_offset_from_harness!(
         i128,
         check_mut_offset_from_i128,
@@ -2884,7 +2966,10 @@ mod verify {
         let self_ptr: *mut u32 = unsafe { origin_ptr.byte_offset(offset as isize) };
         let result: isize = unsafe { self_ptr.byte_offset_from(origin_ptr) };
         assert_eq!(result, offset as isize);
-        assert_eq!(result, (self_ptr.addr() as isize - origin_ptr.addr() as isize));
+        assert_eq!(
+            result,
+            (self_ptr.addr() as isize - origin_ptr.addr() as isize)
+        );
     }
 
     // Proof for unit size

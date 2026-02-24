@@ -230,6 +230,7 @@ pub use thin::ThinBox;
 #[stable(feature = "rust1", since = "1.0.0")]
 #[rustc_insignificant_dtor]
 #[doc(search_unbox)]
+#[cfg_attr(flux, flux::opaque)]
 // The declaration of the `Box` struct must be kept in sync with the
 // compiler or ICEs will happen.
 pub struct Box<

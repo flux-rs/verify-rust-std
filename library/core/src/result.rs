@@ -1101,7 +1101,9 @@ impl<T, E> Result<T, E> {
     #[stable(feature = "rust1", since = "1.0.0")]
     #[rustc_const_unstable(feature = "const_result_trait_fn", issue = "144211")]
     pub const fn iter(&self) -> Iter<'_, T> {
-        Iter { inner: self.as_ref().ok() }
+        Iter {
+            inner: self.as_ref().ok(),
+        }
     }
 
     /// Returns a mutable iterator over the possibly contained value.
@@ -1125,7 +1127,9 @@ impl<T, E> Result<T, E> {
     #[stable(feature = "rust1", since = "1.0.0")]
     #[rustc_const_unstable(feature = "const_result_trait_fn", issue = "144211")]
     pub const fn iter_mut(&mut self) -> IterMut<'_, T> {
-        IterMut { inner: self.as_mut().ok() }
+        IterMut {
+            inner: self.as_mut().ok(),
+        }
     }
 
     /////////////////////////////////////////////////////////////////////////
@@ -1900,6 +1904,7 @@ where
     }
 
     #[inline]
+    #[cfg_attr(flux, flux::trusted)]
     fn clone_from(&mut self, source: &Self) {
         match (self, source) {
             (Ok(to), Ok(from)) => to.clone_from(from),

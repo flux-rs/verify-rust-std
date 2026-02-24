@@ -616,6 +616,7 @@ pub enum Option<T> {
 // Type implementation
 /////////////////////////////////////////////////////////////////////////////
 
+#[cfg_attr(flux, flux::trusted)]
 impl<T> Option<T> {
     /////////////////////////////////////////////////////////////////////////
     // Querying the contained values
@@ -858,7 +859,9 @@ impl<T> Option<T> {
         // `None` case it's just padding).
         unsafe {
             slice::from_raw_parts(
-                (self as *const Self).byte_add(core::mem::offset_of!(Self, Some.0)).cast(),
+                (self as *const Self)
+                    .byte_add(core::mem::offset_of!(Self, Some.0))
+                    .cast(),
                 self.len(),
             )
         }
@@ -915,7 +918,9 @@ impl<T> Option<T> {
         // the `None` case it's just padding).
         unsafe {
             slice::from_raw_parts_mut(
-                (self as *mut Self).byte_add(core::mem::offset_of!(Self, Some.0)).cast(),
+                (self as *mut Self)
+                    .byte_add(core::mem::offset_of!(Self, Some.0))
+                    .cast(),
                 self.len(),
             )
         }
@@ -1442,7 +1447,9 @@ impl<T> Option<T> {
     #[inline]
     #[stable(feature = "rust1", since = "1.0.0")]
     pub fn iter(&self) -> Iter<'_, T> {
-        Iter { inner: Item { opt: self.as_ref() } }
+        Iter {
+            inner: Item { opt: self.as_ref() },
+        }
     }
 
     /// Returns a mutable iterator over the possibly contained value.
@@ -1463,7 +1470,9 @@ impl<T> Option<T> {
     #[inline]
     #[stable(feature = "rust1", since = "1.0.0")]
     pub fn iter_mut(&mut self) -> IterMut<'_, T> {
-        IterMut { inner: Item { opt: self.as_mut() } }
+        IterMut {
+            inner: Item { opt: self.as_mut() },
+        }
     }
 
     /////////////////////////////////////////////////////////////////////////
@@ -1808,6 +1817,7 @@ impl<T> Option<T> {
     #[inline]
     #[stable(feature = "option_entry", since = "1.20.0")]
     #[rustc_const_unstable(feature = "const_option_ops", issue = "143956")]
+    #[cfg_attr(flux, flux::trusted)]
     pub const fn get_or_insert_with<F>(&mut self, f: F) -> &mut T
     where
         F: [const] FnOnce() -> T + [const] Destruct,
@@ -1880,7 +1890,11 @@ impl<T> Option<T> {
     where
         P: [const] FnOnce(&mut T) -> bool + [const] Destruct,
     {
-        if self.as_mut().map_or(false, predicate) { self.take() } else { None }
+        if self.as_mut().map_or(false, predicate) {
+            self.take()
+        } else {
+            None
+        }
     }
 
     /// Replaces the actual value in the option by the value given in parameter,
@@ -2014,6 +2028,7 @@ impl<T> Option<T> {
     }
 }
 
+#[cfg_attr(flux, flux::trusted)]
 impl<T, U> Option<(T, U)> {
     /// Unzips an option containing a tuple of two options.
     ///
@@ -2039,6 +2054,7 @@ impl<T, U> Option<(T, U)> {
     }
 }
 
+#[cfg_attr(flux, flux::trusted)]
 impl<T> Option<&T> {
     /// Maps an `Option<&T>` to an `Option<T>` by copying the contents of the
     /// option.
@@ -2092,6 +2108,7 @@ impl<T> Option<&T> {
     }
 }
 
+#[cfg_attr(flux, flux::trusted)]
 impl<T> Option<&mut T> {
     /// Maps an `Option<&mut T>` to an `Option<T>` by copying the contents of the
     /// option.
@@ -2143,6 +2160,7 @@ impl<T> Option<&mut T> {
     }
 }
 
+#[cfg_attr(flux, flux::trusted)]
 impl<T, E> Option<Result<T, E>> {
     /// Transposes an `Option` of a [`Result`] into a [`Result`] of an `Option`.
     ///
@@ -2196,6 +2214,7 @@ const fn expect_failed(msg: &str) -> ! {
 
 #[stable(feature = "rust1", since = "1.0.0")]
 #[rustc_const_unstable(feature = "const_clone", issue = "142757")]
+#[cfg_attr(flux, flux::trusted)]
 impl<T> const Clone for Option<T>
 where
     // FIXME(const_hack): the T: [const] Destruct should be inferred from the Self: [const] Destruct in clone_from.
@@ -2264,7 +2283,9 @@ impl<T> IntoIterator for Option<T> {
     /// ```
     #[inline]
     fn into_iter(self) -> IntoIter<T> {
-        IntoIter { inner: Item { opt: self } }
+        IntoIter {
+            inner: Item { opt: self },
+        }
     }
 }
 
@@ -2494,7 +2515,9 @@ unsafe impl<A> TrustedLen for Iter<'_, A> {}
 impl<A> Clone for Iter<'_, A> {
     #[inline]
     fn clone(&self) -> Self {
-        Iter { inner: self.inner.clone() }
+        Iter {
+            inner: self.inner.clone(),
+        }
     }
 }
 
@@ -2705,6 +2728,7 @@ impl<T> const ops::Residual<T> for Option<convert::Infallible> {
     type TryType = Option<T>;
 }
 
+#[cfg_attr(flux, flux::trusted)]
 impl<T> Option<Option<T>> {
     /// Converts from `Option<Option<T>>` to `Option<T>`.
     ///

@@ -1360,6 +1360,7 @@ pub const unsafe fn swap<T>(x: *mut T, y: *mut T) {
 #[rustc_diagnostic_item = "ptr_swap_nonoverlapping"]
 #[rustc_allow_const_fn_unstable(const_eval_select)] // both implementations behave the same
 #[track_caller]
+#[cfg_attr(flux, flux::trusted)]
 pub const unsafe fn swap_nonoverlapping<T>(x: *mut T, y: *mut T, count: usize) {
     ub_checks::assert_unsafe_precondition!(
         check_library_ub,
@@ -1795,7 +1796,11 @@ pub const unsafe fn read_unaligned<T>(src: *const T) -> T {
     // Also, since we just wrote a valid value into `tmp`, it is guaranteed
     // to be properly initialized.
     unsafe {
-        copy_nonoverlapping(src as *const u8, tmp.as_mut_ptr() as *mut u8, size_of::<T>());
+        copy_nonoverlapping(
+            src as *const u8,
+            tmp.as_mut_ptr() as *mut u8,
+            size_of::<T>(),
+        );
         tmp.assume_init()
     }
 }
@@ -1993,7 +1998,11 @@ pub const unsafe fn write_unaligned<T>(dst: *mut T, src: T) {
     // `dst` cannot overlap `src` because the caller has mutable access
     // to `dst` while `src` is owned by this function.
     unsafe {
-        copy_nonoverlapping((&raw const src) as *const u8, dst as *mut u8, size_of::<T>());
+        copy_nonoverlapping(
+            (&raw const src) as *const u8,
+            dst as *mut u8,
+            size_of::<T>(),
+        );
         // We are calling the intrinsic directly to avoid function calls in the generated code.
         intrinsics::forget(src);
     }
@@ -2247,6 +2256,7 @@ pub(crate) unsafe fn align_offset<T: Sized>(p: *const T, a: usize) -> usize {
     #[cfg_attr(not(kani),
         safety::ensures(|result| wrapping_mul(*result, x) % m == 1))]
     #[inline]
+    #[cfg_attr(flux, flux::trusted)]
     const unsafe fn mod_inv(x: usize, m: usize) -> usize {
         /// Multiplicative modular inverse table modulo 2⁴ = 16.
         ///

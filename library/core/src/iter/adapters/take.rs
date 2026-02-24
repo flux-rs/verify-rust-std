@@ -87,7 +87,11 @@ where
             move |acc, x| {
                 *n -= 1;
                 let r = fold(acc, x);
-                if *n == 0 { ControlFlow::Break(r) } else { ControlFlow::from_try(r) }
+                if *n == 0 {
+                    ControlFlow::Break(r)
+                } else {
+                    ControlFlow::from_try(r)
+                }
             }
         }
 
@@ -115,6 +119,7 @@ where
 
     #[inline]
     #[rustc_inherit_overflow_checks]
+    #[cfg_attr(flux, flux::trusted)]
     fn advance_by(&mut self, n: usize) -> Result<(), NonZero<usize>> {
         let min = self.n.min(n);
         let rem = match self.iter.advance_by(min) {
@@ -217,6 +222,7 @@ where
 
     #[inline]
     #[rustc_inherit_overflow_checks]
+    #[cfg_attr(flux, flux::trusted)]
     fn advance_back_by(&mut self, n: usize) -> Result<(), NonZero<usize>> {
         // The amount by which the inner iterator needs to be shortened for it to be
         // at most as long as the take() amount.

@@ -14,6 +14,7 @@ use crate::kani;
 use crate::num::NonZero;
 use crate::ops::{ChangeOutputType, ControlFlow, FromResidual, Residual, Try};
 
+#[cfg_attr(flux, flux::trusted)]
 fn _assert_is_dyn_compatible(_: &dyn Iterator<Item = ()>) {}
 
 /// A trait for dealing with iterators.
@@ -77,6 +78,7 @@ pub trait Iterator {
     /// ```
     #[lang = "next"]
     #[stable(feature = "rust1", since = "1.0.0")]
+    #[cfg_attr(flux, flux::trusted)]
     fn next(&mut self) -> Option<Self::Item>;
 
     /// Advances the iterator and returns an array containing the next `N` values.
@@ -110,7 +112,12 @@ pub trait Iterator {
     /// assert_eq!(third, "those");
     /// ```
     #[inline]
-    #[unstable(feature = "iter_next_chunk", reason = "recently added", issue = "98326")]
+    #[unstable(
+        feature = "iter_next_chunk",
+        reason = "recently added",
+        issue = "98326"
+    )]
+    #[cfg_attr(flux, flux::trusted)]
     fn next_chunk<const N: usize>(
         &mut self,
     ) -> Result<[Self::Item; N], array::IntoIter<Self::Item, N>>
@@ -188,6 +195,7 @@ pub trait Iterator {
     /// ```
     #[inline]
     #[stable(feature = "rust1", since = "1.0.0")]
+    #[cfg_attr(flux, flux::trusted)]
     fn size_hint(&self) -> (usize, Option<usize>) {
         (0, None)
     }
@@ -223,6 +231,7 @@ pub trait Iterator {
     /// ```
     #[inline]
     #[stable(feature = "rust1", since = "1.0.0")]
+    #[cfg_attr(flux, flux::trusted)]
     fn count(self) -> usize
     where
         Self: Sized,
@@ -251,11 +260,13 @@ pub trait Iterator {
     /// ```
     #[inline]
     #[stable(feature = "rust1", since = "1.0.0")]
+    #[cfg_attr(flux, flux::trusted)]
     fn last(self) -> Option<Self::Item>
     where
         Self: Sized,
     {
         #[inline]
+        #[cfg_attr(flux, flux::trusted)]
         fn some<T>(_: Option<T>, x: T) -> Option<T> {
             Some(x)
         }
@@ -297,10 +308,16 @@ pub trait Iterator {
     /// assert_eq!(iter.advance_by(100), Err(NonZero::new(99).unwrap())); // only `4` was skipped
     /// ```
     #[inline]
-    #[unstable(feature = "iter_advance_by", reason = "recently added", issue = "77404")]
+    #[unstable(
+        feature = "iter_advance_by",
+        reason = "recently added",
+        issue = "77404"
+    )]
+    #[cfg_attr(flux, flux::trusted)]
     fn advance_by(&mut self, n: usize) -> Result<(), NonZero<usize>> {
         /// Helper trait to specialize `advance_by` via `try_fold` for `Sized` iterators.
         trait SpecAdvanceBy {
+            #[cfg_attr(flux, flux::trusted)]
             fn spec_advance_by(&mut self, n: usize) -> Result<(), NonZero<usize>>;
         }
 
@@ -317,6 +334,7 @@ pub trait Iterator {
         }
 
         impl<I: Iterator> SpecAdvanceBy for I {
+            #[cfg_attr(flux, flux::trusted)]
             fn spec_advance_by(&mut self, n: usize) -> Result<(), NonZero<usize>> {
                 let Some(n) = NonZero::new(n) else {
                     return Ok(());
@@ -375,6 +393,7 @@ pub trait Iterator {
     /// ```
     #[inline]
     #[stable(feature = "rust1", since = "1.0.0")]
+    #[cfg_attr(flux, flux::trusted)]
     fn nth(&mut self, n: usize) -> Option<Self::Item> {
         self.advance_by(n).ok()?;
         self.next()
@@ -425,6 +444,7 @@ pub trait Iterator {
     /// ```
     #[inline]
     #[stable(feature = "iterator_step_by", since = "1.28.0")]
+    #[cfg_attr(flux, flux::trusted)]
     fn step_by(self, step: usize) -> StepBy<Self>
     where
         Self: Sized,
@@ -496,6 +516,7 @@ pub trait Iterator {
     /// [`OsStr`]: ../../std/ffi/struct.OsStr.html
     #[inline]
     #[stable(feature = "rust1", since = "1.0.0")]
+    #[cfg_attr(flux, flux::trusted)]
     fn chain<U>(self, other: U) -> Chain<Self, U::IntoIter>
     where
         Self: Sized,
@@ -614,6 +635,7 @@ pub trait Iterator {
     /// [`zip`]: crate::iter::zip
     #[inline]
     #[stable(feature = "rust1", since = "1.0.0")]
+    #[cfg_attr(flux, flux::trusted)]
     fn zip<U>(self, other: U) -> Zip<Self, U::IntoIter>
     where
         Self: Sized,
@@ -656,7 +678,12 @@ pub trait Iterator {
     /// [`Clone`]: crate::clone::Clone
     /// [`intersperse_with`]: Iterator::intersperse_with
     #[inline]
-    #[unstable(feature = "iter_intersperse", reason = "recently added", issue = "79524")]
+    #[unstable(
+        feature = "iter_intersperse",
+        reason = "recently added",
+        issue = "79524"
+    )]
+    #[cfg_attr(flux, flux::trusted)]
     fn intersperse(self, separator: Self::Item) -> Intersperse<Self>
     where
         Self: Sized,
@@ -714,7 +741,12 @@ pub trait Iterator {
     /// [`Clone`]: crate::clone::Clone
     /// [`intersperse`]: Iterator::intersperse
     #[inline]
-    #[unstable(feature = "iter_intersperse", reason = "recently added", issue = "79524")]
+    #[unstable(
+        feature = "iter_intersperse",
+        reason = "recently added",
+        issue = "79524"
+    )]
+    #[cfg_attr(flux, flux::trusted)]
     fn intersperse_with<G>(self, separator: G) -> IntersperseWith<Self, G>
     where
         Self: Sized,
@@ -774,6 +806,7 @@ pub trait Iterator {
     #[rustc_diagnostic_item = "IteratorMap"]
     #[inline]
     #[stable(feature = "rust1", since = "1.0.0")]
+    #[cfg_attr(flux, flux::trusted)]
     fn map<B, F>(self, f: F) -> Map<Self, F>
     where
         Self: Sized,
@@ -819,12 +852,14 @@ pub trait Iterator {
     /// ```
     #[inline]
     #[stable(feature = "iterator_for_each", since = "1.21.0")]
+    #[cfg_attr(flux, flux::trusted)]
     fn for_each<F>(self, f: F)
     where
         Self: Sized,
         F: FnMut(Self::Item),
     {
         #[inline]
+        #[cfg_attr(flux, flux::trusted)]
         fn call<T>(mut f: impl FnMut(T)) -> impl FnMut((), T) {
             move |(), item| f(item)
         }
@@ -894,6 +929,7 @@ pub trait Iterator {
     #[inline]
     #[stable(feature = "rust1", since = "1.0.0")]
     #[rustc_diagnostic_item = "iter_filter"]
+    #[cfg_attr(flux, flux::trusted)]
     fn filter<P>(self, predicate: P) -> Filter<Self, P>
     where
         Self: Sized,
@@ -939,6 +975,7 @@ pub trait Iterator {
     /// ```
     #[inline]
     #[stable(feature = "rust1", since = "1.0.0")]
+    #[cfg_attr(flux, flux::trusted)]
     fn filter_map<B, F>(self, f: F) -> FilterMap<Self, F>
     where
         Self: Sized,
@@ -986,6 +1023,7 @@ pub trait Iterator {
     #[inline]
     #[stable(feature = "rust1", since = "1.0.0")]
     #[rustc_diagnostic_item = "enumerate_method"]
+    #[cfg_attr(flux, flux::trusted)]
     fn enumerate(self) -> Enumerate<Self>
     where
         Self: Sized,
@@ -1057,6 +1095,7 @@ pub trait Iterator {
     /// [`next`]: Iterator::next
     #[inline]
     #[stable(feature = "rust1", since = "1.0.0")]
+    #[cfg_attr(flux, flux::trusted)]
     fn peekable(self) -> Peekable<Self>
     where
         Self: Sized,
@@ -1122,6 +1161,7 @@ pub trait Iterator {
     #[inline]
     #[doc(alias = "drop_while")]
     #[stable(feature = "rust1", since = "1.0.0")]
+    #[cfg_attr(flux, flux::trusted)]
     fn skip_while<P>(self, predicate: P) -> SkipWhile<Self, P>
     where
         Self: Sized,
@@ -1200,6 +1240,7 @@ pub trait Iterator {
     /// the iteration should stop, but wasn't placed back into the iterator.
     #[inline]
     #[stable(feature = "rust1", since = "1.0.0")]
+    #[cfg_attr(flux, flux::trusted)]
     fn take_while<P>(self, predicate: P) -> TakeWhile<Self, P>
     where
         Self: Sized,
@@ -1288,6 +1329,7 @@ pub trait Iterator {
     /// [`fuse`]: Iterator::fuse
     #[inline]
     #[stable(feature = "iter_map_while", since = "1.57.0")]
+    #[cfg_attr(flux, flux::trusted)]
     fn map_while<B, P>(self, predicate: P) -> MapWhile<Self, P>
     where
         Self: Sized,
@@ -1317,6 +1359,7 @@ pub trait Iterator {
     /// ```
     #[inline]
     #[stable(feature = "rust1", since = "1.0.0")]
+    #[cfg_attr(flux, flux::trusted)]
     fn skip(self, n: usize) -> Skip<Self>
     where
         Self: Sized,
@@ -1389,6 +1432,7 @@ pub trait Iterator {
     #[doc(alias = "limit")]
     #[inline]
     #[stable(feature = "rust1", since = "1.0.0")]
+    #[cfg_attr(flux, flux::trusted)]
     fn take(self, n: usize) -> Take<Self>
     where
         Self: Sized,
@@ -1436,6 +1480,7 @@ pub trait Iterator {
     /// ```
     #[inline]
     #[stable(feature = "rust1", since = "1.0.0")]
+    #[cfg_attr(flux, flux::trusted)]
     fn scan<St, B, F>(self, initial_state: St, f: F) -> Scan<Self, St, F>
     where
         Self: Sized,
@@ -1474,6 +1519,7 @@ pub trait Iterator {
     /// ```
     #[inline]
     #[stable(feature = "rust1", since = "1.0.0")]
+    #[cfg_attr(flux, flux::trusted)]
     fn flat_map<U, F>(self, f: F) -> FlatMap<Self, U, F>
     where
         Self: Sized,
@@ -1558,6 +1604,7 @@ pub trait Iterator {
     /// [`flat_map()`]: Iterator::flat_map
     #[inline]
     #[stable(feature = "iterator_flatten", since = "1.29.0")]
+    #[cfg_attr(flux, flux::trusted)]
     fn flatten(self) -> Flatten<Self>
     where
         Self: Sized,
@@ -1713,8 +1760,13 @@ pub trait Iterator {
     /// assert_eq!(iter.next(), None);
     /// ```
     #[inline]
-    #[unstable(feature = "iter_map_windows", reason = "recently added", issue = "87155")]
+    #[unstable(
+        feature = "iter_map_windows",
+        reason = "recently added",
+        issue = "87155"
+    )]
     #[requires(N > 0)]
+    #[cfg_attr(flux, flux::trusted)]
     fn map_windows<F, R, const N: usize>(self, f: F) -> MapWindows<Self, F, N>
     where
         Self: Sized,
@@ -1777,6 +1829,7 @@ pub trait Iterator {
     /// ```
     #[inline]
     #[stable(feature = "rust1", since = "1.0.0")]
+    #[cfg_attr(flux, flux::trusted)]
     fn fuse(self) -> Fuse<Self>
     where
         Self: Sized,
@@ -1861,6 +1914,7 @@ pub trait Iterator {
     /// ```
     #[inline]
     #[stable(feature = "rust1", since = "1.0.0")]
+    #[cfg_attr(flux, flux::trusted)]
     fn inspect<F>(self, f: F) -> Inspect<Self, F>
     where
         Self: Sized,
@@ -1898,6 +1952,7 @@ pub trait Iterator {
     /// assert_eq!(of_rust, vec!["of", "Rust"]);
     /// ```
     #[stable(feature = "rust1", since = "1.0.0")]
+    #[cfg_attr(flux, flux::trusted)]
     fn by_ref(&mut self) -> &mut Self
     where
         Self: Sized,
@@ -2017,6 +2072,7 @@ pub trait Iterator {
     #[stable(feature = "rust1", since = "1.0.0")]
     #[must_use = "if you really need to exhaust the iterator, consider `.for_each(drop)` instead"]
     #[rustc_diagnostic_item = "iterator_collect_fn"]
+    #[cfg_attr(flux, flux::trusted)]
     fn collect<B: FromIterator<Self::Item>>(self) -> B
     where
         Self: Sized,
@@ -2027,7 +2083,10 @@ pub trait Iterator {
         // even if users won't actually ever see it.
         if cfg!(debug_assertions) {
             let hint = self.size_hint();
-            assert!(hint.1.is_none_or(|high| high >= hint.0), "Malformed size_hint {hint:?}");
+            assert!(
+                hint.1.is_none_or(|high| high >= hint.0),
+                "Malformed size_hint {hint:?}"
+            );
         }
 
         FromIterator::from_iter(self)
@@ -2104,6 +2163,7 @@ pub trait Iterator {
     /// [`collect`]: Iterator::collect
     #[inline]
     #[unstable(feature = "iterator_try_collect", issue = "94047")]
+    #[cfg_attr(flux, flux::trusted)]
     fn try_collect<B>(&mut self) -> ChangeOutputType<Self::Item, B>
     where
         Self: Sized,
@@ -2176,6 +2236,7 @@ pub trait Iterator {
     /// ```
     #[inline]
     #[unstable(feature = "iter_collect_into", reason = "new API", issue = "94780")]
+    #[cfg_attr(flux, flux::trusted)]
     fn collect_into<E: Extend<Self::Item>>(self, collection: &mut E) -> &mut E
     where
         Self: Sized,
@@ -2208,6 +2269,7 @@ pub trait Iterator {
     /// assert_eq!(odd, [1, 3]);
     /// ```
     #[stable(feature = "rust1", since = "1.0.0")]
+    #[cfg_attr(flux, flux::trusted)]
     fn partition<B, F>(self, f: F) -> (B, B)
     where
         Self: Sized,
@@ -2215,6 +2277,7 @@ pub trait Iterator {
         F: FnMut(&Self::Item) -> bool,
     {
         #[inline]
+        #[cfg_attr(flux, flux::trusted)]
         fn extend<'a, T, B: Extend<T>>(
             mut f: impl FnMut(&T) -> bool + 'a,
             left: &'a mut B,
@@ -2269,7 +2332,12 @@ pub trait Iterator {
     /// assert!(a[..i].iter().all(|n| n % 2 == 0)); // evens
     /// assert!(a[i..].iter().all(|n| n % 2 == 1)); // odds
     /// ```
-    #[unstable(feature = "iter_partition_in_place", reason = "new API", issue = "62543")]
+    #[unstable(
+        feature = "iter_partition_in_place",
+        reason = "new API",
+        issue = "62543"
+    )]
+    #[cfg_attr(flux, flux::trusted)]
     fn partition_in_place<'a, T: 'a, P>(mut self, ref mut predicate: P) -> usize
     where
         Self: Sized + DoubleEndedIterator<Item = &'a mut T>,
@@ -2281,6 +2349,7 @@ pub trait Iterator {
         // These closure "factory" functions exist to avoid genericity in `Self`.
 
         #[inline]
+        #[cfg_attr(flux, flux::trusted)]
         fn is_false<'a, T>(
             predicate: &'a mut impl FnMut(&T) -> bool,
             true_count: &'a mut usize,
@@ -2293,6 +2362,7 @@ pub trait Iterator {
         }
 
         #[inline]
+        #[cfg_attr(flux, flux::trusted)]
         fn is_true<T>(predicate: &mut impl FnMut(&T) -> bool) -> impl FnMut(&&mut T) -> bool + '_ {
             move |x| predicate(&**x)
         }
@@ -2327,6 +2397,7 @@ pub trait Iterator {
     /// assert!(!"IntoIterator".chars().is_partitioned(char::is_uppercase));
     /// ```
     #[unstable(feature = "iter_is_partitioned", reason = "new API", issue = "62544")]
+    #[cfg_attr(flux, flux::trusted)]
     fn is_partitioned<P>(mut self, mut predicate: P) -> bool
     where
         Self: Sized,
@@ -2421,6 +2492,7 @@ pub trait Iterator {
     /// ```
     #[inline]
     #[stable(feature = "iterator_try_fold", since = "1.27.0")]
+    #[cfg_attr(flux, flux::trusted)]
     fn try_fold<B, F, R>(&mut self, init: B, mut f: F) -> R
     where
         Self: Sized,
@@ -2479,6 +2551,7 @@ pub trait Iterator {
     /// ```
     #[inline]
     #[stable(feature = "iterator_try_fold", since = "1.27.0")]
+    #[cfg_attr(flux, flux::trusted)]
     fn try_for_each<F, R>(&mut self, f: F) -> R
     where
         Self: Sized,
@@ -2486,6 +2559,7 @@ pub trait Iterator {
         R: Try<Output = ()>,
     {
         #[inline]
+        #[cfg_attr(flux, flux::trusted)]
         fn call<T, R>(mut f: impl FnMut(T) -> R) -> impl FnMut((), T) -> R {
             move |(), x| f(x)
         }
@@ -2598,6 +2672,7 @@ pub trait Iterator {
     #[doc(alias = "inject", alias = "foldl")]
     #[inline]
     #[stable(feature = "rust1", since = "1.0.0")]
+    #[cfg_attr(flux, flux::trusted)]
     fn fold<B, F>(mut self, init: B, mut f: F) -> B
     where
         Self: Sized,
@@ -2635,6 +2710,7 @@ pub trait Iterator {
     /// ```
     #[inline]
     #[stable(feature = "iterator_fold_self", since = "1.51.0")]
+    #[cfg_attr(flux, flux::trusted)]
     fn reduce<F>(mut self, f: F) -> Option<Self::Item>
     where
         Self: Sized,
@@ -2706,6 +2782,7 @@ pub trait Iterator {
     /// ```
     #[inline]
     #[unstable(feature = "iterator_try_reduce", reason = "new API", issue = "87053")]
+    #[cfg_attr(flux, flux::trusted)]
     fn try_reduce<R>(
         &mut self,
         f: impl FnMut(Self::Item, Self::Item) -> R,
@@ -2764,15 +2841,21 @@ pub trait Iterator {
     /// ```
     #[inline]
     #[stable(feature = "rust1", since = "1.0.0")]
+    #[cfg_attr(flux, flux::trusted)]
     fn all<F>(&mut self, f: F) -> bool
     where
         Self: Sized,
         F: FnMut(Self::Item) -> bool,
     {
         #[inline]
+        #[cfg_attr(flux, flux::trusted)]
         fn check<T>(mut f: impl FnMut(T) -> bool) -> impl FnMut((), T) -> ControlFlow<()> {
             move |(), x| {
-                if f(x) { ControlFlow::Continue(()) } else { ControlFlow::Break(()) }
+                if f(x) {
+                    ControlFlow::Continue(())
+                } else {
+                    ControlFlow::Break(())
+                }
             }
         }
         self.try_fold((), check(f)) == ControlFlow::Continue(())
@@ -2817,15 +2900,21 @@ pub trait Iterator {
     /// ```
     #[inline]
     #[stable(feature = "rust1", since = "1.0.0")]
+    #[cfg_attr(flux, flux::trusted)]
     fn any<F>(&mut self, f: F) -> bool
     where
         Self: Sized,
         F: FnMut(Self::Item) -> bool,
     {
         #[inline]
+        #[cfg_attr(flux, flux::trusted)]
         fn check<T>(mut f: impl FnMut(T) -> bool) -> impl FnMut((), T) -> ControlFlow<()> {
             move |(), x| {
-                if f(x) { ControlFlow::Break(()) } else { ControlFlow::Continue(()) }
+                if f(x) {
+                    ControlFlow::Break(())
+                } else {
+                    ControlFlow::Continue(())
+                }
             }
         }
 
@@ -2879,15 +2968,21 @@ pub trait Iterator {
     /// Note that `iter.find(f)` is equivalent to `iter.filter(f).next()`.
     #[inline]
     #[stable(feature = "rust1", since = "1.0.0")]
+    #[cfg_attr(flux, flux::trusted)]
     fn find<P>(&mut self, predicate: P) -> Option<Self::Item>
     where
         Self: Sized,
         P: FnMut(&Self::Item) -> bool,
     {
         #[inline]
+        #[cfg_attr(flux, flux::trusted)]
         fn check<T>(mut predicate: impl FnMut(&T) -> bool) -> impl FnMut((), T) -> ControlFlow<T> {
             move |(), x| {
-                if predicate(&x) { ControlFlow::Break(x) } else { ControlFlow::Continue(()) }
+                if predicate(&x) {
+                    ControlFlow::Break(x)
+                } else {
+                    ControlFlow::Continue(())
+                }
             }
         }
 
@@ -2910,12 +3005,14 @@ pub trait Iterator {
     /// ```
     #[inline]
     #[stable(feature = "iterator_find_map", since = "1.30.0")]
+    #[cfg_attr(flux, flux::trusted)]
     fn find_map<B, F>(&mut self, f: F) -> Option<B>
     where
         Self: Sized,
         F: FnMut(Self::Item) -> Option<B>,
     {
         #[inline]
+        #[cfg_attr(flux, flux::trusted)]
         fn check<T, B>(mut f: impl FnMut(T) -> Option<B>) -> impl FnMut((), T) -> ControlFlow<B> {
             move |(), x| match f(x) {
                 Some(x) => ControlFlow::Break(x),
@@ -2968,6 +3065,7 @@ pub trait Iterator {
     /// ```
     #[inline]
     #[unstable(feature = "try_find", reason = "new API", issue = "63178")]
+    #[cfg_attr(flux, flux::trusted)]
     fn try_find<R>(
         &mut self,
         f: impl FnMut(&Self::Item) -> R,
@@ -2977,6 +3075,7 @@ pub trait Iterator {
         R: Try<Output = bool, Residual: Residual<Option<Self::Item>>>,
     {
         #[inline]
+        #[cfg_attr(flux, flux::trusted)]
         fn check<I, V, R>(
             mut f: impl FnMut(&I) -> V,
         ) -> impl FnMut((), I) -> ControlFlow<R::TryType>
@@ -3051,12 +3150,14 @@ pub trait Iterator {
     /// ```
     #[inline]
     #[stable(feature = "rust1", since = "1.0.0")]
+    #[cfg_attr(flux, flux::trusted)]
     fn position<P>(&mut self, predicate: P) -> Option<usize>
     where
         Self: Sized,
         P: FnMut(Self::Item) -> bool,
     {
         #[inline]
+        #[cfg_attr(flux, flux::trusted)]
         fn check<'a, T>(
             mut predicate: impl FnMut(T) -> bool + 'a,
             acc: &'a mut usize,
@@ -3116,6 +3217,7 @@ pub trait Iterator {
     /// ```
     #[inline]
     #[stable(feature = "rust1", since = "1.0.0")]
+    #[cfg_attr(flux, flux::trusted)]
     fn rposition<P>(&mut self, predicate: P) -> Option<usize>
     where
         P: FnMut(Self::Item) -> bool,
@@ -3124,12 +3226,17 @@ pub trait Iterator {
         // No need for an overflow check here, because `ExactSizeIterator`
         // implies that the number of elements fits into a `usize`.
         #[inline]
+        #[cfg_attr(flux, flux::trusted)]
         fn check<T>(
             mut predicate: impl FnMut(T) -> bool,
         ) -> impl FnMut(usize, T) -> ControlFlow<usize, usize> {
             move |i, x| {
                 let i = i - 1;
-                if predicate(x) { ControlFlow::Break(i) } else { ControlFlow::Continue(i) }
+                if predicate(x) {
+                    ControlFlow::Break(i)
+                } else {
+                    ControlFlow::Continue(i)
+                }
             }
         }
 
@@ -3165,6 +3272,7 @@ pub trait Iterator {
     /// ```
     #[inline]
     #[stable(feature = "rust1", since = "1.0.0")]
+    #[cfg_attr(flux, flux::trusted)]
     fn max(self) -> Option<Self::Item>
     where
         Self: Sized,
@@ -3201,6 +3309,7 @@ pub trait Iterator {
     /// ```
     #[inline]
     #[stable(feature = "rust1", since = "1.0.0")]
+    #[cfg_attr(flux, flux::trusted)]
     fn min(self) -> Option<Self::Item>
     where
         Self: Sized,
@@ -3223,17 +3332,20 @@ pub trait Iterator {
     /// ```
     #[inline]
     #[stable(feature = "iter_cmp_by_key", since = "1.6.0")]
+    #[cfg_attr(flux, flux::trusted)]
     fn max_by_key<B: Ord, F>(self, f: F) -> Option<Self::Item>
     where
         Self: Sized,
         F: FnMut(&Self::Item) -> B,
     {
         #[inline]
+        #[cfg_attr(flux, flux::trusted)]
         fn key<T, B>(mut f: impl FnMut(&T) -> B) -> impl FnMut(T) -> (B, T) {
             move |x| (f(&x), x)
         }
 
         #[inline]
+        #[cfg_attr(flux, flux::trusted)]
         fn compare<T, B: Ord>((x_p, _): &(B, T), (y_p, _): &(B, T)) -> Ordering {
             x_p.cmp(y_p)
         }
@@ -3256,12 +3368,14 @@ pub trait Iterator {
     /// ```
     #[inline]
     #[stable(feature = "iter_max_by", since = "1.15.0")]
+    #[cfg_attr(flux, flux::trusted)]
     fn max_by<F>(self, compare: F) -> Option<Self::Item>
     where
         Self: Sized,
         F: FnMut(&Self::Item, &Self::Item) -> Ordering,
     {
         #[inline]
+        #[cfg_attr(flux, flux::trusted)]
         fn fold<T>(mut compare: impl FnMut(&T, &T) -> Ordering) -> impl FnMut(T, T) -> T {
             move |x, y| cmp::max_by(x, y, &mut compare)
         }
@@ -3283,17 +3397,20 @@ pub trait Iterator {
     /// ```
     #[inline]
     #[stable(feature = "iter_cmp_by_key", since = "1.6.0")]
+    #[cfg_attr(flux, flux::trusted)]
     fn min_by_key<B: Ord, F>(self, f: F) -> Option<Self::Item>
     where
         Self: Sized,
         F: FnMut(&Self::Item) -> B,
     {
         #[inline]
+        #[cfg_attr(flux, flux::trusted)]
         fn key<T, B>(mut f: impl FnMut(&T) -> B) -> impl FnMut(T) -> (B, T) {
             move |x| (f(&x), x)
         }
 
         #[inline]
+        #[cfg_attr(flux, flux::trusted)]
         fn compare<T, B: Ord>((x_p, _): &(B, T), (y_p, _): &(B, T)) -> Ordering {
             x_p.cmp(y_p)
         }
@@ -3316,12 +3433,14 @@ pub trait Iterator {
     /// ```
     #[inline]
     #[stable(feature = "iter_min_by", since = "1.15.0")]
+    #[cfg_attr(flux, flux::trusted)]
     fn min_by<F>(self, compare: F) -> Option<Self::Item>
     where
         Self: Sized,
         F: FnMut(&Self::Item, &Self::Item) -> Ordering,
     {
         #[inline]
+        #[cfg_attr(flux, flux::trusted)]
         fn fold<T>(mut compare: impl FnMut(&T, &T) -> Ordering) -> impl FnMut(T, T) -> T {
             move |x, y| cmp::min_by(x, y, &mut compare)
         }
@@ -3353,6 +3472,7 @@ pub trait Iterator {
     #[inline]
     #[doc(alias = "reverse")]
     #[stable(feature = "rust1", since = "1.0.0")]
+    #[cfg_attr(flux, flux::trusted)]
     fn rev(self) -> Rev<Self>
     where
         Self: Sized + DoubleEndedIterator,
@@ -3389,6 +3509,7 @@ pub trait Iterator {
     /// assert_eq!(z, [3, 6]);
     /// ```
     #[stable(feature = "rust1", since = "1.0.0")]
+    #[cfg_attr(flux, flux::trusted)]
     fn unzip<A, B, FromA, FromB>(self) -> (FromA, FromB)
     where
         FromA: Default + Extend<A>,
@@ -3420,6 +3541,7 @@ pub trait Iterator {
     /// ```
     #[stable(feature = "iter_copied", since = "1.36.0")]
     #[rustc_diagnostic_item = "iter_copied"]
+    #[cfg_attr(flux, flux::trusted)]
     fn copied<'a, T>(self) -> Copied<Self>
     where
         T: Copy + 'a,
@@ -3468,6 +3590,7 @@ pub trait Iterator {
     /// ```
     #[stable(feature = "rust1", since = "1.0.0")]
     #[rustc_diagnostic_item = "iter_cloned"]
+    #[cfg_attr(flux, flux::trusted)]
     fn cloned<'a, T>(self) -> Cloned<Self>
     where
         T: Clone + 'a,
@@ -3499,6 +3622,7 @@ pub trait Iterator {
     /// ```
     #[stable(feature = "rust1", since = "1.0.0")]
     #[inline]
+    #[cfg_attr(flux, flux::trusted)]
     fn cycle(self) -> Cycle<Self>
     where
         Self: Sized + Clone,
@@ -3541,7 +3665,12 @@ pub trait Iterator {
     /// }
     /// ```
     #[track_caller]
-    #[unstable(feature = "iter_array_chunks", reason = "recently added", issue = "100450")]
+    #[unstable(
+        feature = "iter_array_chunks",
+        reason = "recently added",
+        issue = "100450"
+    )]
+    #[cfg_attr(flux, flux::trusted)]
     fn array_chunks<const N: usize>(self) -> ArrayChunks<Self, N>
     where
         Self: Sized,
@@ -3578,6 +3707,7 @@ pub trait Iterator {
     /// assert_eq!(sum, -0.0_f32);
     /// ```
     #[stable(feature = "iter_arith", since = "1.11.0")]
+    #[cfg_attr(flux, flux::trusted)]
     fn sum<S>(self) -> S
     where
         Self: Sized,
@@ -3610,6 +3740,7 @@ pub trait Iterator {
     /// assert_eq!(factorial(5), 120);
     /// ```
     #[stable(feature = "iter_arith", since = "1.11.0")]
+    #[cfg_attr(flux, flux::trusted)]
     fn product<P>(self) -> P
     where
         Self: Sized,
@@ -3631,6 +3762,7 @@ pub trait Iterator {
     /// assert_eq!([1, 2].iter().cmp([1].iter()), Ordering::Greater);
     /// ```
     #[stable(feature = "iter_order", since = "1.5.0")]
+    #[cfg_attr(flux, flux::trusted)]
     fn cmp<I>(self, other: I) -> Ordering
     where
         I: IntoIterator<Item = Self::Item>,
@@ -3658,6 +3790,7 @@ pub trait Iterator {
     /// assert_eq!(xs.into_iter().cmp_by(ys, |x, y| (2 * x).cmp(&y)), Ordering::Greater);
     /// ```
     #[unstable(feature = "iter_order_by", issue = "64295")]
+    #[cfg_attr(flux, flux::trusted)]
     fn cmp_by<I, F>(self, other: I, cmp: F) -> Ordering
     where
         Self: Sized,
@@ -3665,6 +3798,7 @@ pub trait Iterator {
         F: FnMut(Self::Item, I::Item) -> Ordering,
     {
         #[inline]
+        #[cfg_attr(flux, flux::trusted)]
         fn compare<X, Y, F>(mut cmp: F) -> impl FnMut(X, Y) -> ControlFlow<Ordering>
         where
             F: FnMut(X, Y) -> Ordering,
@@ -3714,6 +3848,7 @@ pub trait Iterator {
     /// ```
     ///
     #[stable(feature = "iter_order", since = "1.5.0")]
+    #[cfg_attr(flux, flux::trusted)]
     fn partial_cmp<I>(self, other: I) -> Option<Ordering>
     where
         I: IntoIterator,
@@ -3750,6 +3885,7 @@ pub trait Iterator {
     /// );
     /// ```
     #[unstable(feature = "iter_order_by", issue = "64295")]
+    #[cfg_attr(flux, flux::trusted)]
     fn partial_cmp_by<I, F>(self, other: I, partial_cmp: F) -> Option<Ordering>
     where
         Self: Sized,
@@ -3757,6 +3893,7 @@ pub trait Iterator {
         F: FnMut(Self::Item, I::Item) -> Option<Ordering>,
     {
         #[inline]
+        #[cfg_attr(flux, flux::trusted)]
         fn compare<X, Y, F>(mut partial_cmp: F) -> impl FnMut(X, Y) -> ControlFlow<Option<Ordering>>
         where
             F: FnMut(X, Y) -> Option<Ordering>,
@@ -3783,6 +3920,7 @@ pub trait Iterator {
     /// assert_eq!([1].iter().eq([1, 2].iter()), false);
     /// ```
     #[stable(feature = "iter_order", since = "1.5.0")]
+    #[cfg_attr(flux, flux::trusted)]
     fn eq<I>(self, other: I) -> bool
     where
         I: IntoIterator,
@@ -3806,6 +3944,7 @@ pub trait Iterator {
     /// assert!(xs.iter().eq_by(ys, |x, y| x * x == y));
     /// ```
     #[unstable(feature = "iter_order_by", issue = "64295")]
+    #[cfg_attr(flux, flux::trusted)]
     fn eq_by<I, F>(self, other: I, eq: F) -> bool
     where
         Self: Sized,
@@ -3813,12 +3952,17 @@ pub trait Iterator {
         F: FnMut(Self::Item, I::Item) -> bool,
     {
         #[inline]
+        #[cfg_attr(flux, flux::trusted)]
         fn compare<X, Y, F>(mut eq: F) -> impl FnMut(X, Y) -> ControlFlow<()>
         where
             F: FnMut(X, Y) -> bool,
         {
             move |x, y| {
-                if eq(x, y) { ControlFlow::Continue(()) } else { ControlFlow::Break(()) }
+                if eq(x, y) {
+                    ControlFlow::Continue(())
+                } else {
+                    ControlFlow::Break(())
+                }
             }
         }
 
@@ -3835,6 +3979,7 @@ pub trait Iterator {
     /// assert_eq!([1].iter().ne([1, 2].iter()), true);
     /// ```
     #[stable(feature = "iter_order", since = "1.5.0")]
+    #[cfg_attr(flux, flux::trusted)]
     fn ne<I>(self, other: I) -> bool
     where
         I: IntoIterator,
@@ -3856,6 +4001,7 @@ pub trait Iterator {
     /// assert_eq!([1, 2].iter().lt([1, 2].iter()), false);
     /// ```
     #[stable(feature = "iter_order", since = "1.5.0")]
+    #[cfg_attr(flux, flux::trusted)]
     fn lt<I>(self, other: I) -> bool
     where
         I: IntoIterator,
@@ -3877,13 +4023,17 @@ pub trait Iterator {
     /// assert_eq!([1, 2].iter().le([1, 2].iter()), true);
     /// ```
     #[stable(feature = "iter_order", since = "1.5.0")]
+    #[cfg_attr(flux, flux::trusted)]
     fn le<I>(self, other: I) -> bool
     where
         I: IntoIterator,
         Self::Item: PartialOrd<I::Item>,
         Self: Sized,
     {
-        matches!(self.partial_cmp(other), Some(Ordering::Less | Ordering::Equal))
+        matches!(
+            self.partial_cmp(other),
+            Some(Ordering::Less | Ordering::Equal)
+        )
     }
 
     /// Determines if the elements of this [`Iterator`] are [lexicographically](Ord#lexicographical-comparison)
@@ -3898,6 +4048,7 @@ pub trait Iterator {
     /// assert_eq!([1, 2].iter().gt([1, 2].iter()), false);
     /// ```
     #[stable(feature = "iter_order", since = "1.5.0")]
+    #[cfg_attr(flux, flux::trusted)]
     fn gt<I>(self, other: I) -> bool
     where
         I: IntoIterator,
@@ -3919,13 +4070,17 @@ pub trait Iterator {
     /// assert_eq!([1, 2].iter().ge([1, 2].iter()), true);
     /// ```
     #[stable(feature = "iter_order", since = "1.5.0")]
+    #[cfg_attr(flux, flux::trusted)]
     fn ge<I>(self, other: I) -> bool
     where
         I: IntoIterator,
         Self::Item: PartialOrd<I::Item>,
         Self: Sized,
     {
-        matches!(self.partial_cmp(other), Some(Ordering::Greater | Ordering::Equal))
+        matches!(
+            self.partial_cmp(other),
+            Some(Ordering::Greater | Ordering::Equal)
+        )
     }
 
     /// Checks if the elements of this iterator are sorted.
@@ -3948,6 +4103,7 @@ pub trait Iterator {
     /// ```
     #[inline]
     #[stable(feature = "is_sorted", since = "1.82.0")]
+    #[cfg_attr(flux, flux::trusted)]
     fn is_sorted(self) -> bool
     where
         Self: Sized,
@@ -3974,12 +4130,14 @@ pub trait Iterator {
     /// assert!(std::iter::empty::<i32>().is_sorted_by(|a, b| true));
     /// ```
     #[stable(feature = "is_sorted", since = "1.82.0")]
+    #[cfg_attr(flux, flux::trusted)]
     fn is_sorted_by<F>(mut self, compare: F) -> bool
     where
         Self: Sized,
         F: FnMut(&Self::Item, &Self::Item) -> bool,
     {
         #[inline]
+        #[cfg_attr(flux, flux::trusted)]
         fn check<'a, T>(
             last: &'a mut T,
             mut compare: impl FnMut(&T, &T) -> bool + 'a,
@@ -4018,6 +4176,7 @@ pub trait Iterator {
     /// ```
     #[inline]
     #[stable(feature = "is_sorted", since = "1.82.0")]
+    #[cfg_attr(flux, flux::trusted)]
     fn is_sorted_by_key<F, K>(self, f: F) -> bool
     where
         Self: Sized,
@@ -4042,11 +4201,13 @@ pub trait Iterator {
 }
 
 trait SpecIterEq<B: Iterator>: Iterator {
+    #[cfg_attr(flux, flux::trusted)]
     fn spec_iter_eq<F>(self, b: B, f: F) -> bool
     where
         F: FnMut(Self::Item, <B as Iterator>::Item) -> ControlFlow<()>;
 }
 
+#[cfg_attr(flux, flux::trusted)]
 impl<A: Iterator, B: Iterator> SpecIterEq<B> for A {
     #[inline]
     default fn spec_iter_eq<F>(self, b: B, f: F) -> bool
@@ -4057,8 +4218,10 @@ impl<A: Iterator, B: Iterator> SpecIterEq<B> for A {
     }
 }
 
+#[cfg_attr(flux, flux::trusted)]
 impl<A: Iterator + TrustedLen, B: Iterator + TrustedLen> SpecIterEq<B> for A {
     #[inline]
+    #[cfg_attr(flux, flux::trusted)]
     fn spec_iter_eq<F>(self, b: B, f: F) -> bool
     where
         F: FnMut(Self::Item, <B as Iterator>::Item) -> ControlFlow<()>,
@@ -4088,6 +4251,7 @@ impl<A: Iterator + TrustedLen, B: Iterator + TrustedLen> SpecIterEq<B> for A {
 /// Isolates the logic shared by ['cmp_by'](Iterator::cmp_by),
 /// ['partial_cmp_by'](Iterator::partial_cmp_by), and ['eq_by'](Iterator::eq_by).
 #[inline]
+#[cfg_attr(flux, flux::trusted)]
 fn iter_compare<A, B, F, T>(mut a: A, mut b: B, f: F) -> ControlFlow<T, Ordering>
 where
     A: Iterator,
@@ -4095,6 +4259,7 @@ where
     F: FnMut(A::Item, B::Item) -> ControlFlow<T>,
 {
     #[inline]
+    #[cfg_attr(flux, flux::trusted)]
     fn compare<'a, B, X, T>(
         b: &'a mut B,
         mut f: impl FnMut(X, B::Item) -> ControlFlow<T> + 'a,
@@ -4118,40 +4283,50 @@ where
 }
 
 #[inline]
+#[cfg_attr(flux, flux::trusted)]
 fn iter_eq<A, B, F>(a: A, b: B, f: F) -> bool
 where
     A: Iterator,
     B: Iterator,
     F: FnMut(A::Item, B::Item) -> ControlFlow<()>,
 {
-    iter_compare(a, b, f).continue_value().is_some_and(|ord| ord == Ordering::Equal)
+    iter_compare(a, b, f)
+        .continue_value()
+        .is_some_and(|ord| ord == Ordering::Equal)
 }
 
 /// Implements `Iterator` for mutable references to iterators, such as those produced by [`Iterator::by_ref`].
 ///
 /// This implementation passes all method calls on to the original iterator.
 #[stable(feature = "rust1", since = "1.0.0")]
+#[cfg_attr(flux, flux::trusted)]
 impl<I: Iterator + ?Sized> Iterator for &mut I {
     type Item = I::Item;
     #[inline]
+    #[cfg_attr(flux, flux::trusted)]
     fn next(&mut self) -> Option<I::Item> {
         (**self).next()
     }
+    #[cfg_attr(flux, flux::trusted)]
     fn size_hint(&self) -> (usize, Option<usize>) {
         (**self).size_hint()
     }
+    #[cfg_attr(flux, flux::trusted)]
     fn advance_by(&mut self, n: usize) -> Result<(), NonZero<usize>> {
         (**self).advance_by(n)
     }
+    #[cfg_attr(flux, flux::trusted)]
     fn nth(&mut self, n: usize) -> Option<Self::Item> {
         (**self).nth(n)
     }
+    #[cfg_attr(flux, flux::trusted)]
     fn fold<B, F>(self, init: B, f: F) -> B
     where
         F: FnMut(B, Self::Item) -> B,
     {
         self.spec_fold(init, f)
     }
+    #[cfg_attr(flux, flux::trusted)]
     fn try_fold<B, F, R>(&mut self, init: B, f: F) -> R
     where
         F: FnMut(B, Self::Item) -> R,
@@ -4163,16 +4338,19 @@ impl<I: Iterator + ?Sized> Iterator for &mut I {
 
 /// Helper trait to specialize `fold` and `try_fold` for `&mut I where I: Sized`
 trait IteratorRefSpec: Iterator {
+    #[cfg_attr(flux, flux::trusted)]
     fn spec_fold<B, F>(self, init: B, f: F) -> B
     where
         F: FnMut(B, Self::Item) -> B;
 
+    #[cfg_attr(flux, flux::trusted)]
     fn spec_try_fold<B, F, R>(&mut self, init: B, f: F) -> R
     where
         F: FnMut(B, Self::Item) -> R,
         R: Try<Output = B>;
 }
 
+#[cfg_attr(flux, flux::trusted)]
 impl<I: Iterator + ?Sized> IteratorRefSpec for &mut I {
     default fn spec_fold<B, F>(self, init: B, mut f: F) -> B
     where
@@ -4198,9 +4376,11 @@ impl<I: Iterator + ?Sized> IteratorRefSpec for &mut I {
     }
 }
 
+#[cfg_attr(flux, flux::trusted)]
 impl<I: Iterator> IteratorRefSpec for &mut I {
     impl_fold_via_try_fold! { spec_fold -> spec_try_fold }
 
+    #[cfg_attr(flux, flux::trusted)]
     fn spec_try_fold<B, F, R>(&mut self, init: B, f: F) -> R
     where
         F: FnMut(B, Self::Item) -> R,

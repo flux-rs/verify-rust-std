@@ -118,6 +118,7 @@ pub struct Error;
 /// [flushable]: ../../std/io/trait.Write.html#tymethod.flush
 #[stable(feature = "rust1", since = "1.0.0")]
 #[rustc_diagnostic_item = "FmtWrite"]
+#[cfg_attr(flux, flux::trusted)]
 pub trait Write {
     /// Writes a string slice into this writer, returning whether the write
     /// succeeded.
@@ -151,6 +152,7 @@ pub trait Write {
     /// # std::fmt::Result::Ok(())
     /// ```
     #[stable(feature = "rust1", since = "1.0.0")]
+    #[cfg_attr(flux, flux::trusted)]
     fn write_str(&mut self, s: &str) -> Result;
 
     /// Writes a [`char`] into this writer, returning whether the write succeeded.
@@ -180,6 +182,7 @@ pub trait Write {
     /// # std::fmt::Result::Ok(())
     /// ```
     #[stable(feature = "fmt_write_char", since = "1.1.0")]
+    #[cfg_attr(flux, flux::trusted)]
     fn write_char(&mut self, c: char) -> Result {
         self.write_str(c.encode_utf8(&mut [0; char::MAX_LEN_UTF8]))
     }
@@ -209,10 +212,12 @@ pub trait Write {
     /// # std::fmt::Result::Ok(())
     /// ```
     #[stable(feature = "rust1", since = "1.0.0")]
+    #[cfg_attr(flux, flux::trusted)]
     fn write_fmt(&mut self, args: Arguments<'_>) -> Result {
         // We use a specialization for `Sized` types to avoid an indirection
         // through `&mut self`
         trait SpecWriteFmt {
+            #[cfg_attr(flux, flux::trusted)]
             fn spec_write_fmt(self, args: Arguments<'_>) -> Result;
         }
 
@@ -229,6 +234,7 @@ pub trait Write {
 
         impl<W: Write> SpecWriteFmt for &mut W {
             #[inline]
+            #[cfg_attr(flux, flux::trusted)]
             fn spec_write_fmt(self, args: Arguments<'_>) -> Result {
                 if let Some(s) = args.as_statically_known_str() {
                     self.write_str(s)
@@ -243,15 +249,19 @@ pub trait Write {
 }
 
 #[stable(feature = "fmt_write_blanket_impl", since = "1.4.0")]
+#[cfg_attr(flux, flux::trusted)]
 impl<W: Write + ?Sized> Write for &mut W {
+    #[cfg_attr(flux, flux::trusted)]
     fn write_str(&mut self, s: &str) -> Result {
         (**self).write_str(s)
     }
 
+    #[cfg_attr(flux, flux::trusted)]
     fn write_char(&mut self, c: char) -> Result {
         (**self).write_char(c)
     }
 
+    #[cfg_attr(flux, flux::trusted)]
     fn write_fmt(&mut self, args: Arguments<'_>) -> Result {
         (**self).write_fmt(args)
     }
@@ -329,6 +339,7 @@ mod flags {
     pub(super) const ALIGN_UNKNOWN: u32 = 3 << 29;
 }
 
+#[cfg_attr(flux, flux::trusted)]
 impl FormattingOptions {
     /// Construct a new `FormatterBuilder` with the supplied `Write` trait
     /// object for output that is equivalent to the `{}` formatting
@@ -342,7 +353,11 @@ impl FormattingOptions {
     /// - no [`DebugAsHex`] output mode.
     #[unstable(feature = "formatting_options", issue = "118117")]
     pub const fn new() -> Self {
-        Self { flags: ' ' as u32 | flags::ALIGN_UNKNOWN, width: 0, precision: 0 }
+        Self {
+            flags: ' ' as u32 | flags::ALIGN_UNKNOWN,
+            width: 0,
+            precision: 0,
+        }
     }
 
     /// Sets or removes the sign (the `+` or the `-` flag).
@@ -509,12 +524,20 @@ impl FormattingOptions {
     /// Returns the current width.
     #[unstable(feature = "formatting_options", issue = "118117")]
     pub const fn get_width(&self) -> Option<u16> {
-        if self.flags & flags::WIDTH_FLAG != 0 { Some(self.width) } else { None }
+        if self.flags & flags::WIDTH_FLAG != 0 {
+            Some(self.width)
+        } else {
+            None
+        }
     }
     /// Returns the current precision.
     #[unstable(feature = "formatting_options", issue = "118117")]
     pub const fn get_precision(&self) -> Option<u16> {
-        if self.flags & flags::PRECISION_FLAG != 0 { Some(self.precision) } else { None }
+        if self.flags & flags::PRECISION_FLAG != 0 {
+            Some(self.precision)
+        } else {
+            None
+        }
     }
     /// Returns the current precision.
     #[unstable(feature = "formatting_options", issue = "118117")]
@@ -533,13 +556,18 @@ impl FormattingOptions {
     /// You may alternatively use [`Formatter::new()`].
     #[unstable(feature = "formatting_options", issue = "118117")]
     pub const fn create_formatter<'a>(self, write: &'a mut (dyn Write + 'a)) -> Formatter<'a> {
-        Formatter { options: self, buf: write }
+        Formatter {
+            options: self,
+            buf: write,
+        }
     }
 }
 
 #[unstable(feature = "formatting_options", issue = "118117")]
+#[cfg_attr(flux, flux::trusted)]
 impl Default for FormattingOptions {
     /// Same as [`FormattingOptions::new()`].
+    #[cfg_attr(flux, flux::trusted)]
     fn default() -> Self {
         // The `#[derive(Default)]` implementation would set `fill` to `\0` instead of space.
         Self::new()
@@ -564,6 +592,7 @@ pub struct Formatter<'a> {
     buf: &'a mut (dyn Write + 'a),
 }
 
+#[cfg_attr(flux, flux::trusted)]
 impl<'a> Formatter<'a> {
     /// Creates a new formatter with given [`FormattingOptions`].
     ///
@@ -574,13 +603,19 @@ impl<'a> Formatter<'a> {
     /// You may alternatively use [`FormattingOptions::create_formatter()`].
     #[unstable(feature = "formatting_options", issue = "118117")]
     pub const fn new(write: &'a mut (dyn Write + 'a), options: FormattingOptions) -> Self {
-        Formatter { options, buf: write }
+        Formatter {
+            options,
+            buf: write,
+        }
     }
 
     /// Creates a new formatter based on this one with given [`FormattingOptions`].
     #[unstable(feature = "formatting_options", issue = "118117")]
     pub const fn with_options<'b>(&'b mut self, options: FormattingOptions) -> Formatter<'b> {
-        Formatter { options, buf: self.buf }
+        Formatter {
+            options,
+            buf: self.buf,
+        }
     }
 }
 
@@ -722,22 +757,30 @@ pub struct Arguments<'a> {
 #[doc(hidden)]
 #[rustc_diagnostic_item = "FmtArgumentsNew"]
 #[unstable(feature = "fmt_internals", issue = "none")]
+#[cfg_attr(flux, flux::trusted)]
 impl<'a> Arguments<'a> {
     // SAFETY: The caller must ensure that the provided template and args encode a valid
     // fmt::Arguments, as documented above.
     #[inline]
+    #[cfg_attr(flux, flux::trusted)]
     pub unsafe fn new<const N: usize, const M: usize>(
         template: &'a [u8; N],
         args: &'a [rt::Argument<'a>; M],
     ) -> Arguments<'a> {
         // SAFETY: Responsibility of the caller.
-        unsafe { Arguments { template: mem::transmute(template), args: mem::transmute(args) } }
+        unsafe {
+            Arguments {
+                template: mem::transmute(template),
+                args: mem::transmute(args),
+            }
+        }
     }
 
     // Same as `from_str`, but not const.
     // Used by format_args!() expansion when arguments are inlined,
     // e.g. format_args!("{}", 123), which is not allowed in const.
     #[inline]
+    #[cfg_attr(flux, flux::trusted)]
     pub fn from_str_nonconst(s: &'static str) -> Arguments<'a> {
         Arguments::from_str(s)
     }
@@ -745,12 +788,14 @@ impl<'a> Arguments<'a> {
 
 #[doc(hidden)]
 #[unstable(feature = "fmt_internals", issue = "none")]
+#[cfg_attr(flux, flux::trusted)]
 impl<'a> Arguments<'a> {
     /// Estimates the length of the formatted text.
     ///
     /// This is intended to be used for setting initial `String` capacity
     /// when using `format!`. Note: this is neither the lower nor upper bound.
     #[inline]
+    #[cfg_attr(flux, flux::trusted)]
     pub fn estimated_capacity(&self) -> usize {
         if let Some(s) = self.as_str() {
             return s.len();
@@ -806,6 +851,7 @@ impl<'a> Arguments<'a> {
     }
 }
 
+#[cfg_attr(flux, flux::trusted)]
 impl<'a> Arguments<'a> {
     /// Create a `fmt::Arguments` object for a single static string.
     ///
@@ -889,31 +935,46 @@ impl<'a> Arguments<'a> {
     }
 
     /// Same as [`Arguments::as_str`], but will only return `Some(s)` if it can be determined at compile time.
-    #[unstable(feature = "fmt_internals", reason = "internal to standard library", issue = "none")]
+    #[unstable(
+        feature = "fmt_internals",
+        reason = "internal to standard library",
+        issue = "none"
+    )]
     #[must_use]
     #[inline]
     #[doc(hidden)]
+    #[cfg_attr(flux, flux::trusted)]
     pub fn as_statically_known_str(&self) -> Option<&'static str> {
         let s = self.as_str();
-        if core::intrinsics::is_val_statically_known(s.is_some()) { s } else { None }
+        if core::intrinsics::is_val_statically_known(s.is_some()) {
+            s
+        } else {
+            None
+        }
     }
 }
 
 // Manually implementing these results in better error messages.
 #[stable(feature = "rust1", since = "1.0.0")]
+#[cfg_attr(flux, flux::trusted)]
 impl !Send for Arguments<'_> {}
 #[stable(feature = "rust1", since = "1.0.0")]
+#[cfg_attr(flux, flux::trusted)]
 impl !Sync for Arguments<'_> {}
 
 #[stable(feature = "rust1", since = "1.0.0")]
+#[cfg_attr(flux, flux::trusted)]
 impl Debug for Arguments<'_> {
+    #[cfg_attr(flux, flux::trusted)]
     fn fmt(&self, fmt: &mut Formatter<'_>) -> Result {
         Display::fmt(self, fmt)
     }
 }
 
 #[stable(feature = "rust1", since = "1.0.0")]
+#[cfg_attr(flux, flux::trusted)]
 impl Display for Arguments<'_> {
+    #[cfg_attr(flux, flux::trusted)]
     fn fmt(&self, fmt: &mut Formatter<'_>) -> Result {
         write(fmt.buf, *self)
     }
@@ -1049,6 +1110,7 @@ impl Display for Arguments<'_> {
 #[doc(alias = "{:?}")]
 #[rustc_diagnostic_item = "Debug"]
 #[rustc_trivial_field_reads]
+#[cfg_attr(flux, flux::trusted)]
 pub trait Debug: PointeeSized {
     #[doc = include_str!("fmt_trait_method_doc.md")]
     ///
@@ -1080,6 +1142,7 @@ pub trait Debug: PointeeSized {
     /// )");
     /// ```
     #[stable(feature = "rust1", since = "1.0.0")]
+    #[cfg_attr(flux, flux::trusted)]
     fn fmt(&self, f: &mut Formatter<'_>) -> Result;
 }
 
@@ -1183,6 +1246,7 @@ pub use macros::Debug;
 #[doc(alias = "{}")]
 #[rustc_diagnostic_item = "Display"]
 #[stable(feature = "rust1", since = "1.0.0")]
+#[cfg_attr(flux, flux::trusted)]
 pub trait Display: PointeeSized {
     #[doc = include_str!("fmt_trait_method_doc.md")]
     ///
@@ -1208,6 +1272,7 @@ pub trait Display: PointeeSized {
     /// );
     /// ```
     #[stable(feature = "rust1", since = "1.0.0")]
+    #[cfg_attr(flux, flux::trusted)]
     fn fmt(&self, f: &mut Formatter<'_>) -> Result;
 }
 
@@ -1259,9 +1324,11 @@ pub trait Display: PointeeSized {
 /// assert_eq!(format!("l as octal is: {l:#06o}"), "l as octal is: 0o0011");
 /// ```
 #[stable(feature = "rust1", since = "1.0.0")]
+#[cfg_attr(flux, flux::trusted)]
 pub trait Octal: PointeeSized {
     #[doc = include_str!("fmt_trait_method_doc.md")]
     #[stable(feature = "rust1", since = "1.0.0")]
+    #[cfg_attr(flux, flux::trusted)]
     fn fmt(&self, f: &mut Formatter<'_>) -> Result;
 }
 
@@ -1318,9 +1385,11 @@ pub trait Octal: PointeeSized {
 /// );
 /// ```
 #[stable(feature = "rust1", since = "1.0.0")]
+#[cfg_attr(flux, flux::trusted)]
 pub trait Binary: PointeeSized {
     #[doc = include_str!("fmt_trait_method_doc.md")]
     #[stable(feature = "rust1", since = "1.0.0")]
+    #[cfg_attr(flux, flux::trusted)]
     fn fmt(&self, f: &mut Formatter<'_>) -> Result;
 }
 
@@ -1373,9 +1442,11 @@ pub trait Binary: PointeeSized {
 /// assert_eq!(format!("l as hex is: {l:#010x}"), "l as hex is: 0x00000009");
 /// ```
 #[stable(feature = "rust1", since = "1.0.0")]
+#[cfg_attr(flux, flux::trusted)]
 pub trait LowerHex: PointeeSized {
     #[doc = include_str!("fmt_trait_method_doc.md")]
     #[stable(feature = "rust1", since = "1.0.0")]
+    #[cfg_attr(flux, flux::trusted)]
     fn fmt(&self, f: &mut Formatter<'_>) -> Result;
 }
 
@@ -1428,9 +1499,11 @@ pub trait LowerHex: PointeeSized {
 /// assert_eq!(format!("l as hex is: {l:#010X}"), "l as hex is: 0x7FFFFFFF");
 /// ```
 #[stable(feature = "rust1", since = "1.0.0")]
+#[cfg_attr(flux, flux::trusted)]
 pub trait UpperHex: PointeeSized {
     #[doc = include_str!("fmt_trait_method_doc.md")]
     #[stable(feature = "rust1", since = "1.0.0")]
+    #[cfg_attr(flux, flux::trusted)]
     fn fmt(&self, f: &mut Formatter<'_>) -> Result;
 }
 
@@ -1487,9 +1560,11 @@ pub trait UpperHex: PointeeSized {
 /// ```
 #[stable(feature = "rust1", since = "1.0.0")]
 #[rustc_diagnostic_item = "Pointer"]
+#[cfg_attr(flux, flux::trusted)]
 pub trait Pointer: PointeeSized {
     #[doc = include_str!("fmt_trait_method_doc.md")]
     #[stable(feature = "rust1", since = "1.0.0")]
+    #[cfg_attr(flux, flux::trusted)]
     fn fmt(&self, f: &mut Formatter<'_>) -> Result;
 }
 
@@ -1538,9 +1613,11 @@ pub trait Pointer: PointeeSized {
 /// );
 /// ```
 #[stable(feature = "rust1", since = "1.0.0")]
+#[cfg_attr(flux, flux::trusted)]
 pub trait LowerExp: PointeeSized {
     #[doc = include_str!("fmt_trait_method_doc.md")]
     #[stable(feature = "rust1", since = "1.0.0")]
+    #[cfg_attr(flux, flux::trusted)]
     fn fmt(&self, f: &mut Formatter<'_>) -> Result;
 }
 
@@ -1589,9 +1666,11 @@ pub trait LowerExp: PointeeSized {
 /// );
 /// ```
 #[stable(feature = "rust1", since = "1.0.0")]
+#[cfg_attr(flux, flux::trusted)]
 pub trait UpperExp: PointeeSized {
     #[doc = include_str!("fmt_trait_method_doc.md")]
     #[stable(feature = "rust1", since = "1.0.0")]
+    #[cfg_attr(flux, flux::trusted)]
     fn fmt(&self, f: &mut Formatter<'_>) -> Result;
 }
 
@@ -1627,6 +1706,7 @@ pub trait UpperExp: PointeeSized {
 ///
 /// [`write!`]: crate::write!
 #[stable(feature = "rust1", since = "1.0.0")]
+#[cfg_attr(flux, flux::trusted)]
 pub fn write(output: &mut dyn Write, fmt: Arguments<'_>) -> Result {
     if let Some(s) = fmt.as_str() {
         return output.write_str(s);
@@ -1717,21 +1797,30 @@ pub fn write(output: &mut dyn Write, fmt: Arguments<'_>) -> Result {
                 // Dynamic width from a usize argument.
                 // SAFETY: We can assume the template only refers to arguments that exist.
                 unsafe {
-                    opt.width = args.add(opt.width as usize).as_ref().as_u16().unwrap_unchecked();
+                    opt.width = args
+                        .add(opt.width as usize)
+                        .as_ref()
+                        .as_u16()
+                        .unwrap_unchecked();
                 }
             }
             if n & 32 != 0 {
                 // Dynamic precision from a usize argument.
                 // SAFETY: We can assume the template only refers to arguments that exist.
                 unsafe {
-                    opt.precision =
-                        args.add(opt.precision as usize).as_ref().as_u16().unwrap_unchecked();
+                    opt.precision = args
+                        .add(opt.precision as usize)
+                        .as_ref()
+                        .as_u16()
+                        .unwrap_unchecked();
                 }
             }
 
             // SAFETY: We can assume the template only refers to arguments that exist.
             unsafe {
-                args.add(arg_index).as_ref().fmt(&mut Formatter::new(output, opt))?;
+                args.add(arg_index)
+                    .as_ref()
+                    .fmt(&mut Formatter::new(output, opt))?;
             }
             arg_index += 1;
         }
@@ -1745,7 +1834,9 @@ pub(crate) struct PostPadding {
     padding: u16,
 }
 
+#[cfg_attr(flux, flux::trusted)]
 impl PostPadding {
+    #[cfg_attr(flux, flux::trusted)]
     fn new(fill: char, padding: u16) -> PostPadding {
         PostPadding { fill, padding }
     }
@@ -1759,7 +1850,9 @@ impl PostPadding {
     }
 }
 
+#[cfg_attr(flux, flux::trusted)]
 impl<'a> Formatter<'a> {
+    #[cfg_attr(flux, flux::trusted)]
     fn wrap_buf<'b, 'c, F>(&'b mut self, wrap: F) -> Formatter<'c>
     where
         'b: 'c,
@@ -1822,6 +1915,7 @@ impl<'a> Formatter<'a> {
     /// assert_eq!(format!("{:0>#8}", Foo::new(-1)), "00-Foo 1");
     /// ```
     #[stable(feature = "rust1", since = "1.0.0")]
+    #[cfg_attr(flux, flux::trusted)]
     pub fn pad_integral(&mut self, is_nonnegative: bool, prefix: &str, buf: &str) -> Result {
         let mut width = buf.len();
 
@@ -1843,11 +1937,16 @@ impl<'a> Formatter<'a> {
 
         // Writes the sign if it exists, and then the prefix if it was requested
         #[inline(never)]
+        #[cfg_attr(flux, flux::trusted)]
         fn write_prefix(f: &mut Formatter<'_>, sign: Option<char>, prefix: Option<&str>) -> Result {
             if let Some(c) = sign {
                 f.buf.write_char(c)?;
             }
-            if let Some(prefix) = prefix { f.buf.write_str(prefix) } else { Ok(()) }
+            if let Some(prefix) = prefix {
+                f.buf.write_str(prefix)
+            } else {
+                Ok(())
+            }
         }
 
         // The `width` field is more of a `min-width` parameter at this point.
@@ -1906,6 +2005,7 @@ impl<'a> Formatter<'a> {
     /// assert_eq!(format!("{Foo:0>4}"), "0Foo");
     /// ```
     #[stable(feature = "rust1", since = "1.0.0")]
+    #[cfg_attr(flux, flux::trusted)]
     pub fn pad(&mut self, s: &str) -> Result {
         // Make sure there's a fast path up front.
         if self.options.flags & (flags::WIDTH_FLAG | flags::PRECISION_FLAG) == 0 {
@@ -1977,6 +2077,7 @@ impl<'a> Formatter<'a> {
     /// # Safety
     ///
     /// Any `numfmt::Part::Copy` parts in `formatted` must contain valid UTF-8.
+    #[cfg_attr(flux, flux::trusted)]
     unsafe fn pad_formatted_parts(&mut self, formatted: &numfmt::Formatted<'_>) -> Result {
         if self.options.width == 0 {
             // this is the common case and we take a shortcut
@@ -2021,7 +2122,9 @@ impl<'a> Formatter<'a> {
     /// # Safety
     ///
     /// Any `numfmt::Part::Copy` parts in `formatted` must contain valid UTF-8.
+    #[cfg_attr(flux, flux::trusted)]
     unsafe fn write_formatted_parts(&mut self, formatted: &numfmt::Formatted<'_>) -> Result {
+        #[cfg_attr(flux, flux::trusted)]
         unsafe fn write_bytes(buf: &mut dyn Write, s: &[u8]) -> Result {
             // SAFETY: This is used for `numfmt::Part::Num` and `numfmt::Part::Copy`.
             // It's safe to use for `numfmt::Part::Num` since every char `c` is between
@@ -2089,6 +2192,7 @@ impl<'a> Formatter<'a> {
     /// assert_eq!(format!("{Foo:0>8}"), "Foo");
     /// ```
     #[stable(feature = "rust1", since = "1.0.0")]
+    #[cfg_attr(flux, flux::trusted)]
     pub fn write_str(&mut self, data: &str) -> Result {
         self.buf.write_str(data)
     }
@@ -2118,6 +2222,7 @@ impl<'a> Formatter<'a> {
     /// ```
     #[stable(feature = "rust1", since = "1.0.0")]
     #[inline]
+    #[cfg_attr(flux, flux::trusted)]
     pub fn write_fmt(&mut self, fmt: Arguments<'_>) -> Result {
         if let Some(s) = fmt.as_statically_known_str() {
             self.buf.write_str(s)
@@ -2134,6 +2239,7 @@ impl<'a> Formatter<'a> {
         note = "use the `sign_plus`, `sign_minus`, `alternate`, \
                 or `sign_aware_zero_pad` methods instead"
     )]
+    #[cfg_attr(flux, flux::trusted)]
     pub fn flags(&self) -> u32 {
         // Extract the debug upper/lower hex, zero pad, alternate, and plus/minus flags
         // to stay compatible with older versions of Rust.
@@ -2169,6 +2275,7 @@ impl<'a> Formatter<'a> {
     /// ```
     #[must_use]
     #[stable(feature = "fmt_flags", since = "1.5.0")]
+    #[cfg_attr(flux, flux::trusted)]
     pub fn fill(&self) -> char {
         self.options.get_fill()
     }
@@ -2204,6 +2311,7 @@ impl<'a> Formatter<'a> {
     /// ```
     #[must_use]
     #[stable(feature = "fmt_flags_align", since = "1.28.0")]
+    #[cfg_attr(flux, flux::trusted)]
     pub fn align(&self) -> Option<Alignment> {
         self.options.get_align()
     }
@@ -2234,6 +2342,7 @@ impl<'a> Formatter<'a> {
     /// ```
     #[must_use]
     #[stable(feature = "fmt_flags", since = "1.5.0")]
+    #[cfg_attr(flux, flux::trusted)]
     pub fn width(&self) -> Option<usize> {
         if self.options.flags & flags::WIDTH_FLAG == 0 {
             None
@@ -2269,6 +2378,7 @@ impl<'a> Formatter<'a> {
     /// ```
     #[must_use]
     #[stable(feature = "fmt_flags", since = "1.5.0")]
+    #[cfg_attr(flux, flux::trusted)]
     pub fn precision(&self) -> Option<usize> {
         if self.options.flags & flags::PRECISION_FLAG == 0 {
             None
@@ -2305,6 +2415,7 @@ impl<'a> Formatter<'a> {
     /// ```
     #[must_use]
     #[stable(feature = "fmt_flags", since = "1.5.0")]
+    #[cfg_attr(flux, flux::trusted)]
     pub fn sign_plus(&self) -> bool {
         self.options.flags & flags::SIGN_PLUS_FLAG != 0
     }
@@ -2334,6 +2445,7 @@ impl<'a> Formatter<'a> {
     /// ```
     #[must_use]
     #[stable(feature = "fmt_flags", since = "1.5.0")]
+    #[cfg_attr(flux, flux::trusted)]
     pub fn sign_minus(&self) -> bool {
         self.options.flags & flags::SIGN_MINUS_FLAG != 0
     }
@@ -2362,6 +2474,7 @@ impl<'a> Formatter<'a> {
     /// ```
     #[must_use]
     #[stable(feature = "fmt_flags", since = "1.5.0")]
+    #[cfg_attr(flux, flux::trusted)]
     pub fn alternate(&self) -> bool {
         self.options.flags & flags::ALTERNATE_FLAG != 0
     }
@@ -2388,15 +2501,18 @@ impl<'a> Formatter<'a> {
     /// ```
     #[must_use]
     #[stable(feature = "fmt_flags", since = "1.5.0")]
+    #[cfg_attr(flux, flux::trusted)]
     pub fn sign_aware_zero_pad(&self) -> bool {
         self.options.flags & flags::SIGN_AWARE_ZERO_PAD_FLAG != 0
     }
 
     // FIXME: Decide what public API we want for these two flags.
     // https://github.com/rust-lang/rust/issues/48584
+    #[cfg_attr(flux, flux::trusted)]
     fn debug_lower_hex(&self) -> bool {
         self.options.flags & flags::DEBUG_LOWER_HEX_FLAG != 0
     }
+    #[cfg_attr(flux, flux::trusted)]
     fn debug_upper_hex(&self) -> bool {
         self.options.flags & flags::DEBUG_UPPER_HEX_FLAG != 0
     }
@@ -2438,6 +2554,7 @@ impl<'a> Formatter<'a> {
     /// );
     /// ```
     #[stable(feature = "debug_builders", since = "1.2.0")]
+    #[cfg_attr(flux, flux::trusted)]
     pub fn debug_struct<'b>(&'b mut self, name: &str) -> DebugStruct<'b, 'a> {
         builders::debug_struct_new(self, name)
     }
@@ -2447,6 +2564,7 @@ impl<'a> Formatter<'a> {
     /// faster for 1 field.
     #[doc(hidden)]
     #[unstable(feature = "fmt_helpers_for_derive", issue = "none")]
+    #[cfg_attr(flux, flux::trusted)]
     pub fn debug_struct_field1_finish<'b>(
         &'b mut self,
         name: &str,
@@ -2463,6 +2581,7 @@ impl<'a> Formatter<'a> {
     /// faster for 2 fields.
     #[doc(hidden)]
     #[unstable(feature = "fmt_helpers_for_derive", issue = "none")]
+    #[cfg_attr(flux, flux::trusted)]
     pub fn debug_struct_field2_finish<'b>(
         &'b mut self,
         name: &str,
@@ -2482,6 +2601,7 @@ impl<'a> Formatter<'a> {
     /// faster for 3 fields.
     #[doc(hidden)]
     #[unstable(feature = "fmt_helpers_for_derive", issue = "none")]
+    #[cfg_attr(flux, flux::trusted)]
     pub fn debug_struct_field3_finish<'b>(
         &'b mut self,
         name: &str,
@@ -2504,6 +2624,7 @@ impl<'a> Formatter<'a> {
     /// faster for 4 fields.
     #[doc(hidden)]
     #[unstable(feature = "fmt_helpers_for_derive", issue = "none")]
+    #[cfg_attr(flux, flux::trusted)]
     pub fn debug_struct_field4_finish<'b>(
         &'b mut self,
         name: &str,
@@ -2529,6 +2650,7 @@ impl<'a> Formatter<'a> {
     /// faster for 5 fields.
     #[doc(hidden)]
     #[unstable(feature = "fmt_helpers_for_derive", issue = "none")]
+    #[cfg_attr(flux, flux::trusted)]
     pub fn debug_struct_field5_finish<'b>(
         &'b mut self,
         name: &str,
@@ -2556,6 +2678,7 @@ impl<'a> Formatter<'a> {
     /// For the cases not covered by `debug_struct_field[12345]_finish`.
     #[doc(hidden)]
     #[unstable(feature = "fmt_helpers_for_derive", issue = "none")]
+    #[cfg_attr(flux, flux::trusted)]
     pub fn debug_struct_fields_finish<'b>(
         &'b mut self,
         name: &str,
@@ -2597,6 +2720,7 @@ impl<'a> Formatter<'a> {
     /// );
     /// ```
     #[stable(feature = "debug_builders", since = "1.2.0")]
+    #[cfg_attr(flux, flux::trusted)]
     pub fn debug_tuple<'b>(&'b mut self, name: &str) -> DebugTuple<'b, 'a> {
         builders::debug_tuple_new(self, name)
     }
@@ -2606,6 +2730,7 @@ impl<'a> Formatter<'a> {
     /// for 1 field.
     #[doc(hidden)]
     #[unstable(feature = "fmt_helpers_for_derive", issue = "none")]
+    #[cfg_attr(flux, flux::trusted)]
     pub fn debug_tuple_field1_finish<'b>(&'b mut self, name: &str, value1: &dyn Debug) -> Result {
         let mut builder = builders::debug_tuple_new(self, name);
         builder.field(value1);
@@ -2617,6 +2742,7 @@ impl<'a> Formatter<'a> {
     /// for 2 fields.
     #[doc(hidden)]
     #[unstable(feature = "fmt_helpers_for_derive", issue = "none")]
+    #[cfg_attr(flux, flux::trusted)]
     pub fn debug_tuple_field2_finish<'b>(
         &'b mut self,
         name: &str,
@@ -2634,6 +2760,7 @@ impl<'a> Formatter<'a> {
     /// for 3 fields.
     #[doc(hidden)]
     #[unstable(feature = "fmt_helpers_for_derive", issue = "none")]
+    #[cfg_attr(flux, flux::trusted)]
     pub fn debug_tuple_field3_finish<'b>(
         &'b mut self,
         name: &str,
@@ -2653,6 +2780,7 @@ impl<'a> Formatter<'a> {
     /// for 4 fields.
     #[doc(hidden)]
     #[unstable(feature = "fmt_helpers_for_derive", issue = "none")]
+    #[cfg_attr(flux, flux::trusted)]
     pub fn debug_tuple_field4_finish<'b>(
         &'b mut self,
         name: &str,
@@ -2674,6 +2802,7 @@ impl<'a> Formatter<'a> {
     /// for 5 fields.
     #[doc(hidden)]
     #[unstable(feature = "fmt_helpers_for_derive", issue = "none")]
+    #[cfg_attr(flux, flux::trusted)]
     pub fn debug_tuple_field5_finish<'b>(
         &'b mut self,
         name: &str,
@@ -2696,6 +2825,7 @@ impl<'a> Formatter<'a> {
     /// binaries. For the cases not covered by `debug_tuple_field[12345]_finish`.
     #[doc(hidden)]
     #[unstable(feature = "fmt_helpers_for_derive", issue = "none")]
+    #[cfg_attr(flux, flux::trusted)]
     pub fn debug_tuple_fields_finish<'b>(
         &'b mut self,
         name: &str,
@@ -2727,6 +2857,7 @@ impl<'a> Formatter<'a> {
     /// assert_eq!(format!("{:?}", Foo(vec![10, 11])), "[10, 11]");
     /// ```
     #[stable(feature = "debug_builders", since = "1.2.0")]
+    #[cfg_attr(flux, flux::trusted)]
     pub fn debug_list<'b>(&'b mut self) -> DebugList<'b, 'a> {
         builders::debug_list_new(self)
     }
@@ -2785,6 +2916,7 @@ impl<'a> Formatter<'a> {
     /// }
     /// ```
     #[stable(feature = "debug_builders", since = "1.2.0")]
+    #[cfg_attr(flux, flux::trusted)]
     pub fn debug_set<'b>(&'b mut self) -> DebugSet<'b, 'a> {
         builders::debug_set_new(self)
     }
@@ -2811,6 +2943,7 @@ impl<'a> Formatter<'a> {
     ///  );
     /// ```
     #[stable(feature = "debug_builders", since = "1.2.0")]
+    #[cfg_attr(flux, flux::trusted)]
     pub fn debug_map<'b>(&'b mut self) -> DebugMap<'b, 'a> {
         builders::debug_map_new(self)
     }
@@ -2829,16 +2962,20 @@ impl<'a> Formatter<'a> {
 }
 
 #[stable(since = "1.2.0", feature = "formatter_write")]
+#[cfg_attr(flux, flux::trusted)]
 impl Write for Formatter<'_> {
+    #[cfg_attr(flux, flux::trusted)]
     fn write_str(&mut self, s: &str) -> Result {
         self.buf.write_str(s)
     }
 
+    #[cfg_attr(flux, flux::trusted)]
     fn write_char(&mut self, c: char) -> Result {
         self.buf.write_char(c)
     }
 
     #[inline]
+    #[cfg_attr(flux, flux::trusted)]
     fn write_fmt(&mut self, args: Arguments<'_>) -> Result {
         if let Some(s) = args.as_statically_known_str() {
             self.buf.write_str(s)
@@ -2849,7 +2986,9 @@ impl Write for Formatter<'_> {
 }
 
 #[stable(feature = "rust1", since = "1.0.0")]
+#[cfg_attr(flux, flux::trusted)]
 impl Display for Error {
+    #[cfg_attr(flux, flux::trusted)]
     fn fmt(&self, f: &mut Formatter<'_>) -> Result {
         Display::fmt("an error occurred when formatting an argument", f)
     }
@@ -2861,12 +3000,16 @@ macro_rules! fmt_refs {
     ($($tr:ident),*) => {
         $(
         #[stable(feature = "rust1", since = "1.0.0")]
+
         impl<T: PointeeSized + $tr> $tr for &T {
-            fn fmt(&self, f: &mut Formatter<'_>) -> Result { $tr::fmt(&**self, f) }
+#[cfg_attr(flux, flux::trusted)]
+fn fmt(&self, f: &mut Formatter<'_>) -> Result { $tr::fmt(&**self, f) }
         }
         #[stable(feature = "rust1", since = "1.0.0")]
+
         impl<T: PointeeSized + $tr> $tr for &mut T {
-            fn fmt(&self, f: &mut Formatter<'_>) -> Result { $tr::fmt(&**self, f) }
+#[cfg_attr(flux, flux::trusted)]
+fn fmt(&self, f: &mut Formatter<'_>) -> Result { $tr::fmt(&**self, f) }
         }
         )*
     }
@@ -2875,44 +3018,55 @@ macro_rules! fmt_refs {
 fmt_refs! { Debug, Display, Octal, Binary, LowerHex, UpperHex, LowerExp, UpperExp }
 
 #[unstable(feature = "never_type", issue = "35121")]
+#[cfg_attr(flux, flux::trusted)]
 impl Debug for ! {
     #[inline]
+    #[cfg_attr(flux, flux::trusted)]
     fn fmt(&self, _: &mut Formatter<'_>) -> Result {
         *self
     }
 }
 
 #[unstable(feature = "never_type", issue = "35121")]
+#[cfg_attr(flux, flux::trusted)]
 impl Display for ! {
     #[inline]
+    #[cfg_attr(flux, flux::trusted)]
     fn fmt(&self, _: &mut Formatter<'_>) -> Result {
         *self
     }
 }
 
 #[stable(feature = "rust1", since = "1.0.0")]
+#[cfg_attr(flux, flux::trusted)]
 impl Debug for bool {
     #[inline]
+    #[cfg_attr(flux, flux::trusted)]
     fn fmt(&self, f: &mut Formatter<'_>) -> Result {
         Display::fmt(self, f)
     }
 }
 
 #[stable(feature = "rust1", since = "1.0.0")]
+#[cfg_attr(flux, flux::trusted)]
 impl Display for bool {
+    #[cfg_attr(flux, flux::trusted)]
     fn fmt(&self, f: &mut Formatter<'_>) -> Result {
         Display::fmt(if *self { "true" } else { "false" }, f)
     }
 }
 
 #[stable(feature = "rust1", since = "1.0.0")]
+#[cfg_attr(flux, flux::trusted)]
 impl Debug for str {
+    #[cfg_attr(flux, flux::trusted)]
     fn fmt(&self, f: &mut Formatter<'_>) -> Result {
         f.write_char('"')?;
 
         // substring we know is printable
         let mut printable_range = 0..0;
 
+        #[cfg_attr(flux, flux::trusted)]
         fn needs_escape(b: u8) -> bool {
             b > 0x7E || b < 0x20 || b == b'\\' || b == b'"'
         }
@@ -2955,14 +3109,18 @@ impl Debug for str {
 }
 
 #[stable(feature = "rust1", since = "1.0.0")]
+#[cfg_attr(flux, flux::trusted)]
 impl Display for str {
+    #[cfg_attr(flux, flux::trusted)]
     fn fmt(&self, f: &mut Formatter<'_>) -> Result {
         f.pad(self)
     }
 }
 
 #[stable(feature = "rust1", since = "1.0.0")]
+#[cfg_attr(flux, flux::trusted)]
 impl Debug for char {
+    #[cfg_attr(flux, flux::trusted)]
     fn fmt(&self, f: &mut Formatter<'_>) -> Result {
         f.write_char('\'')?;
         let esc = self.escape_debug_ext(EscapeDebugExtArgs {
@@ -2976,7 +3134,9 @@ impl Debug for char {
 }
 
 #[stable(feature = "rust1", since = "1.0.0")]
+#[cfg_attr(flux, flux::trusted)]
 impl Display for char {
+    #[cfg_attr(flux, flux::trusted)]
     fn fmt(&self, f: &mut Formatter<'_>) -> Result {
         if f.options.flags & (flags::WIDTH_FLAG | flags::PRECISION_FLAG) == 0 {
             f.write_char(*self)
@@ -2987,7 +3147,9 @@ impl Display for char {
 }
 
 #[stable(feature = "rust1", since = "1.0.0")]
+#[cfg_attr(flux, flux::trusted)]
 impl<T: PointeeSized> Pointer for *const T {
+    #[cfg_attr(flux, flux::trusted)]
     fn fmt(&self, f: &mut Formatter<'_>) -> Result {
         if <<T as core::ptr::Pointee>::Metadata as core::unit::IsUnit>::is_unit() {
             pointer_fmt_inner(self.expose_provenance(), f)
@@ -3008,6 +3170,7 @@ impl<T: PointeeSized> Pointer for *const T {
 /// `fn(...) -> ...` without using [problematic] "Oxford Casts".
 ///
 /// [problematic]: https://github.com/rust-lang/rust/issues/95489
+
 pub(crate) fn pointer_fmt_inner(ptr_addr: usize, f: &mut Formatter<'_>) -> Result {
     let old_options = f.options;
 
@@ -3032,21 +3195,27 @@ pub(crate) fn pointer_fmt_inner(ptr_addr: usize, f: &mut Formatter<'_>) -> Resul
 }
 
 #[stable(feature = "rust1", since = "1.0.0")]
+#[cfg_attr(flux, flux::trusted)]
 impl<T: PointeeSized> Pointer for *mut T {
+    #[cfg_attr(flux, flux::trusted)]
     fn fmt(&self, f: &mut Formatter<'_>) -> Result {
         Pointer::fmt(&(*self as *const T), f)
     }
 }
 
 #[stable(feature = "rust1", since = "1.0.0")]
+#[cfg_attr(flux, flux::trusted)]
 impl<T: PointeeSized> Pointer for &T {
+    #[cfg_attr(flux, flux::trusted)]
     fn fmt(&self, f: &mut Formatter<'_>) -> Result {
         Pointer::fmt(&(*self as *const T), f)
     }
 }
 
 #[stable(feature = "rust1", since = "1.0.0")]
+#[cfg_attr(flux, flux::trusted)]
 impl<T: PointeeSized> Pointer for &mut T {
+    #[cfg_attr(flux, flux::trusted)]
     fn fmt(&self, f: &mut Formatter<'_>) -> Result {
         Pointer::fmt(&(&**self as *const T), f)
     }
@@ -3055,13 +3224,17 @@ impl<T: PointeeSized> Pointer for &mut T {
 // Implementation of Display/Debug for various core types
 
 #[stable(feature = "rust1", since = "1.0.0")]
+#[cfg_attr(flux, flux::trusted)]
 impl<T: PointeeSized> Debug for *const T {
+    #[cfg_attr(flux, flux::trusted)]
     fn fmt(&self, f: &mut Formatter<'_>) -> Result {
         Pointer::fmt(self, f)
     }
 }
 #[stable(feature = "rust1", since = "1.0.0")]
+#[cfg_attr(flux, flux::trusted)]
 impl<T: PointeeSized> Debug for *mut T {
+    #[cfg_attr(flux, flux::trusted)]
     fn fmt(&self, f: &mut Formatter<'_>) -> Result {
         Pointer::fmt(self, f)
     }
@@ -3077,9 +3250,11 @@ macro_rules! tuple {
         maybe_tuple_doc! {
             $($name)+ @
             #[stable(feature = "rust1", since = "1.0.0")]
+
             impl<$($name:Debug),+> Debug for ($($name,)+) {
                 #[allow(non_snake_case, unused_assignments)]
-                fn fmt(&self, f: &mut Formatter<'_>) -> Result {
+#[cfg_attr(flux, flux::trusted)]
+fn fmt(&self, f: &mut Formatter<'_>) -> Result {
                     let mut builder = f.debug_tuple("");
                     let ($(ref $name,)+) = *self;
                     $(
@@ -3111,35 +3286,45 @@ macro_rules! maybe_tuple_doc {
 tuple! { E, D, C, B, A, Z, Y, X, W, V, U, T, }
 
 #[stable(feature = "rust1", since = "1.0.0")]
+#[cfg_attr(flux, flux::trusted)]
 impl<T: Debug> Debug for [T] {
+    #[cfg_attr(flux, flux::trusted)]
     fn fmt(&self, f: &mut Formatter<'_>) -> Result {
         f.debug_list().entries(self.iter()).finish()
     }
 }
 
 #[stable(feature = "rust1", since = "1.0.0")]
+#[cfg_attr(flux, flux::trusted)]
 impl Debug for () {
     #[inline]
+    #[cfg_attr(flux, flux::trusted)]
     fn fmt(&self, f: &mut Formatter<'_>) -> Result {
         f.pad("()")
     }
 }
 #[stable(feature = "rust1", since = "1.0.0")]
+#[cfg_attr(flux, flux::trusted)]
 impl<T: ?Sized> Debug for PhantomData<T> {
+    #[cfg_attr(flux, flux::trusted)]
     fn fmt(&self, f: &mut Formatter<'_>) -> Result {
         write!(f, "PhantomData<{}>", crate::any::type_name::<T>())
     }
 }
 
 #[stable(feature = "rust1", since = "1.0.0")]
+#[cfg_attr(flux, flux::trusted)]
 impl<T: Copy + Debug> Debug for Cell<T> {
+    #[cfg_attr(flux, flux::trusted)]
     fn fmt(&self, f: &mut Formatter<'_>) -> Result {
         f.debug_struct("Cell").field("value", &self.get()).finish()
     }
 }
 
 #[stable(feature = "rust1", since = "1.0.0")]
+#[cfg_attr(flux, flux::trusted)]
 impl<T: ?Sized + Debug> Debug for RefCell<T> {
+    #[cfg_attr(flux, flux::trusted)]
     fn fmt(&self, f: &mut Formatter<'_>) -> Result {
         let mut d = f.debug_struct("RefCell");
         match self.try_borrow() {
@@ -3151,28 +3336,36 @@ impl<T: ?Sized + Debug> Debug for RefCell<T> {
 }
 
 #[stable(feature = "rust1", since = "1.0.0")]
+#[cfg_attr(flux, flux::trusted)]
 impl<T: ?Sized + Debug> Debug for Ref<'_, T> {
+    #[cfg_attr(flux, flux::trusted)]
     fn fmt(&self, f: &mut Formatter<'_>) -> Result {
         Debug::fmt(&**self, f)
     }
 }
 
 #[stable(feature = "rust1", since = "1.0.0")]
+#[cfg_attr(flux, flux::trusted)]
 impl<T: ?Sized + Debug> Debug for RefMut<'_, T> {
+    #[cfg_attr(flux, flux::trusted)]
     fn fmt(&self, f: &mut Formatter<'_>) -> Result {
         Debug::fmt(&*(self.deref()), f)
     }
 }
 
 #[stable(feature = "core_impl_debug", since = "1.9.0")]
+#[cfg_attr(flux, flux::trusted)]
 impl<T: ?Sized> Debug for UnsafeCell<T> {
+    #[cfg_attr(flux, flux::trusted)]
     fn fmt(&self, f: &mut Formatter<'_>) -> Result {
         f.debug_struct("UnsafeCell").finish_non_exhaustive()
     }
 }
 
 #[unstable(feature = "sync_unsafe_cell", issue = "95439")]
+#[cfg_attr(flux, flux::trusted)]
 impl<T: ?Sized> Debug for SyncUnsafeCell<T> {
+    #[cfg_attr(flux, flux::trusted)]
     fn fmt(&self, f: &mut Formatter<'_>) -> Result {
         f.debug_struct("SyncUnsafeCell").finish_non_exhaustive()
     }

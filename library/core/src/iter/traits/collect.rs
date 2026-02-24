@@ -254,12 +254,18 @@ pub trait FromIterator<A>: Sized {
         Self = "[]",
         label = "`{Self}` is not an iterator; try calling `.into_iter()` or `.iter()`"
     ),
-    on(Self = "&[]", label = "`{Self}` is not an iterator; try calling `.iter()`"),
+    on(
+        Self = "&[]",
+        label = "`{Self}` is not an iterator; try calling `.iter()`"
+    ),
     on(
         Self = "alloc::vec::Vec<T, A>",
         label = "`{Self}` is not an iterator; try calling `.into_iter()` or `.iter()`"
     ),
-    on(Self = "&str", label = "`{Self}` is not an iterator; try calling `.chars()` or `.bytes()`"),
+    on(
+        Self = "&str",
+        label = "`{Self}` is not an iterator; try calling `.chars()` or `.bytes()`"
+    ),
     on(
         Self = "alloc::string::String",
         label = "`{Self}` is not an iterator; try calling `.chars()` or `.bytes()`"
@@ -420,6 +426,7 @@ pub trait Extend<A> {
 
     /// Extends a collection with exactly one element.
     #[unstable(feature = "extend_one", issue = "72631")]
+    #[cfg_attr(flux, flux::trusted)]
     #[cfg_attr(flux, flux::spec(fn(s: &mut Self[@slf], item: A)
         requires Self::can_extend_one(slf)
         ensures s : Self{ v : Self::post_extend_one(slf, v) }
@@ -433,6 +440,7 @@ pub trait Extend<A> {
     ///
     /// The default implementation does nothing.
     #[unstable(feature = "extend_one", issue = "72631")]
+    #[cfg_attr(flux, flux::trusted)]
     #[cfg_attr(flux, flux::spec(fn(s: &mut Self[@slf], additional: usize)
         requires Self::can_reserve(slf, additional)
         ensures s : Self{ v : Self::post_reserve(slf, additional, v) }
@@ -454,6 +462,7 @@ pub trait Extend<A> {
     // This method is for internal usage only. It is only on the trait because of specialization's limitations.
     #[unstable(feature = "extend_one_unchecked", issue = "none")]
     #[doc(hidden)]
+    #[cfg_attr(flux, flux::trusted)]
     unsafe fn extend_one_unchecked(&mut self, item: A)
     where
         Self: Sized,
@@ -463,6 +472,7 @@ pub trait Extend<A> {
 }
 
 #[stable(feature = "extend_for_unit", since = "1.28.0")]
+#[cfg_attr(flux, flux::ignore)]
 impl Extend<()> for () {
     fn extend<T: IntoIterator<Item = ()>>(&mut self, iter: T) {
         iter.into_iter().for_each(drop)
@@ -474,6 +484,7 @@ impl Extend<()> for () {
 /// 1- and 3- through 12-ary tuples were stabilized after 2-tuples, in 1.85.0.
 #[doc(fake_variadic)] // the other implementations are below.
 #[stable(feature = "extend_for_tuple", since = "1.56.0")]
+#[cfg_attr(flux, flux::ignore)]
 impl<T, ExtendT> Extend<(T,)> for (ExtendT,)
 where
     ExtendT: Extend<T>,
@@ -552,6 +563,7 @@ where
 
 /// An implementation of [`extend`](Extend::extend) that calls `extend_one` or
 /// `extend_one_unchecked` for each element of the iterator.
+#[cfg_attr(flux, flux::ignore)]
 fn default_extend<ExtendT, I, T>(collection: &mut ExtendT, iter: I)
 where
     ExtendT: Extend<T>,
@@ -585,6 +597,7 @@ where
         move |item| unsafe { collection.extend_one_unchecked(item) }
     }
 
+    #[cfg_attr(flux, flux::ignore)]
     impl<ExtendT, I, T> SpecExtend<I> for ExtendT
     where
         ExtendT: Extend<T>,
@@ -630,6 +643,7 @@ macro_rules! impl_extend_tuple {
     ($(($ty:tt, $extend_ty:tt, $index:tt)),+) => {
         #[doc(hidden)]
         #[stable(feature = "extend_for_tuple", since = "1.56.0")]
+        #[cfg_attr(flux, flux::ignore)]
         impl<$($ty,)+ $($extend_ty,)+> Extend<($($ty,)+)> for ($($extend_ty,)+)
         where
             $($extend_ty: Extend<$ty>,)+
@@ -672,8 +686,21 @@ macro_rules! impl_extend_tuple {
 impl_extend_tuple!((A, ExA, 0), (B, ExB, 1));
 impl_extend_tuple!((A, ExA, 0), (B, ExB, 1), (C, ExC, 2));
 impl_extend_tuple!((A, ExA, 0), (B, ExB, 1), (C, ExC, 2), (D, ExD, 3));
-impl_extend_tuple!((A, ExA, 0), (B, ExB, 1), (C, ExC, 2), (D, ExD, 3), (E, ExE, 4));
-impl_extend_tuple!((A, ExA, 0), (B, ExB, 1), (C, ExC, 2), (D, ExD, 3), (E, ExE, 4), (F, ExF, 5));
+impl_extend_tuple!(
+    (A, ExA, 0),
+    (B, ExB, 1),
+    (C, ExC, 2),
+    (D, ExD, 3),
+    (E, ExE, 4)
+);
+impl_extend_tuple!(
+    (A, ExA, 0),
+    (B, ExB, 1),
+    (C, ExC, 2),
+    (D, ExD, 3),
+    (E, ExE, 4),
+    (F, ExF, 5)
+);
 impl_extend_tuple!(
     (A, ExA, 0),
     (B, ExB, 1),
