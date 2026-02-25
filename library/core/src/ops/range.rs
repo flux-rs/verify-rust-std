@@ -79,12 +79,15 @@ impl fmt::Debug for RangeFull {
 #[derive(Eq, Hash)]
 #[derive_const(Clone, Default, PartialEq)] // not Copy -- see #27186
 #[stable(feature = "rust1", since = "1.0.0")]
+#[cfg_attr(flux, flux::refined_by(start: Idx, end: Idx))]
 pub struct Range<Idx> {
     /// The lower bound of the range (inclusive).
     #[stable(feature = "rust1", since = "1.0.0")]
+    #[cfg_attr(flux, flux::field(Idx[start]))]
     pub start: Idx,
     /// The upper bound of the range (exclusive).
     #[stable(feature = "rust1", since = "1.0.0")]
+    #[cfg_attr(flux, flux::field(Idx[end]))]
     pub end: Idx,
 }
 

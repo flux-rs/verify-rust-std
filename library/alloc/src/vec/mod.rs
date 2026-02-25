@@ -435,8 +435,14 @@ mod spec_extend;
 #[rustc_insignificant_dtor]
 #[doc(alias = "list")]
 #[doc(alias = "vector")]
+#[cfg_attr(flux, flux::refined_by(len: int, cap: int))]
+#[cfg_attr(flux, flux::invariant(len <= isize::MAX))]
+#[cfg_attr(flux, flux::invariant(cap <= isize::MAX))]
+#[cfg_attr(flux, flux::invariant(len <= cap))]
 pub struct Vec<T, #[unstable(feature = "allocator_api", issue = "32838")] A: Allocator = Global> {
+    #[cfg_attr(flux, flux::field(RawVec<T, A>[cap]))]
     buf: RawVec<T, A>,
+    #[cfg_attr(flux, flux::field(usize[len]))]
     len: usize,
 }
 
@@ -1190,6 +1196,7 @@ impl<T, A: Allocator> Vec<T, A> {
     /// ```
     #[must_use = "losing the pointer will leak memory"]
     #[unstable(feature = "allocator_api", issue = "32838")]
+    #[cfg_attr(flux, flux::spec(fn(Self[@slf]) -> (_, usize[slf.len], usize[slf.cap], A)))]
     pub fn into_raw_parts_with_alloc(self) -> (*mut T, usize, usize, A) {
         let mut me = ManuallyDrop::new(self);
         let len = me.len();

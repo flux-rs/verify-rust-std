@@ -402,6 +402,8 @@ impl<I: Iterator> IntoIterator for I {
     fn post_reserve(self: Self, additional: int, new_self: Self) -> bool
     fn can_extend_one(self: Self) -> bool
     fn post_extend_one(self: Self, new_self: Self) -> bool
+    fn can_extend_one_unchecked(self: Self) -> bool
+    fn post_extend_one_unchecked(self: Self, new_self: Self) -> bool
 ))]
 pub trait Extend<A> {
     /// Extends a collection with the contents of an iterator.
@@ -463,6 +465,11 @@ pub trait Extend<A> {
     #[unstable(feature = "extend_one_unchecked", issue = "none")]
     #[doc(hidden)]
     #[cfg_attr(flux, flux::trusted)]
+    #[cfg_attr(flux, flux::spec(fn(s: &mut Self[@slf], item: A)
+        requires Self::can_extend_one_unchecked(slf)
+        ensures s : Self{ v : Self::post_extend_one_unchecked(slf, v) }
+
+    ))]
     unsafe fn extend_one_unchecked(&mut self, item: A)
     where
         Self: Sized,

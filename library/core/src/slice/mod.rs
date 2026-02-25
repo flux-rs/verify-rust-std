@@ -116,6 +116,8 @@ impl<T> [T] {
     #[rustc_no_implicit_autorefs]
     #[inline]
     #[must_use]
+    #[cfg_attr(flux, flux::trusted)]
+    #[cfg_attr(flux, flux::spec(fn(&Self[@slf]) -> usize[slf]))]
     pub const fn len(&self) -> usize {
         ptr::metadata(self)
     }

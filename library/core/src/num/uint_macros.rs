@@ -899,6 +899,7 @@ macro_rules! uint_impl {
                       without modifying the original"]
         #[inline(always)]
         #[track_caller]
+        #[cfg_attr(flux, flux::spec(fn(self: Self, rhs: Self{self - rhs >= 0}) -> Self[self - rhs]))]
         #[requires(!self.overflowing_sub(rhs).1)] // Preconditions: No overflow should occur
         pub const unsafe fn unchecked_sub(self, rhs: Self) -> Self {
             assert_unsafe_precondition!(

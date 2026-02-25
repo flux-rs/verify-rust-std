@@ -177,6 +177,7 @@ impl Alignment {
     #[ensures(|result| *result > 0)]
     #[ensures(|result| *result == !(self.as_usize() -1))]
     #[ensures(|result| self.as_usize() & *result == self.as_usize())]
+    #[cfg_attr(flux, flux::trusted)]
     pub const fn mask(self) -> usize {
         // SAFETY: The alignment is always nonzero, and therefore decrementing won't overflow.
         !(unsafe { self.as_usize().unchecked_sub(1) })
