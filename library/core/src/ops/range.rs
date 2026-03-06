@@ -281,9 +281,11 @@ impl<Idx: PartialOrd<Idx>> RangeFrom<Idx> {
 #[derive(Copy, Eq, Hash)]
 #[derive_const(Clone, PartialEq)]
 #[stable(feature = "rust1", since = "1.0.0")]
+#[cfg_attr(flux, flux::refined_by(end: Idx))]
 pub struct RangeTo<Idx> {
     /// The upper bound of the range (exclusive).
     #[stable(feature = "rust1", since = "1.0.0")]
+    #[cfg_attr(flux, flux::field(Idx[end]))]
     pub end: Idx,
 }
 
@@ -692,15 +694,20 @@ impl<Idx: PartialOrd<Idx>> RangeToInclusive<Idx> {
 #[stable(feature = "collections_bound", since = "1.17.0")]
 #[derive(Copy, Debug, Hash)]
 #[derive_const(Clone, Eq, PartialEq)]
+#[cfg_attr(flux, flux::opaque)]
+#[cfg_attr(flux, flux::refined_by(bounded: bool, included: bool))]
 pub enum Bound<T> {
     /// An inclusive bound.
     #[stable(feature = "collections_bound", since = "1.17.0")]
+    #[cfg_attr(flux, flux::variant((T) -> Bound<T>[true, true]))]
     Included(#[stable(feature = "collections_bound", since = "1.17.0")] T),
     /// An exclusive bound.
     #[stable(feature = "collections_bound", since = "1.17.0")]
+    #[cfg_attr(flux, flux::variant((T) -> Bound<T>[true, false]))]
     Excluded(#[stable(feature = "collections_bound", since = "1.17.0")] T),
     /// An infinite endpoint. Indicates that there is no bound in this direction.
     #[stable(feature = "collections_bound", since = "1.17.0")]
+    #[cfg_attr(flux, flux::variant(Bound<T>[false, false]))]
     Unbounded,
 }
 
@@ -1048,6 +1055,7 @@ use self::Bound::{Excluded, Included, Unbounded};
 
 #[stable(feature = "collections_range", since = "1.28.0")]
 #[rustc_const_unstable(feature = "const_range", issue = "none")]
+#[cfg_attr(flux, flux::ignore)]
 impl<T: ?Sized> const RangeBounds<T> for RangeFull {
     fn start_bound(&self) -> Bound<&T> {
         Unbounded
@@ -1067,6 +1075,7 @@ impl<T> const IntoBounds<T> for RangeFull {
 
 #[stable(feature = "collections_range", since = "1.28.0")]
 #[rustc_const_unstable(feature = "const_range", issue = "none")]
+#[cfg_attr(flux, flux::ignore)]
 impl<T> const RangeBounds<T> for RangeFrom<T> {
     fn start_bound(&self) -> Bound<&T> {
         Included(&self.start)
@@ -1090,6 +1099,7 @@ impl<T> const RangeBounds<T> for RangeTo<T> {
     fn start_bound(&self) -> Bound<&T> {
         Unbounded
     }
+
     fn end_bound(&self) -> Bound<&T> {
         Excluded(&self.end)
     }
@@ -1105,6 +1115,7 @@ impl<T> const IntoBounds<T> for RangeTo<T> {
 
 #[stable(feature = "collections_range", since = "1.28.0")]
 #[rustc_const_unstable(feature = "const_range", issue = "none")]
+#[cfg_attr(flux, flux::ignore)]
 impl<T> const RangeBounds<T> for Range<T> {
     fn start_bound(&self) -> Bound<&T> {
         Included(&self.start)
@@ -1124,6 +1135,7 @@ impl<T> const IntoBounds<T> for Range<T> {
 
 #[stable(feature = "collections_range", since = "1.28.0")]
 #[rustc_const_unstable(feature = "const_range", issue = "none")]
+#[cfg_attr(flux, flux::ignore)]
 impl<T> const RangeBounds<T> for RangeInclusive<T> {
     fn start_bound(&self) -> Bound<&T> {
         Included(&self.start)
@@ -1158,6 +1170,7 @@ impl<T> const IntoBounds<T> for RangeInclusive<T> {
 
 #[stable(feature = "collections_range", since = "1.28.0")]
 #[rustc_const_unstable(feature = "const_range", issue = "none")]
+#[cfg_attr(flux, flux::ignore)]
 impl<T> const RangeBounds<T> for RangeToInclusive<T> {
     fn start_bound(&self) -> Bound<&T> {
         Unbounded
@@ -1177,6 +1190,7 @@ impl<T> const IntoBounds<T> for RangeToInclusive<T> {
 
 #[stable(feature = "collections_range", since = "1.28.0")]
 #[rustc_const_unstable(feature = "const_range", issue = "none")]
+#[cfg_attr(flux, flux::ignore)]
 impl<T> const RangeBounds<T> for (Bound<T>, Bound<T>) {
     fn start_bound(&self) -> Bound<&T> {
         match *self {
@@ -1205,6 +1219,7 @@ impl<T> const IntoBounds<T> for (Bound<T>, Bound<T>) {
 
 #[stable(feature = "collections_range", since = "1.28.0")]
 #[rustc_const_unstable(feature = "const_range", issue = "none")]
+#[cfg_attr(flux, flux::ignore)]
 impl<'a, T: ?Sized + 'a> const RangeBounds<T> for (Bound<&'a T>, Bound<&'a T>) {
     fn start_bound(&self) -> Bound<&T> {
         self.0
@@ -1223,6 +1238,7 @@ impl<'a, T: ?Sized + 'a> const RangeBounds<T> for (Bound<&'a T>, Bound<&'a T>) {
 /// i.e. replace `start..` with `(Bound::Included(start), Bound::Unbounded)`.
 #[stable(feature = "collections_range", since = "1.28.0")]
 #[rustc_const_unstable(feature = "const_range", issue = "none")]
+#[cfg_attr(flux, flux::ignore)]
 impl<T> const RangeBounds<T> for RangeFrom<&T> {
     fn start_bound(&self) -> Bound<&T> {
         Included(self.start)
@@ -1240,6 +1256,7 @@ impl<T> const RangeBounds<T> for RangeFrom<&T> {
 /// i.e. replace `..end` with `(Bound::Unbounded, Bound::Excluded(end))`.
 #[stable(feature = "collections_range", since = "1.28.0")]
 #[rustc_const_unstable(feature = "const_range", issue = "none")]
+#[cfg_attr(flux, flux::ignore)]
 impl<T> const RangeBounds<T> for RangeTo<&T> {
     fn start_bound(&self) -> Bound<&T> {
         Unbounded
@@ -1257,6 +1274,7 @@ impl<T> const RangeBounds<T> for RangeTo<&T> {
 /// i.e. replace `start..end` with `(Bound::Included(start), Bound::Excluded(end))`.
 #[stable(feature = "collections_range", since = "1.28.0")]
 #[rustc_const_unstable(feature = "const_range", issue = "none")]
+#[cfg_attr(flux, flux::ignore)]
 impl<T> const RangeBounds<T> for Range<&T> {
     fn start_bound(&self) -> Bound<&T> {
         Included(self.start)
@@ -1274,6 +1292,7 @@ impl<T> const RangeBounds<T> for Range<&T> {
 /// i.e. replace `start..=end` with `(Bound::Included(start), Bound::Included(end))`.
 #[stable(feature = "collections_range", since = "1.28.0")]
 #[rustc_const_unstable(feature = "const_range", issue = "none")]
+#[cfg_attr(flux, flux::ignore)]
 impl<T> const RangeBounds<T> for RangeInclusive<&T> {
     fn start_bound(&self) -> Bound<&T> {
         Included(self.start)
@@ -1291,6 +1310,7 @@ impl<T> const RangeBounds<T> for RangeInclusive<&T> {
 /// i.e. replace `..=end` with `(Bound::Unbounded, Bound::Included(end))`.
 #[stable(feature = "collections_range", since = "1.28.0")]
 #[rustc_const_unstable(feature = "const_range", issue = "none")]
+#[cfg_attr(flux, flux::ignore)]
 impl<T> const RangeBounds<T> for RangeToInclusive<&T> {
     fn start_bound(&self) -> Bound<&T> {
         Unbounded

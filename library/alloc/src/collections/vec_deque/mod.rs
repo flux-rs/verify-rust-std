@@ -97,6 +97,10 @@ use core::kani;
     fn is_cont(v: VecDeque) -> bool {
         v.head <= v.cap - v.len
     }
+
+    fn min(a: int, b: int) -> int {
+        if a < b { a } else { b }
+    }
 })]
 const _ : () = ();
 
@@ -284,6 +288,9 @@ impl<T, A: Allocator> VecDeque<T, A> {
     /// Returns a slice pointer into the buffer.
     /// `range` must lie inside `0..self.capacity()`.
     #[inline]
+    #[cfg_attr(flux, flux::spec(fn(&Self[@slf], range: Range<usize>) -> _
+        requires range.start >= 0, range.start <= range.end, range.end <= slf.cap
+    ))]
     unsafe fn buffer_range(&self, range: Range<usize>) -> *mut [T] {
         unsafe {
             ptr::slice_from_raw_parts_mut(self.ptr().add(range.start), range.end - range.start)
@@ -412,6 +419,7 @@ impl<T, A: Allocator> VecDeque<T, A> {
     /// Copies a contiguous block of memory len long from src to dst
     #[inline]
     #[cfg_attr(flux, flux::spec(fn(s: &mut Self[@slf], src: usize, dst: usize, len: usize)
+        requires dst + len <= slf.cap, src + len <= slf.cap
         ensures s : Self[slf]
     ))]
     unsafe fn copy(&mut self, src: usize, dst: usize, len: usize) {
@@ -439,6 +447,7 @@ impl<T, A: Allocator> VecDeque<T, A> {
     /// Copies a contiguous block of memory len long from src to dst
     #[inline]
     #[cfg_attr(flux, flux::spec(fn(s: &mut Self[@slf], src: usize, dst: usize, len: usize)
+        requires dst + len <= slf.cap, src + len <= slf.cap
         ensures s : Self[slf]
     ))]
     unsafe fn copy_nonoverlapping(&mut self, src: usize, dst: usize, len: usize) {
@@ -467,7 +476,9 @@ impl<T, A: Allocator> VecDeque<T, A> {
     /// (abs(dst - src) + len) must be no larger than capacity() (There must be at
     /// most one continuous overlapping region between src and dest).
     #[cfg_attr(flux, flux::spec(fn(s: &mut Self[@slf], src: usize, dst: usize, len: usize)
-        requires abs(dst - src) + len <= slf.cap
+        requires abs(dst - src) + len <= slf.cap || slf.cap - abs(dst - src) + len <= slf.cap,
+                 wrping_add(wrping_sub(dst, src), slf.cap) < slf.cap || wrping_sub(dst, src) < slf.cap,
+                 slf.cap >= src, slf.cap >= dst
         ensures s : Self[slf]
     ))]
     unsafe fn wrap_copy(&mut self, src: usize, dst: usize, len: usize) {
@@ -604,7 +615,8 @@ impl<T, A: Allocator> VecDeque<T, A> {
     /// Copies all values from `src` to `dst`, wrapping around if needed.
     /// Assumes capacity is sufficient.
     #[inline]
-    #[cfg_attr(flux, flux::spec(fn(s: &mut Self[@slf], dst: usize, src: &[T])
+    #[cfg_attr(flux, flux::spec(fn(s: &mut Self[@slf], dst: usize, src: &[T][@len])
+        requires len <= slf.cap
         ensures s : Self[slf]
     ))]
     unsafe fn copy_slice(&mut self, dst: usize, src: &[T]) {
@@ -724,7 +736,7 @@ impl<T, A: Allocator> VecDeque<T, A> {
     #[inline]
     #[cfg_attr(flux, flux::spec(fn(s: &mut Self[@slf], old_capacity: usize)
         requires slf.cap >= old_capacity && (slf.head <= old_capacity) && (old_capacity == 0 || slf.head < old_capacity)
-        ensures s : Self{ v : v.head >= slf.head && v.len == slf.len && v.cap == slf.cap }
+        ensures s : Self{ v : v.head >= slf.head && v.len == slf.len && v.cap == slf.cap },
     ))]
     unsafe fn handle_capacity_increase(&mut self, old_capacity: usize) {
         let new_capacity = self.capacity();
@@ -1021,6 +1033,7 @@ impl<T, A: Allocator> VecDeque<T, A> {
     /// assert_eq!(buf.get(1), Some(&4));
     /// ```
     #[stable(feature = "rust1", since = "1.0.0")]
+    #[cfg_attr(flux, flux::spec(fn(&Self[@slf], index: usize) -> Option<&T>[index < slf.len]))]
     pub fn get(&self, index: usize) -> Option<&T> {
         if index < self.len {
             let idx = self.to_physical_idx(index);
@@ -1051,6 +1064,9 @@ impl<T, A: Allocator> VecDeque<T, A> {
     /// assert_eq!(buf[1], 7);
     /// ```
     #[stable(feature = "rust1", since = "1.0.0")]
+    #[cfg_attr(flux, flux::spec(fn(s : &mut Self[@slf], index: usize) -> Option<&mut T>[index < slf.len]
+        ensures s : Self[slf]
+    ))]
     pub fn get_mut(&mut self, index: usize) -> Option<&mut T> {
         if index < self.len {
             let idx = self.to_physical_idx(index);
@@ -1086,6 +1102,7 @@ impl<T, A: Allocator> VecDeque<T, A> {
     #[stable(feature = "rust1", since = "1.0.0")]
     #[cfg_attr(flux, flux::spec(fn(s: &mut Self[@slf], i: usize, j: usize)
         requires i < slf.len && j < slf.len
+        ensures s : Self[slf]
     ))]
     pub fn swap(&mut self, i: usize, j: usize) {
         assert!(i < self.len());
@@ -1345,7 +1362,7 @@ impl<T, A: Allocator> VecDeque<T, A> {
     /// assert!(buf.capacity() >= 4);
     /// ```
     #[stable(feature = "shrink_to", since = "1.56.0")]
-    #[cfg_attr(flux, flux::trusted(reason = "capacity change relies on extern specs"))]
+    #[cfg_attr(flux, flux::trusted(reason = "hard to write spec; involves ranges"))]
     pub fn shrink_to(&mut self, min_capacity: usize) {
         let target_cap = min_capacity.max(self.len);
 
@@ -1456,7 +1473,17 @@ impl<T, A: Allocator> VecDeque<T, A> {
     ///
     /// `old_head` refers to the head index before `shrink_to` was called. `target_cap`
     /// is the capacity that it was trying to shrink to.
-    #[cfg_attr(flux, flux::trusted(reason = "rollback logic relies on allocator behavior"))]
+    #[cfg_attr(flux, flux::spec(fn(s: &mut Self[@slf], old_head: usize, target_cap: usize)
+        requires target_cap >= slf.len, 
+                 target_cap >= slf.head, 
+                 target_cap <= slf.cap, 
+                 slf.cap == 0 || old_head < slf.cap,
+                 old_head + target_cap - slf.head <= slf.cap
+        ensures s : Self[#new_slf],
+                new_slf.len == slf.len,
+                new_slf.cap == slf.cap,
+                new_slf.head == slf.head || new_slf.head == old_head,
+    ))]
     unsafe fn abort_shrink(&mut self, old_head: usize, target_cap: usize) {
         // Moral equivalent of self.head + self.len <= target_cap. Won't overflow
         // because `self.len <= target_cap`.
@@ -1484,7 +1511,8 @@ impl<T, A: Allocator> VecDeque<T, A> {
             // (and therefore hopefully cheaper to copy).
             unsafe {
                 // The old and the new head slice can overlap, so we can't use `copy_nonoverlapping` here.
-                self.copy(self.head, old_head, head_len);
+                let head = self.head;
+                self.copy(head, old_head, head_len);
                 self.head = old_head;
             }
         }
@@ -1510,7 +1538,13 @@ impl<T, A: Allocator> VecDeque<T, A> {
     /// assert_eq!(buf, [5]);
     /// ```
     #[stable(feature = "deque_extras", since = "1.16.0")]
-    #[cfg_attr(flux, flux::trusted(reason = "drop/copy logic relies on pointer reasoning"))]
+    #[cfg_attr(flux, flux::spec(fn(s: &mut Self[@slf], len: usize)
+        ensures s : Self[#new_slf],
+                new_slf.cap == slf.cap,
+                new_slf.head == slf.head,
+                len >= slf.len => new_slf.len == slf.len,
+                len < slf.len => new_slf.len == len, 
+    ))]
     pub fn truncate(&mut self, len: usize) {
         /// Runs the destructor for all items in the slice when it gets dropped (normally or
         /// during unwinding).
@@ -1577,7 +1611,12 @@ impl<T, A: Allocator> VecDeque<T, A> {
     /// assert_eq!(buf.as_slices(), (&[5][..], &[][..]));
     /// ```
     #[unstable(feature = "vec_deque_truncate_front", issue = "140667")]
-    #[cfg_attr(flux, flux::trusted(reason = "drop/copy logic relies on pointer reasoning"))]
+    #[cfg_attr(flux, flux::spec(fn(s: &mut Self[@slf], len: usize)
+        ensures s : Self[#new_slf],
+                new_slf.cap == slf.cap,
+                len >= slf.len => (new_slf.len == slf.len && new_slf.head == slf.head),
+                len < slf.len => (new_slf.len == len && new_slf.head < slf.cap)
+    ))]
     pub fn truncate_front(&mut self, len: usize) {
         /// Runs the destructor for all items in the slice when it gets dropped (normally or
         /// during unwinding).
@@ -1711,7 +1750,7 @@ impl<T, A: Allocator> VecDeque<T, A> {
     /// ```
     #[inline]
     #[stable(feature = "deque_extras_15", since = "1.5.0")]
-    #[cfg_attr(flux, flux::trusted(reason = "range"))]
+    #[cfg_attr(flux, flux::trusted(reason = "buffer_range spec"))]
     #[cfg_attr(flux, flux::spec(fn(&Self[@slf]) -> (&[T][#llen], &[T][#rlen])
         ensures llen + rlen <= slf.len, llen <= slf.len, rlen <= slf.len
     ))]
@@ -1764,6 +1803,13 @@ impl<T, A: Allocator> VecDeque<T, A> {
     /// ```
     #[inline]
     #[stable(feature = "deque_extras_15", since = "1.5.0")]
+    #[cfg_attr(flux, flux::trusted(reason = "buffer_range spec"))]
+    #[cfg_attr(flux, flux::spec(fn(s: &mut Self[@slf]) -> (&mut [T][#llen], &mut [T][#rlen])
+        ensures s : Self[slf],
+                llen <= slf.cap - slf.head,
+                rlen == slf.len - llen,
+                llen <= slf.len, rlen <= slf.len
+    ))]
     pub fn as_mut_slices(&mut self) -> (&mut [T], &mut [T]) {
         let (a_range, b_range) = self.slice_ranges(.., self.len);
         // SAFETY: `slice_ranges` always returns valid ranges into
@@ -1819,7 +1865,11 @@ impl<T, A: Allocator> VecDeque<T, A> {
     /// ranges into the physical buffer, the caller must ensure that the result of
     /// calling `slice::range(range, ..len)` represents a valid range into the
     /// logical buffer, and that all elements in that range are initialized.
-    #[cfg_attr(flux, flux::trusted(reason = "wrap-around index arithmetic"))]
+    #[cfg_attr(flux, flux::trusted(reason = "uses slice_range"))]
+    #[cfg_attr(flux, flux::spec(fn(&Self[@slf], range: R, len: usize) -> (Range<usize>[#f], Range<usize>[#s])
+        ensures f.start >= 0, f.start <= f.end, f.end <= slf.cap,
+                s.start >= 0, s.start <= s.end, s.end <= slf.cap,
+    ))]
     fn slice_ranges<R>(&self, range: R, len: usize) -> (Range<usize>, Range<usize>)
     where
         R: RangeBounds<usize>,
@@ -1873,6 +1923,7 @@ impl<T, A: Allocator> VecDeque<T, A> {
     /// ```
     #[inline]
     #[stable(feature = "deque_range", since = "1.51.0")]
+    #[cfg_attr(flux, flux::spec(fn(&Self[@slf], range: R) -> _))]
     pub fn range<R>(&self, range: R) -> Iter<'_, T>
     where
         R: RangeBounds<usize>,
@@ -1913,6 +1964,9 @@ impl<T, A: Allocator> VecDeque<T, A> {
     /// ```
     #[inline]
     #[stable(feature = "deque_range", since = "1.51.0")]
+    #[cfg_attr(flux, flux::spec(fn(s: &mut Self[@slf], range: R) -> _
+        ensures s: Self[slf]
+    ))]
     pub fn range_mut<R>(&mut self, range: R) -> IterMut<'_, T>
     where
         R: RangeBounds<usize>,
@@ -1962,7 +2016,7 @@ impl<T, A: Allocator> VecDeque<T, A> {
     /// ```
     #[inline]
     #[stable(feature = "drain", since = "1.6.0")]
-    #[cfg_attr(flux, flux::trusted(reason = "drain relies on raw pointer invariants"))]
+    #[cfg_attr(flux, flux::trusted(reason = "uses slice::range"))]
     pub fn drain<R>(&mut self, range: R) -> Drain<'_, T, A>
     where
         R: RangeBounds<usize>,
@@ -2560,7 +2614,7 @@ impl<T, A: Allocator> VecDeque<T, A> {
     /// ```
     #[unstable(feature = "push_mut", issue = "135974")]
     #[must_use = "if you don't need a reference to the value, use `VecDeque::insert` instead"]
-    #[cfg_attr(flux, flux::trusted(reason = "wrap/copy logic relies on pointer invariants"))]
+    #[cfg_attr(flux, flux::trusted(reason = "uses wrap_copy, can't come up with a reasonable pre-condition"))]
     pub fn insert_mut(&mut self, index: usize, value: T) -> &mut T {
         assert!(index <= self.len(), "index out of bounds");
 
@@ -2834,7 +2888,7 @@ impl<T, A: Allocator> VecDeque<T, A> {
     /// assert_eq!(buf, [3, 5]);
     /// ```
     #[stable(feature = "vec_retain_mut", since = "1.61.0")]
-    #[cfg_attr(flux, flux::trusted(reason = "swap/truncate reasoning"))]
+    #[cfg_attr(flux, flux::trusted(reason = "hard to prove preconditions for swap, eventually truncate too"))]
     pub fn retain_mut<F>(&mut self, mut f: F)
     where
         F: FnMut(&mut T) -> bool,
@@ -3207,7 +3261,7 @@ impl<T, A: Allocator> VecDeque<T, A> {
     // so it's sound to call here because we're calling with something
     // less than half the length, which is never above half the capacity.
 
-    #[cfg_attr(flux, flux::trusted(reason = "wrap/copy reasoning"))]
+    #[cfg_attr(flux, flux::trusted(reason = "hard to prove the preconditions for warp_copy"))]
     unsafe fn rotate_left_inner(&mut self, mid: usize) {
         debug_assert!(mid * 2 <= self.len());
         unsafe {
@@ -3216,7 +3270,7 @@ impl<T, A: Allocator> VecDeque<T, A> {
         self.head = self.to_physical_idx(mid);
     }
 
-    #[cfg_attr(flux, flux::trusted(reason = "wrap/copy reasoning"))]
+    #[cfg_attr(flux, flux::trusted(reason = "hard to prove the preconditions for warp_copy"))]
     unsafe fn rotate_right_inner(&mut self, k: usize) {
         debug_assert!(k * 2 <= self.len());
         self.head = self.wrap_sub(self.head, k);
@@ -3578,7 +3632,7 @@ trait SpecExtendFromWithin {
 
 #[cfg(not(no_global_oom_handling))]
 impl<T: Clone, A: Allocator> SpecExtendFromWithin for VecDeque<T, A> {
-    #[cfg_attr(flux, flux::trusted(reason = "clone/len updates rely on raw pointer reasoning"))]
+    #[cfg_attr(flux, flux::trusted(reason = "required invariant not expressible in flux"))]
     default unsafe fn spec_extend_from_within(&mut self, src: Range<usize>) {
         let dst = self.len();
         let count = src.end - src.start;
@@ -3602,7 +3656,7 @@ impl<T: Clone, A: Allocator> SpecExtendFromWithin for VecDeque<T, A> {
         }
     }
 
-    #[cfg_attr(flux, flux::trusted(reason = "clone/len updates rely on raw pointer reasoning"))]
+    #[cfg_attr(flux, flux::trusted(reason = "required invariant not expressible in flux"))]
     default unsafe fn spec_prepend_from_within(&mut self, src: Range<usize>) {
         let dst = 0;
         let count = src.end - src.start;
@@ -3655,7 +3709,7 @@ impl<T: Clone, A: Allocator> SpecExtendFromWithin for VecDeque<T, A> {
 
 #[cfg(not(no_global_oom_handling))]
 impl<T: TrivialClone, A: Allocator> SpecExtendFromWithin for VecDeque<T, A> {
-    #[cfg_attr(flux, flux::trusted(reason = "copy/len updates rely on raw pointer reasoning"))]
+    #[cfg_attr(flux, flux::trusted(reason = "required invariant not expressible in flux"))]
     unsafe fn spec_extend_from_within(&mut self, src: Range<usize>) {
         let dst = self.len();
         let count = src.end - src.start;
@@ -3676,7 +3730,7 @@ impl<T: TrivialClone, A: Allocator> SpecExtendFromWithin for VecDeque<T, A> {
         self.len += count;
     }
 
-    #[cfg_attr(flux, flux::trusted(reason = "copy/len updates rely on raw pointer reasoning"))]
+    #[cfg_attr(flux, flux::trusted(reason = "required invariant not expressible in flux"))]
     unsafe fn spec_prepend_from_within(&mut self, src: Range<usize>) {
         let dst = 0;
         let count = src.end - src.start;
